@@ -1,17 +1,13 @@
 <template>
-  <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <MainPage header="기브미콘"/>
-
+  <div id="app">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-import MainPage from './components/MainPage.vue'
 
 export default {
   name: 'App',
-  components: {
-    MainPage
-  }
 }
 </script>
 
