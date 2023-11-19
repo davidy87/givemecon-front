@@ -17,7 +17,7 @@
   <div class="container-fluid">
     <div class="d-flex align-items-center justify-content-center">
       <div class="row">
-        <div class="col-2 pb-5" v-for="category in categories" :key="category">
+        <div class="col-2 py-4 d-flex justify-content-center" v-for="category in categories" :key="category">
           <button class="card align-items-center" data-bs-toggle="modal" data-bs-target="#brands" style="width: 8rem;" 
                   @click="onCategoryClick(category.id, category.name)">
             <img class="card-img-top" src="../assets/logo.png">
