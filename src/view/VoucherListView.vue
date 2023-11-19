@@ -1,14 +1,14 @@
 <template>
-  <div id="voucher">
+  <div id="voucher-list">
     <h1>This is Voucher List View</h1>
     <div class="d-flex align-items-center justify-content-center">
       <div class="row">
         <div class="col-2 p-4" v-for="voucher in vouchers" :key="voucher">
-          <button class="card" style="width: 8rem;">
+          <button @click="onVoucherClick(voucher.id)" class="card" style="width: 8rem;">
             <img class="card-img-top" src="../assets/logo.png">
             <div class="card-body">
               <p class="card-text">{{ voucher.title }}</p>
-              <p class="card-text">{{ voucher.price }} 원</p>
+              <p class="card-text">{{ Intl.NumberFormat('en-US').format(voucher.price) }} 원</p>
             </div>
           </button>
         </div>
@@ -36,6 +36,9 @@ export default {
           this.vouchers = result.data;
         });
     },
+    onVoucherClick(id) {
+      this.$router.push({ name: 'voucher', params: { id: id} });
+    }
   },
   created() {
     this.onLoad();
@@ -45,7 +48,7 @@ export default {
 </script>
 
 <style>
-#voucher {
+#voucher-list {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -2,12 +2,14 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import HomeView from './view/HomeView.vue'
 import VoucherListView from './view/VoucherListView.vue'
+import VoucherView from './view/VoucherView.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   { path: '/', component: HomeView},
-  { path: '/vouchers', component: VoucherListView},
+  { path: '/vouchers', name: 'voucherList', component: VoucherListView},
+  { path: '/vouchers/:id', name: "voucher", component: VoucherView}
 ]
 
 const router = createRouter({

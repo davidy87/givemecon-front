@@ -75,7 +75,7 @@ export default {
         });
     },
     onBrandClick(brandId) {
-      this.$router.push({ path: 'vouchers', query: { brandId: brandId} });
+      this.$router.push({ name: 'voucherList', query: { brandId: brandId} });
     }
   },
   created() {
