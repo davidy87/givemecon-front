@@ -1,20 +1,29 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-dark bg-dark" aria-label="First navbar example">
     <div class="container-fluid">
-      <h2><a href="/">기브미콘</a></h2>
+      <a class="navbar-brand" href="#">기브미콘 로고</a>
+      <div class="d-flex align-items-center">
+        <button class="btn btn-primary">
+          <span>간편 로그인</span>
+        </button>
+      </div>
     </div>
   </nav>
 
-  <div class="py-5"></div>
+  <div class="py-5">
+    <h1>기브미콘</h1>
+  </div>
 
-  <div class="d-flex align-items-center justify-content-center">
-    <div class="row">
-      <div class="col-2 pb-5" v-for="category in categories" :key="category">
-        <button class="card align-items-center" data-bs-toggle="modal" data-bs-target="#brands" style="width: 8rem;" 
-                @click="onCategoryClick(category.id, category.name)">
-          <img class="card-img-top" src="../assets/logo.png">
-          <p>{{ category.name }}</p>
-        </button>
+  <div class="container-fluid">
+    <div class="d-flex align-items-center justify-content-center">
+      <div class="row">
+        <div class="col-2 pb-5" v-for="category in categories" :key="category">
+          <button class="card align-items-center" data-bs-toggle="modal" data-bs-target="#brands" style="width: 8rem;" 
+                  @click="onCategoryClick(category.id, category.name)">
+            <img class="card-img-top" src="../assets/logo.png">
+            <p>{{ category.name }}</p>
+          </button>
+        </div>
       </div>
     </div>
   </div>
