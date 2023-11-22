@@ -1,6 +1,9 @@
 <template>
   <div id="voucher-list">
-    <h1>This is Voucher List View</h1>
+    <div class="py-5">
+      <h1>This is Voucher List View</h1>
+    </div>
+
     <div class="d-flex align-items-center justify-content-center">
       <div class="row">
         <div class="col-2 p-4" v-for="voucher in vouchers" :key="voucher">
@@ -54,6 +57,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
