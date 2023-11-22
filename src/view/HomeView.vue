@@ -3,8 +3,11 @@
     <div class="container-fluid">
       <a class="navbar-brand" href="#">기브미콘 로고</a>
       <div class="d-flex align-items-center">
-        <button class="btn btn-primary">
-          <span>간편 로그인</span>
+        <button v-if="!username" class="btn btn-primary" @click="onLoginClick">
+          <span>로그인</span>
+        </button>
+        <button v-else class="btn btn-primary">
+          <span>{{ username }}</span>
         </button>
       </div>
     </div>
@@ -64,27 +67,33 @@ export default {
       categories : [],
       brands : [],
       modalHeader : "",
+      username : localStorage.getItem('username')
     };
   },
   methods: {
     onLoad() {
       axios
-        .get("/categories")
+        .get("/api/categories")
         .then((result) => {
           console.log(result);
           this.categories = result.data;
         });
+      
+      
     },
     onCategoryClick(categoryId, categoryName) {
       this.modalHeader = categoryName;
       axios
-        .get("/brands?categoryId=" + categoryId)
+        .get("/api/brands?categoryId=" + categoryId)
         .then((result) => {
           this.brands = result.data;
         });
     },
     onBrandClick(brandId) {
       this.$router.push({ name: 'voucherList', query: { brandId: brandId} });
+    },
+    onLoginClick() {
+      this.$router.push('login');
     }
   },
   created() {

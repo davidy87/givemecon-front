@@ -30,7 +30,7 @@ export default {
   methods: {
     onLoad() {
       axios
-        .get("/vouchers" + "?brandId=" + this.$route.query.brandId)
+        .get("/api/vouchers" + "?brandId=" + this.$route.query.brandId)
         .then((result) => {
           console.log(result);
           this.vouchers = result.data;

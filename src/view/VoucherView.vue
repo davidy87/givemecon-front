@@ -64,7 +64,7 @@ export default {
   methods: {
     onLoad() {
       axios
-        .get("/vouchers/" + this.$route.params.id)
+        .get("/api/vouchers/" + this.$route.params.id)
         .then((result) => {
           this.voucher = result.data
         })
