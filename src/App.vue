@@ -1,5 +1,4 @@
 <template>
-  <navbar-header></navbar-header>
   <div id="app">
     <router-view></router-view>
   </div>
@@ -7,13 +6,8 @@
 
 <script>
 
-import NavbarHeader from './components/NavbarHeader.vue';
-
 export default {
   name: 'App',
-  components: {
-    NavbarHeader
-  }
 }
 </script>
 

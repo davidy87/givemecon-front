@@ -1,4 +1,6 @@
 <template>
+  <navbar-header></navbar-header>
+
   <div id="voucher">
     <div class="container">
       <img src="../assets/logo.png" alt="">
@@ -53,9 +55,13 @@
 
 <script>
 import axios from 'axios';
+import NavbarHeader from '@/components/NavbarHeader.vue';
 
 export default {
   name: 'VoucherView',
+  components: {
+    NavbarHeader
+  },
   data() {
     return {
       voucher: {}

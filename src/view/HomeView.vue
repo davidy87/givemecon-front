@@ -1,4 +1,6 @@
 <template>
+  <navbar-header></navbar-header>
+
   <div class="py-5">
     <h1>기브미콘</h1>
   </div>
@@ -45,9 +47,13 @@
 
 <script>
 import axios from 'axios';
+import NavbarHeader from '@/components/NavbarHeader.vue';
 
 export default {
   name: 'HomeView',
+  components: {
+    NavbarHeader
+  },
   data() {
     return {
       headers: {

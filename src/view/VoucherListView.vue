@@ -1,4 +1,6 @@
 <template>
+  <navbar-header></navbar-header>
+
   <div id="voucher-list">
     <div class="py-5">
       <h1>This is Voucher List View</h1>
@@ -22,9 +24,13 @@
   
 <script>
 import axios from 'axios';
+import NavbarHeader from '@/components/NavbarHeader.vue';
 
 export default {
   name: 'VoucherListView',
+  components: {
+    NavbarHeader
+  },
   data() {
     return {
       vouchers : [],

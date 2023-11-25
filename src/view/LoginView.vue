@@ -1,4 +1,6 @@
 <template>
+  <navbar-header :key="componentKey"></navbar-header>
+
   <div id="login">
     <div class="container py-5">
       <h1>로그인</h1>
@@ -33,9 +35,20 @@
 
 <script>
 // import axios from 'axios';
+import NavbarHeader from '@/components/NavbarHeader.vue';
 
 export default {
   name: 'LoginVue',
+  components: {
+    NavbarHeader
+  },
+
+  data() {
+    return {
+      componentKey: 0
+    }
+  },
+  
   methods: {
     onLoad() {
       const params = this.$route.query;
@@ -45,9 +58,11 @@ export default {
         localStorage.setItem('accessToken', params.accessToken);
         localStorage.setItem('refreshToken', params.refreshToken);
         localStorage.setItem('username', params.username);
+        this.componentKey += 1;
         this.$router.push('/');
       }
     },
+    
     onGoogleLoginClick() {
       location.href = 'http://localhost:8080/oauth2/authorization/google';
     }
