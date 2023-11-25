@@ -1,6 +1,5 @@
 <template>
   <div id="login">
-
     <div class="container py-5">
       <h1>로그인</h1>
     </div>
@@ -12,7 +11,7 @@
             <div class="row justify-content-center">
               <div class="col-12 col-lg-5 d-flex align-items-center">
                 <div class="d-flex gap-3 flex-column w-100">
-                  <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8081" class="btn btn-lg btn-primary" role=button>
+                  <a @click="onGoogleLoginClick" class="btn btn-lg btn-primary" role=button>
                     <span class="ms-2 fs-6">Google로 로그인</span>
                   </a>
                   <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8081" class="btn btn-lg btn-success" role=button>
@@ -33,6 +32,7 @@
 </template>
 
 <script>
+// import axios from 'axios';
 
 export default {
   name: 'LoginVue',
@@ -47,6 +47,9 @@ export default {
         localStorage.setItem('username', params.username);
         this.$router.push('/');
       }
+    },
+    onGoogleLoginClick() {
+      location.href = 'http://localhost:8080/oauth2/authorization/google';
     }
   },
   mounted() {

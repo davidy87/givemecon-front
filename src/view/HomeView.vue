@@ -50,6 +50,9 @@ export default {
   name: 'HomeView',
   data() {
     return {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('accessToken')
+      },
       categories : [],
       brands : [],
       modalHeader : "",
@@ -58,7 +61,7 @@ export default {
   methods: {
     onLoad() {
       axios
-        .get("/api/categories")
+        .get("/api/categories", { headers: this.headers })
         .then((result) => {
           console.log(result);
           this.categories = result.data;
@@ -75,9 +78,6 @@ export default {
     onBrandClick(brandId) {
       this.$router.push({ name: 'voucherList', query: { brandId: brandId} });
     },
-    onLoginClick() {
-      this.$router.push('login');
-    }
   },
   created() {
     this.onLoad();
