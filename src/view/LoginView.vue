@@ -16,10 +16,10 @@
                   <a @click="onGoogleLoginClick" class="btn btn-lg btn-primary" role=button>
                     <span class="ms-2 fs-6">Google로 로그인</span>
                   </a>
-                  <a href="http://localhost:8080/oauth2/authorization/naver?redirect_uri=http://localhost:8081" class="btn btn-lg btn-success" role=button>
+                  <a @click="onNaverLoginClick" class="btn btn-lg btn-success" role=button>
                     <span class="ms-2 fs-6">Naver로 로그인</span>
                   </a>
-                  <a href="/oauth2/authorization/kakao" class="btn btn-lg btn-warning" role=button>
+                  <a @click="onKakaoLoginClick" class="btn btn-lg btn-warning" role=button>
                     <span class="ms-2 fs-6">Kakao로 로그인</span>
                   </a>
                 </div>
@@ -34,7 +34,6 @@
 </template>
 
 <script>
-// import axios from 'axios';
 import NavbarHeader from '@/components/NavbarHeader.vue';
 
 export default {
@@ -62,11 +61,20 @@ export default {
         this.$router.push('/');
       }
     },
-    
+
     onGoogleLoginClick() {
       location.href = 'http://localhost:8080/oauth2/authorization/google';
+    },
+
+    onNaverLoginClick() {
+      location.href = 'http://localhost:8080/oauth2/authorization/naver';
+    },
+
+    onKakaoLoginClick() {
+      location.href = 'http://localhost:8080/oauth2/authorization/kakao';
     }
   },
+  
   mounted() {
     this.onLoad();
   }
