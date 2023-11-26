@@ -7,7 +7,7 @@
 
   <div class="container-fluid">
     <div class="d-flex align-items-center justify-content-center">
-      <div class="row row-cols-auto mx-3">
+      <div class="row row-cols-auto justify-content-center">
         <div class="col p-4" v-for="category in categories" :key="category">
           <button @click="onCategoryClick(category.id, category.name)" 
                   class="card align-items-center mx-auto" data-bs-toggle="modal" data-bs-target="#brands" style="width: 8rem;">
@@ -99,11 +99,5 @@ export default {
   text-align: center;
   color: #2c3e50;
   /* margin-top: 60px; */
-}
-.row {
-  display: flex;
-}
-.col {
-  flex: 1;
 }
 </style>

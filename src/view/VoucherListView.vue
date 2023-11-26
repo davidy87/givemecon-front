@@ -8,7 +8,7 @@
 
     <div class="container-fluid">
       <div class="d-flex align-items-center justify-content-center">
-        <div class="row row-cols-auto mx-3">
+        <div class="row row-cols-auto justify-content-center">
           <div class="col p-4" v-for="voucher in vouchers" :key="voucher">
             <button @click="onVoucherClick(voucher.id)" class="card align-items-center mx-auto" style="width: 8rem;">
               <img class="card-img-top" src="../assets/logo.png">
