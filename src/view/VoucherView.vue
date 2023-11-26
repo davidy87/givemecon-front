@@ -38,12 +38,12 @@
         </div>
       </div>
 
-      <div class="container" id="purchase-btn">
-        <div class="row">
-          <div class="col-2 d-grid">
+      <div class="container-fluid" id="purchase-btn">
+        <div class="row row-cols-auto justify-content-center">
+          <div class="col">
             <button class="btn btn-lg btn-outline-danger">찜하기</button>
           </div>
-          <div class="col d-grid">
+          <div class="col">
             <button class="btn btn-lg btn-primary">구매하기</button>
           </div>
         </div>
@@ -98,7 +98,7 @@ html {
 }
 
 #purchase-btn {
-  margin-top: 50vh;
-  margin-bottom: 10vh;
+  padding-top: 50vh;
+  padding-bottom: 10vh;
 }
 </style>
