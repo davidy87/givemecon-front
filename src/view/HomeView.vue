@@ -7,10 +7,10 @@
 
   <div class="container-fluid">
     <div class="d-flex align-items-center justify-content-center">
-      <div class="row">
-        <div class="col-2 py-4 d-flex justify-content-center" v-for="category in categories" :key="category">
-          <button class="card align-items-center" data-bs-toggle="modal" data-bs-target="#brands" style="width: 8rem;" 
-                  @click="onCategoryClick(category.id, category.name)">
+      <div class="row row-cols-auto mx-3">
+        <div class="col p-4" v-for="category in categories" :key="category">
+          <button @click="onCategoryClick(category.id, category.name)" 
+                  class="card align-items-center mx-auto" data-bs-toggle="modal" data-bs-target="#brands" style="width: 8rem;">
             <img class="card-img-top" src="../assets/logo.png">
             <p>{{ category.name }}</p>
           </button>
@@ -28,9 +28,9 @@
         </div>
         <div class="modal-body">
           <div class="py-5 d-flex align-items-center justify-content-center">
-            <div class="row">
-              <div class="col-auto pb-4" v-for="brand in brands" :key="brand">                  
-                <button @click="onBrandClick(brand.id)" class="card align-items-center" style="width: 8rem;">
+            <div class="row row-col-auto">
+              <div class="col p-4" v-for="brand in brands" :key="brand">                  
+                <button @click="onBrandClick(brand.id)" class="card align-items-center mx-auto" style="width: 8rem;">
                   <img class="card-img-top" src="../assets/logo.png">
                   <div class="card-body" style="width: inherit;">
                     <span class="card-text" >{{ brand.name }}</span>
@@ -99,5 +99,11 @@ export default {
   text-align: center;
   color: #2c3e50;
   /* margin-top: 60px; */
+}
+.row {
+  display: flex;
+}
+.col {
+  flex: 1;
 }
 </style>
