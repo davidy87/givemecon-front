@@ -221,13 +221,13 @@ html {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  margin-bottom: 60px;
 }
 
 #purchase-btn {
   padding-top: 50vh;
   padding-bottom: 10vh;
 }
-
 
 #purchase-list-group #purchase-list-group-item {
   border-radius: 0.25rem;
