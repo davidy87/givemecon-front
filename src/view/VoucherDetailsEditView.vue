@@ -68,6 +68,13 @@ export default {
         this.$router.push('/sell');
       }
     },
+
+    onContinueClick() {
+      if (confirm('이 기프티콘을 판매하시겠습니까?') === true) {
+        alert('판매 등록이 완료되었습니다.');
+        this.$router.push('/');
+      }
+    }
   }
 }
 </script>
