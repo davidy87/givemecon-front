@@ -30,7 +30,7 @@
           <div class="py-5 d-flex align-items-center justify-content-center">
             <div class="row row-col-auto">
               <div class="col p-4" v-for="brand in brands" :key="brand">                  
-                <button @click="onBrandClick(brand.id)" class="card align-items-center mx-auto" style="width: 8rem;">
+                <button @click="onBrandClick(brand.name)" class="card align-items-center mx-auto" style="width: 8rem;">
                   <img class="card-img-top" src="../assets/logo.png">
                   <div class="card-body" style="width: inherit;">
                     <span class="card-text" >{{ brand.name }}</span>
@@ -73,16 +73,18 @@ export default {
           this.categories = result.data;
         });
     },
+
     onCategoryClick(categoryId, categoryName) {
       this.modalHeader = categoryName;
       axios
-        .get("/api/brands?categoryId=" + categoryId)
+        .get('/api/categories/' + categoryId + '/brands')
         .then((result) => {
           this.brands = result.data;
         });
     },
-    onBrandClick(brandId) {
-      this.$router.push({ name: 'voucherList', query: { brandId: brandId} });
+
+    onBrandClick(brandName) {
+      this.$router.push('/brands/' + brandName + '/vouchers');
     },
   },
   created() {

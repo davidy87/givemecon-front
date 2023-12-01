@@ -65,14 +65,14 @@ export default {
   methods: {
     onCancelClick() {
       if (confirm('판매를 취소하시겠습니까?') === true) {
-        this.$router.push('/sell');
+        this.$router.replace('/sell');
       }
     },
 
     onContinueClick() {
       if (confirm('이 기프티콘을 판매하시겠습니까?') === true) {
         alert('판매 등록이 완료되었습니다.');
-        this.$router.push('/');
+        this.$router.replace('/');
       }
     }
   }

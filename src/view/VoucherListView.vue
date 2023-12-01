@@ -41,14 +41,14 @@ export default {
   methods: {
     onLoad() {
       axios
-        .get("/api/vouchers" + "?brandId=" + this.$route.query.brandId)
+        .get('/api/brands/' + this.$route.params.brandName + '/vouchers')
         .then((result) => {
           console.log(result);
           this.vouchers = result.data;
         });
     },
     onVoucherClick(id) {
-      this.$router.push({ name: 'voucher', params: { id: id} });
+      this.$router.push('/vouchers/' + id);
     }
   },
   created() {
