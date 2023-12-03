@@ -8,13 +8,13 @@
       <div class="d-flex align-items-center justify-content-center">
         <span class="px-3">기프티콘 등록</span>
         <div class="align-items-center px-3">
-          <input class="form-control" type="file" id="formFile" @change="onImageUpload($event)" accept="image/*" capture>
+          <input class="form-control" type="file" id="formFile" @change="onImageUpload" accept="image/*" capture>
         </div>
       </div>
     </div>
 
     <div class="container py-5">
-      <img id="preview" style="width: 500px; height: 500px;" />
+      <img id="preview" />
     </div>
 
     <div class="container py-5">
@@ -32,44 +32,47 @@ export default {
   components: {
     NavbarHeader,
   },
+
   data() {
     return {
-      voucherImage : ''
+      imageFile : '',
     }
   },
-  methods: {
-    onImageUpload(event) {
-      const target = event.target;
 
-      if (target !== undefined && target.files.length !== 0) {
-        this.base64(target.files[0])
+  methods: {
+    onImageUpload(e) {
+      const target = e.target;
+
+      if (target.files.length == 1) {
+        this.imageFile = URL.createObjectURL(target.files[0]);
+        document.getElementById('preview').src = URL.createObjectURL(target.files[0]);
       } else {
         document.getElementById('preview').src = '';
       }
     },
 
-    base64(file) {
+    showPreview(file) {
       return new Promise(resolve => {
         let a = new FileReader()
         a.onload = e => {
           resolve(e.target.result)
-          document.getElementById('preview').src = e.target.result
-          this.voucherImage = e.target.result;
+          document.getElementById('preview').src = e.target.result;
         }
         a.readAsDataURL(file)
       });
     },
 
     onUploadClick() {
-      if (this.voucherImage === '') {
+      if (this.imageFile === '') {
         alert("기프티콘 사진을 등록하세요.");
       } else {
-        this.$router.push({ path: '/sell/details', query: { img: this.voucherImage }});
+        this.$router.push({ path: '/sell/details', query: { img: this.imageFile }});
       }
     }
   },
+
   mounted() {
-    this.voucherImage = ''
+    this.imageFile = '';
   }
 }
 </script>
@@ -78,5 +81,10 @@ export default {
 #voucher-image-upload {
   margin-top: 60px;
   margin-bottom: 60px;
+}
+
+#preview {
+  width: 400px;
+  height: 400px;
 }
 </style>

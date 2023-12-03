@@ -8,18 +8,18 @@
       <div class="d-flex justify-content-center">
         <div class="card" style="width: auto; height: auto;">
           <div class="container py-3">
-            <img v-bind:src="voucherImage" class="card-img-top" style="width: 500px; height: 500px;" />
+            <img v-bind:src="voucherPost.image" class="card-img-top" style="width: 500px; height: 500px;" />
           </div>
           <div class="card-body">
             <ul id="details-list-group" class="list-group">
               <span class="d-flex">상품명</span>
-              <li id="details-list-group-item" class="list-group-item d-flex">상품명입니다</li>
+              <input v-model="voucherPost.title" id="details-list-group-item" class="list-group-item d-flex" placeholder="상품명입니다">
               <br>
               <span class="d-flex">유효기간</span>
-              <li id="details-list-group-item" class="list-group-item d-flex">유효기간입니다</li>
+              <input v-model="voucherPost.expDate" id="details-list-group-item" class="list-group-item d-flex" placeholder="유효기간입니다">
               <br>
               <span class="d-flex">바코드</span>
-              <li id="details-list-group-item" class="list-group-item d-flex">바코드입니다</li>
+              <input v-model="voucherPost.barcode" id="details-list-group-item" class="list-group-item d-flex" placeholder="바코드입니다">
             </ul>
           </div>
         </div>
@@ -51,17 +51,29 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import axios from 'axios';
 
 export default {
-  name: 'VoucherDetailsEditView',
+  name: 'VoucherSubmitView',
   components: {
     NavbarHeader,
   },
   data() {
     return {
-      voucherImage : this.$route.query.img
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('accessToken')
+      },
+
+      voucherPost : {
+        image : this.$route.query.img,
+        title : "",
+        price : 4000,
+        expDate : "",
+        barcode : "",
+      }
     }
   },
+  
   methods: {
     onCancelClick() {
       if (confirm('판매를 취소하시겠습니까?') === true) {
@@ -71,11 +83,27 @@ export default {
 
     onContinueClick() {
       if (confirm('이 기프티콘을 판매하시겠습니까?') === true) {
-        alert('판매 등록이 완료되었습니다.');
-        this.$router.replace('/');
+        axios
+          .post('/api/vouchers-for-sale', this.voucherPost, { headers: this.headers })
+          .then((response) => {
+            console.log(response.data);
+            alert('판매 등록이 완료되었습니다.');
+            this.$router.replace('/');
+          })
       }
-    }
-  }
+    },
+
+    showPreview(file) {
+      return new Promise(resolve => {
+        let a = new FileReader()
+        a.onload = e => {
+          resolve(e.target.result)
+          document.getElementById('preview').src = e.target.result;
+        }
+        a.readAsDataURL(file)
+      });
+    },
+  },
 }
 </script>
 

@@ -9,9 +9,9 @@
     <div class="container px-5 py-5">
       <div class="d-flex align-items-center justify-content-center">
         <div class="row justify-content-center">
-          <div class="col-12 col-lg-10 col-xl-8">
+          <div class="col-12">
             <div class="row justify-content-center">
-              <div class="col-12 col-lg-5 d-flex align-items-center">
+              <div class="col-12 d-flex align-items-center">
                 <div class="d-flex gap-3 flex-column w-100">
                   <a @click="onGoogleLoginClick" class="btn btn-lg btn-primary" role=button>
                     <span class="ms-2 fs-6">Google로 로그인</span>
