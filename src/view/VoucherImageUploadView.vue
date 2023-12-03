@@ -45,21 +45,10 @@ export default {
 
       if (target.files.length == 1) {
         this.imageFile = URL.createObjectURL(target.files[0]);
-        document.getElementById('preview').src = URL.createObjectURL(target.files[0]);
+        document.getElementById('preview').src = this.imageFile;
       } else {
         document.getElementById('preview').src = '';
       }
-    },
-
-    showPreview(file) {
-      return new Promise(resolve => {
-        let a = new FileReader()
-        a.onload = e => {
-          resolve(e.target.result)
-          document.getElementById('preview').src = e.target.result;
-        }
-        a.readAsDataURL(file)
-      });
     },
 
     onUploadClick() {

@@ -15,6 +15,9 @@
               <span class="d-flex">상품명</span>
               <input v-model="voucherPost.title" id="details-list-group-item" class="list-group-item d-flex" placeholder="상품명입니다">
               <br>
+              <span class="d-flex">가격</span>
+              <input v-model="voucherPost.price" id="details-list-group-item" class="list-group-item d-flex" placeholder="가격입니다">
+              <br>
               <span class="d-flex">유효기간</span>
               <input v-model="voucherPost.expDate" id="details-list-group-item" class="list-group-item d-flex" placeholder="유효기간입니다">
               <br>
@@ -67,7 +70,7 @@ export default {
       voucherPost : {
         image : this.$route.query.img,
         title : "",
-        price : 4000,
+        price : 0,
         expDate : "",
         barcode : "",
       }
@@ -91,17 +94,6 @@ export default {
             this.$router.replace('/');
           })
       }
-    },
-
-    showPreview(file) {
-      return new Promise(resolve => {
-        let a = new FileReader()
-        a.onload = e => {
-          resolve(e.target.result)
-          document.getElementById('preview').src = e.target.result;
-        }
-        a.readAsDataURL(file)
-      });
     },
   },
 }
