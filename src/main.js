@@ -6,7 +6,8 @@ import VoucherListView from './view/VoucherListView.vue'
 import VoucherView from './view/VoucherView.vue'
 import VoucherImageUploadView from './view/VoucherImageUploadView.vue'
 import VoucherSubmitView from './view/VoucherSubmitView.vue'
-import LikedVoucherListView from '@/view/LikedVoucherListView.vue' 
+import LikedVoucherListView from '@/view/LikedVoucherListView.vue'
+import PurchasedVoucherListView from '@/view/PurchasedVoucherListView.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -17,7 +18,8 @@ const routes = [
   { path: '/vouchers/:id', component: VoucherView },
   { path: '/sell', component: VoucherImageUploadView },
   { path: '/sell/details', component: VoucherSubmitView},
-  { path: '/liked-vouchers', component: LikedVoucherListView }
+  { path: '/liked-vouchers', component: LikedVoucherListView },
+  { path: '/my-vouchers', component: PurchasedVoucherListView },
 ]
 
 const router = createRouter({
