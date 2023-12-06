@@ -41,7 +41,7 @@
       <div class="container-fluid" id="purchase-btn">
         <div class="row row-cols-auto justify-content-center">
           <div class="col">
-            <button class="btn btn-lg btn-outline-danger">찜하기</button>
+            <button class="btn btn-lg btn-outline-danger" @click="onLikeClick">찜하기</button>
           </div>
           <div class="col">
             <button class="btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#vouchers-for-sale"
@@ -134,6 +134,11 @@ export default {
 
   data() {
     return {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+        'Content-Type': 'application/json'
+      },
+
       voucher: {},
       voucherForSaleList: [],
       toPurchaseList: new Map(),
@@ -148,7 +153,16 @@ export default {
         .get('/api/vouchers/' + this.$route.params.id)
         .then((response) => {
           this.voucher = response.data;
-        })
+        });
+    },
+
+    onLikeClick() {
+      axios
+        .post('/api/liked-vouchers', this.voucher.id, { headers : this.headers })
+        .then((response) => {
+          console.log(response.data);
+          alert('찜 리스트에 추가되었습니다.');
+        });
     },
 
     onPurchaseClick() {
@@ -156,7 +170,7 @@ export default {
         .get('/api/vouchers/' + this.voucher.id + '/selling-list')
         .then((response) => {
           this.voucherForSaleList = response.data;
-        })
+        });
     },
 
     onVoucherForSaleClick(voucherForSale) {
