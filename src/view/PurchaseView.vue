@@ -6,7 +6,7 @@
       <h1>결제하기</h1>
     </div>
 
-    <div class="container w-50">
+    <div class="container px-5">
       <ul id="purchase-list-group" class="list-group" v-for="[voucher, count] in toPurchaseList" :key="voucher">
         <li id="purchase-list-group-item" class="list-group-item border-dark">
           <div class="d-flex justify-content-between align-items-start py-2">
