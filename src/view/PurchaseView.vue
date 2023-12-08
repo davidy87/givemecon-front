@@ -84,8 +84,10 @@ export default {
 
     onPayClick() {
       // TODO: 결제 방법 추가 필요
-      alert('결제가 완료되었습니다.\n구매하신 기프티콘은 내콘함에서 확인하실 수 있습니다.');
-      this.$router.replace('/');
+      if (confirm('결제하시겠습니까?')) {
+        alert('결제가 완료되었습니다.\n구매하신 기프티콘은 내콘함에서 확인하실 수 있습니다.');
+        this.$router.replace('/');
+      }
     },
 
     sleep(ms) {
