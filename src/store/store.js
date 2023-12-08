@@ -18,5 +18,12 @@ export default createStore({
         state.totalPrice += key.price * value;
       })
     },
+
+    remove(state, value) {
+      state.totalCount -= state.toPurchaseList.get(value);
+      state.totalPrice -= value.price * state.toPurchaseList.get(value);
+
+      state.toPurchaseList.delete(value);
+    }
   }
 });

@@ -13,7 +13,7 @@
             <div class="ms-2 me-auto">
               {{ voucher.expDate }} 까지
             </div>
-            <button class="btn btn-sm btn-close"></button>
+            <button @click="onDeleteClick(voucher)" class="btn btn-sm btn-close"></button>
           </div>
           <div class="d-flex align-items-center py-2">
             <div class="ms-2 me-auto">
@@ -59,8 +59,9 @@ export default {
     const toPurchaseList = computed(() => store.state.toPurchaseList);
     const totalCount = computed(() => store.state.totalCount);
     const totalPrice = computed(() => store.state.totalPrice);
+    const remove = (voucher) => store.commit('remove', voucher);
 
-    return { toPurchaseList, totalCount, totalPrice };
+    return { toPurchaseList, totalCount, totalPrice, remove };
   },
 
   methods: {
@@ -68,10 +69,27 @@ export default {
       return Intl.NumberFormat('en-US').format(price);
     },
 
+    onDeleteClick(voucher) {
+      if (confirm('해당 제품을 제거하시겠습니까?')) {
+        this.remove(voucher);
+
+        if (this.totalCount === 0) {
+          this.sleep(100).then(() => {
+            alert('구매할 기프티콘이 없습니다. 선택화면으로 돌아갑니다.');
+            this.$router.go(-1);
+          });
+        }
+      }
+    },
+
     onPayClick() {
       // TODO: 결제 방법 추가 필요
       alert('결제가 완료되었습니다.\n구매하신 기프티콘은 내콘함에서 확인하실 수 있습니다.');
       this.$router.replace('/');
+    },
+
+    sleep(ms) {
+      return new Promise((r) => setTimeout(r, ms));
     }
   }
 }
