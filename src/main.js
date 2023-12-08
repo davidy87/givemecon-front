@@ -1,12 +1,15 @@
 import { createApp } from 'vue'
+import store from './store/store'
+
 import App from './App.vue'
-import HomeView from './view/HomeView.vue'
-import LoginView from './view/LoginView.vue'
-import VoucherListView from './view/VoucherListView.vue'
-import VoucherView from './view/VoucherView.vue'
-import VoucherImageUploadView from './view/VoucherImageUploadView.vue'
-import VoucherSubmitView from './view/VoucherSubmitView.vue'
-import LikedVoucherListView from '@/view/LikedVoucherListView.vue' 
+import HomeView from '@/view/HomeView.vue'
+import LoginView from '@/view/LoginView.vue'
+import VoucherListView from '@/view/VoucherListView.vue'
+import VoucherView from '@/view/VoucherView.vue'
+import PurchaseView from '@/view/PurchaseView'
+import VoucherImageUploadView from '@/view/VoucherImageUploadView.vue'
+import VoucherSubmitView from '@/view/VoucherSubmitView.vue'
+import LikedVoucherListView from '@/view/LikedVoucherListView.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -17,7 +20,8 @@ const routes = [
   { path: '/vouchers/:id', component: VoucherView },
   { path: '/sell', component: VoucherImageUploadView },
   { path: '/sell/details', component: VoucherSubmitView},
-  { path: '/liked-vouchers', component: LikedVoucherListView }
+  { path: '/liked-vouchers', component: LikedVoucherListView },
+  { path: '/purchase', component: PurchaseView },
 ]
 
 const router = createRouter({
@@ -27,11 +31,11 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   // remove modal backdrop if one exists
-  let modalBackground = document.querySelector('.modal-backdrop')
+  let modalBackground = document.querySelector('.modal-backdrop');
   if (modalBackground) {
-    modalBackground.remove()
+    modalBackground.remove();
   }
-  next()
+  next();
 })
 
-createApp(App).use(router).mount('#app')
+createApp(App).use(router).use(store).mount('#app')

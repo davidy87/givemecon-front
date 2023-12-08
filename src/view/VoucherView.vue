@@ -108,13 +108,12 @@
               </div>
               <span class="fw-semibold">총 금액 <span class="text-danger">{{ format(this.totalPrice) }}원</span></span>
             </div>
-            
+
             <div class="container-fluid">
-              <button class="btn btn-primary">
+              <button @click="onFinalPurchaseClick" class="btn btn-primary">
                 <span class="fw-semibold">구매하기</span>
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -125,11 +124,19 @@
 <script>
 import axios from 'axios';
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import { useStore } from "vuex";
 
 export default {
   name: 'VoucherView',
   components: {
     NavbarHeader
+  },
+
+  setup() {
+    const store = useStore();
+    return {
+      setter: (toPurchaseList) => store.commit('setToPurchaseList', toPurchaseList)
+    };
   },
 
   data() {
@@ -171,6 +178,16 @@ export default {
         .then((response) => {
           this.voucherForSaleList = response.data;
         });
+    },
+
+    onFinalPurchaseClick() {
+      if (this.total == 0) {
+        alert('구매할 기프티콘을 선택해주세요.');
+        return;
+      }
+
+      this.setter(this.toPurchaseList);
+      this.$router.push('/purchase');
     },
 
     onVoucherForSaleClick(voucherForSale) {
@@ -222,10 +239,6 @@ export default {
 </script>
 
 <style>
-html {
-  overflow-y: auto;
-}
-
 #voucher {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
