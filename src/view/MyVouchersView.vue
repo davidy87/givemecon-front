@@ -36,6 +36,11 @@ export default {
 
   data() {
     return {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+        'Content-Type': 'application/json'
+      },
+
       purchasedVouchers : {}
     }
   },
@@ -43,7 +48,7 @@ export default {
   methods: {
     onLoad() {
       axios
-        .get('/api/purchased-vouchers')
+        .get('/api/purchased-vouchers', { headers : this.headers })
         .then((response) => {
           this.purchasedVouchers = response.data;
         });
