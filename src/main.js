@@ -1,15 +1,16 @@
 import { createApp } from 'vue'
 import store from './store/store'
-
 import App from './App.vue'
-import HomeView from '@/view/HomeView.vue'
-import LoginView from '@/view/LoginView.vue'
-import VoucherListView from '@/view/VoucherListView.vue'
-import VoucherView from '@/view/VoucherView.vue'
+
+import HomeView from './view/HomeView.vue'
+import LoginView from './view/LoginView.vue'
+import VoucherListView from './view/VoucherListView.vue'
+import VoucherView from './view/VoucherView.vue'
 import PurchaseView from '@/view/PurchaseView'
-import VoucherImageUploadView from '@/view/VoucherImageUploadView.vue'
-import VoucherSubmitView from '@/view/VoucherSubmitView.vue'
+import VoucherImageUploadView from './view/VoucherImageUploadView.vue'
+import VoucherSubmitView from './view/VoucherSubmitView.vue'
 import LikedVoucherListView from '@/view/LikedVoucherListView.vue'
+import MyVouchersView from '@/view/MyVouchersView.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -22,6 +23,7 @@ const routes = [
   { path: '/sell/details', component: VoucherSubmitView},
   { path: '/liked-vouchers', component: LikedVoucherListView },
   { path: '/purchase', component: PurchaseView },
+  { path: '/my-vouchers', component: MyVouchersView },
 ]
 
 const router = createRouter({
