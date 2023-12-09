@@ -177,6 +177,7 @@ export default {
         .get('/api/vouchers/' + this.voucher.id + '/selling-list')
         .then((response) => {
           this.voucherForSaleList = response.data;
+          this.voucherForSaleList.forEach((voucherForSale) => voucherForSale['voucherId'] = this.voucher.id);
         });
     },
 

@@ -45,6 +45,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import axios from 'axios';
 import { computed } from "vue";
 import { useStore } from "vuex";
 
@@ -62,6 +63,15 @@ export default {
     const remove = (voucher) => store.commit('remove', voucher);
 
     return { toPurchaseList, totalCount, totalPrice, remove };
+  },
+
+  data() {
+    return {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+        'Content-Type': 'application/json'
+      },
+    }
   },
 
   methods: {
@@ -86,7 +96,12 @@ export default {
       // TODO: 결제 방법 추가 필요
       if (confirm('결제하시겠습니까?')) {
         alert('결제가 완료되었습니다.\n구매하신 기프티콘은 내콘함에서 확인하실 수 있습니다.');
-        this.$router.replace('/');
+        axios
+          .post('/api/purchased-vouchers', Array.from(this.toPurchaseList.keys()), { headers : this.headers })
+          .then((response) => {
+            console.log(response.data);
+            this.$router.replace('/');
+          });
       }
     },
 
