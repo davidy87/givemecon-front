@@ -11,6 +11,7 @@ import VoucherImageUploadView from './view/VoucherImageUploadView.vue'
 import VoucherSubmitView from './view/VoucherSubmitView.vue'
 import LikedVoucherListView from '@/view/LikedVoucherListView.vue'
 import MyVouchersView from '@/view/MyVouchersView.vue'
+import ValidVoucherView from '@/view/ValidVoucherView.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -24,6 +25,7 @@ const routes = [
   { path: '/liked-vouchers', component: LikedVoucherListView },
   { path: '/purchase', component: PurchaseView },
   { path: '/my-vouchers', component: MyVouchersView },
+  { path: '/my-vouchers/valid/:id', component: ValidVoucherView },
 ]
 
 const router = createRouter({
