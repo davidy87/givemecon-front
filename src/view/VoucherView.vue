@@ -122,8 +122,9 @@
 </template>
 
 <script>
-import axios from 'axios';
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import { requestNewAccessToken } from '@/modules/utilities.js'
+import axios from 'axios';
 import { useStore } from "vuex";
 
 export default {
@@ -169,6 +170,10 @@ export default {
         .then((response) => {
           console.log(response.data);
           alert('찜 리스트에 추가되었습니다.');
+        })
+        .catch((error) => {
+          console.log(error);
+          requestNewAccessToken(this.$router);
         });
     },
 

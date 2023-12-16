@@ -2,7 +2,7 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    toPurchaseList : new Map(),
+    toPurchaseList: new Map(),
     totalCount: 0,
     totalPrice: 0,
   },

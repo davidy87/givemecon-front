@@ -54,6 +54,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import { requestNewAccessToken } from '@/modules/utilities.js'
 import axios from 'axios';
 
 export default {
@@ -64,7 +65,7 @@ export default {
   data() {
     return {
       headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('accessToken')
+        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
       },
 
       voucherPost : {
@@ -93,6 +94,10 @@ export default {
             alert('판매 등록이 완료되었습니다.');
             this.$router.replace('/');
           })
+          .catch((error) => {
+            console.log(error);
+            requestNewAccessToken(this.$router);
+          });
       }
     },
   },

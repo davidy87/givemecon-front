@@ -43,7 +43,9 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import { requestNewAccessToken } from '@/modules/utilities.js'
 import axios from 'axios';
+
 
 export default {
   name: 'ValidVoucherView',
@@ -68,6 +70,10 @@ export default {
         .get('/api/purchased-vouchers/' + this.$route.params.id, { headers : this.headers })
         .then((response) => {
           this.voucher = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          requestNewAccessToken(this.$router);
         });
     },
 
@@ -79,6 +85,10 @@ export default {
             console.log(response);
             this.$router.replace('/my-vouchers');
           })
+          .catch((error) => {
+            console.log(error);
+            requestNewAccessToken(this.$router);
+          });
       }
     },
 

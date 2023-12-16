@@ -49,11 +49,13 @@ import axios from 'axios';
 
 export default {
   name: 'NavbarHeader',
+
   data() {
     return {
       username: localStorage.getItem('username')
     }
   },
+
   methods: {
     onLogoutClick() {
       axios

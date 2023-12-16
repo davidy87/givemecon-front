@@ -54,20 +54,19 @@ export default {
   components: {
     NavbarHeader
   },
+  
   data() {
     return {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('accessToken')
-      },
       categories : [],
       brands : [],
       modalHeader : "",
     };
   },
+
   methods: {
     onLoad() {
       axios
-        .get("/api/categories", { headers: this.headers })
+        .get("/api/categories")
         .then((result) => {
           console.log(result);
           this.categories = result.data;
@@ -87,6 +86,7 @@ export default {
       this.$router.push('/brands/' + brandName + '/vouchers');
     },
   },
+
   created() {
     this.onLoad();
   }

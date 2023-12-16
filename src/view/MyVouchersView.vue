@@ -72,6 +72,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import { requestNewAccessToken } from '@/modules/utilities.js'
 import axios from 'axios';
 
 export default {
@@ -103,6 +104,10 @@ export default {
               this.usedVouchers.push(voucher);
             }
           })
+        })
+        .catch((error) => {
+          console.log(error);
+          requestNewAccessToken(this.$router);
         });
     },
 

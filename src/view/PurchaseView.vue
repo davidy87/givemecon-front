@@ -45,9 +45,11 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import { requestNewAccessToken } from '@/modules/utilities.js'
 import axios from 'axios';
 import { computed } from "vue";
 import { useStore } from "vuex";
+
 
 export default {
   name: 'PurchaseView',
@@ -101,6 +103,10 @@ export default {
           .then((response) => {
             console.log(response.data);
             this.$router.replace('/');
+          })
+          .catch((error) => {
+            console.log(error);
+            requestNewAccessToken(this.$router);
           });
       }
     },

@@ -28,6 +28,7 @@
 <script>
 import axios from 'axios';
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import { requestNewAccessToken } from '@/modules/utilities.js'
 
 export default {
   name: 'LikedVoucherListView',
@@ -40,6 +41,7 @@ export default {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
       },
+
       likedVouchers : []
     }
   },
@@ -49,9 +51,12 @@ export default {
       axios
         .get('/api/liked-vouchers', { headers: this.headers })
         .then((response) => {
-          console.log(response.data);
           this.likedVouchers = response.data;
         })
+        .catch((error) => {
+          console.log(error);
+          requestNewAccessToken(this.$router);
+        });
     },
 
     onVoucherClick(id) {
