@@ -52,6 +52,11 @@ export default {
     onLoad() {
       const params = this.$route.query;
 
+      if (params.oauth2Error === 'true') {
+        alert('로그인 시도 중 문제가 생겼습니다. 다시 시도해주세요.');
+        this.$router.replace('/login');
+      }
+
       if (params.grantType !== undefined) {
         localStorage.setItem('grantType', params.grantType);
         localStorage.setItem('accessToken', params.accessToken);

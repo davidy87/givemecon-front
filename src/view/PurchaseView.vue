@@ -101,6 +101,7 @@ export default {
         axios
           .post('/api/purchased-vouchers', Array.from(this.toPurchaseList.keys()), { headers : this.headers })
           .then((response) => {
+            console.log(response.status);
             console.log(response.data);
             this.$router.replace('/');
           })

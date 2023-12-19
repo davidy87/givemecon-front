@@ -20,12 +20,12 @@ const routes = [
   { path: '/login', component: LoginView },
   { path: '/brands/:brandName/vouchers', component: VoucherListView },
   { path: '/vouchers/:id', component: VoucherView },
-  { path: '/sell', component: VoucherImageUploadView },
-  { path: '/sell/details', component: VoucherSubmitView},
-  { path: '/liked-vouchers', component: LikedVoucherListView },
-  { path: '/purchase', component: PurchaseView },
-  { path: '/my-vouchers', component: MyVouchersView },
-  { path: '/my-vouchers/valid/:id', component: ValidVoucherView },
+  { path: '/sell', component: VoucherImageUploadView, meta: { requiresAuth: true } },
+  { path: '/sell/details', component: VoucherSubmitView, meta: { requiresAuth: true } },
+  { path: '/liked-vouchers', component: LikedVoucherListView, meta: { requiresAuth: true } },
+  { path: '/purchase', component: PurchaseView, meta: { requiresAuth: true } },
+  { path: '/my-vouchers', component: MyVouchersView, meta: { requiresAuth: true } },
+  { path: '/my-vouchers/valid/:id', component: ValidVoucherView, meta: { requiresAuth: true } },
 ]
 
 const router = createRouter({
@@ -39,6 +39,12 @@ router.beforeEach((to, from, next) => {
   if (modalBackground) {
     modalBackground.remove();
   }
+
+  if (to.meta.requiresAuth && !localStorage.getItem('accessToken')) {
+    alert('로그인 후 이용해주세요.');
+    next('/login');
+  }
+
   next();
 })
 
