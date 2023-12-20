@@ -34,15 +34,23 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // remove modal backdrop if one exists
+  // 모달이 뜬 상태라면 닫기
   let modalBackground = document.querySelector('.modal-backdrop');
   if (modalBackground) {
     modalBackground.remove();
   }
 
+  // 인증되지 않은 상태라면 인증이 필요한 페이지 접속 거부
   if (to.meta.requiresAuth && !localStorage.getItem('accessToken')) {
     alert('로그인 후 이용해주세요.');
     next('/login');
+    return;
+  }
+
+  // 인증된 상태에서는 로그인 페이지로 접속 거부
+  if (to.path === '/login' && localStorage.getItem('accessToken')) {
+    next(from);
+    return;
   }
 
   next();

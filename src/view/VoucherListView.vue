@@ -2,8 +2,8 @@
   <navbar-header></navbar-header>
 
   <div id="voucher-list">
-    <div class="py-5">
-      <h1>This is Voucher List View</h1>
+    <div class="pb-5">
+      <h1>{{ this.$route.params.brandName }} 기프티콘</h1>
     </div>
 
     <div class="container-fluid">
@@ -65,5 +65,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  margin-top: 60px;
+  margin-bottom: 60px;
 }
 </style>
