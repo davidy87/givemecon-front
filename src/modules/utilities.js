@@ -2,11 +2,10 @@ import axios, { HttpStatusCode } from "axios";
 
 export const requestNewAccessToken = (router) => {
   axios
-    .get('/auth/refresh', { headers: { 'Refresh-Token' : localStorage.getItem('refreshToken') } })
+    .get('/api/auth/refresh', { headers: { 'Refresh-Token' : localStorage.getItem('refreshToken') } })
     .then((response) => {
       console.log(response);
       localStorage.setItem('accessToken', response.data);
-      router.replace('/liked-vouchers');
     })
     .catch((error) => {
       if (error.response.status === HttpStatusCode.Unauthorized) {
