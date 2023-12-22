@@ -18,7 +18,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   { path: '/', component: HomeView },
   { path: '/login', component: LoginView },
-  { path: '/brands/:brandName/vouchers', component: VoucherListView },
+  { path: '/vouchers', component: VoucherListView },
   { path: '/vouchers/:id', component: VoucherView },
   { path: '/sell', component: VoucherImageUploadView, meta: { requiresAuth: true } },
   { path: '/sell/details', component: VoucherSubmitView, meta: { requiresAuth: true } },

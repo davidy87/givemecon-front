@@ -78,14 +78,14 @@ export default {
     onCategoryClick(categoryId, categoryName) {
       this.modalHeader = categoryName;
       axios
-        .get('/api/categories/' + categoryId + '/brands')
+        .get('/api/brands?categoryId=' + categoryId)
         .then((result) => {
           this.brands = result.data;
         });
     },
 
     onBrandClick(brandName) {
-      this.$router.push('/brands/' + brandName + '/vouchers');
+      this.$router.push({ path : '/vouchers', query : { brandName : brandName } })
     },
   },
 
