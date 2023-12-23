@@ -8,7 +8,7 @@
 
     <div v-if="this.deleted !== ''" class="container px-5">
       <div class="alert alert-success">
-        {{ this.deleted }}가 찜 목록에서 제거되었습니다.
+        {{ this.deleted }}가 찜 리스트에서 제거되었습니다.
       </div>
     </div>
 
@@ -16,16 +16,21 @@
       <div class="d-flex align-items-center justify-content-center">
         <div class="row row-cols-auto justify-content-center">
           <div class="col p-4" v-for="[voucherId, voucher] in likedVouchers" :key="voucherId">
-              <div class="container d-flex align-items-end justify-content-end">
+
+            <div class="row">
+              <div class="col-sm-8">
+                <button @click="onVoucherClick(voucherId)" class="card align-items-center mx-auto" style="width: 8rem;">
+                  <img class="card-img-top" src="../assets/logo.png">
+                  <div class="card-body">
+                    <p class="card-text">{{ voucher.title }}</p>
+                    <p class="card-text">{{ Intl.NumberFormat('en-US').format(voucher.price) }} 원</p>
+                  </div>
+                </button>
+              </div>
+              <div class="col-sm-4 d-flex">
                 <button @click="onDeleteClick(voucherId)" class="btn-close" aria-label="Delete"></button>
               </div>
-              <button @click="onVoucherClick(voucherId)" class="card align-items-center mx-auto" style="width: 8rem;">
-                <img class="card-img-top" src="../assets/logo.png">
-                <div class="card-body">
-                  <p class="card-text">{{ voucher.title }}</p>
-                  <p class="card-text">{{ Intl.NumberFormat('en-US').format(voucher.price) }} 원</p>
-                </div>
-              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -77,7 +82,7 @@ export default {
         .then(() => {
           this.deleted = this.likedVouchers.get(voucherId).title;
           this.likedVouchers.delete(voucherId);
-          
+
           this.sleep(5000).then(() => {
             this.deleted = '';
           });
@@ -91,6 +96,8 @@ export default {
     sleep(ms) {
       return new Promise((r) => setTimeout(r, ms));
     },
+
+    
   },
 
   mounted() {
