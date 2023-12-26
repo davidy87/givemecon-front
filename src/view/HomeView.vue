@@ -1,12 +1,12 @@
 <template>
   <navbar-header></navbar-header>
 
-  <div id="home">
+  <div id="home" class="container">
     <div class="pb-5">
       <h1>기브미콘</h1>
     </div>
   
-    <div class="container-fluid">
+    <div class="container">
       <div class="d-flex align-items-center justify-content-center">
         <div class="row row-cols-auto justify-content-center">
           <div class="col p-4" v-for="category in categories" :key="category">
@@ -28,9 +28,9 @@
             <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="py-5 d-flex align-items-center justify-content-center">
-              <div class="row row-col-auto">
-                <div class="col p-4" v-for="brand in brands" :key="brand">                  
+            <div class="d-flex align-items-center justify-content-center">
+              <div class="row row-col-auto justify-content-center">
+                <div class="col p-3" v-for="brand in brands" :key="brand">                  
                   <button @click="onBrandClick(brand.name)" class="card align-items-center mx-auto" style="width: 8rem;">
                     <img class="card-img-top" src="../assets/logo.png">
                     <div class="card-body" style="width: inherit;">

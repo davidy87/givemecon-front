@@ -1,7 +1,7 @@
 <template>
   <navbar-header></navbar-header>
 
-  <div id="voucher-details">
+  <div id="voucher-details" class="container">
     <h3>쿠폰 상세정보</h3>
 
     <div class="container py-5">

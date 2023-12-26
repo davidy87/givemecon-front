@@ -1,7 +1,7 @@
 <template>
   <navbar-header></navbar-header>
 
-  <div id="liked-vouchers">
+  <div id="liked-vouchers" class="container">
     <div class="pb-5">
       <h1>찜 리스트</h1>
     </div>

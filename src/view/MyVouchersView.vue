@@ -1,7 +1,7 @@
 <template>
   <navbar-header></navbar-header>
 
-  <div id="my-vouchers">
+  <div id="my-vouchers" class="container">
     <div class="pb-5">
       <h1>내 기프티콘</h1>
     </div>

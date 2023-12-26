@@ -1,7 +1,7 @@
 <template>
   <navbar-header></navbar-header>
 
-  <div id="voucher">
+  <div id="voucher" class="container">
     <div class="container">
       <img src="../assets/logo.png" alt="">
     </div>

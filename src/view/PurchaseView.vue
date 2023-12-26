@@ -1,7 +1,7 @@
 <template>
   <navbar-header></navbar-header>
 
-  <div id="purchase">
+  <div id="purchase" class="container">
     <div class="pb-5">
       <h1>결제하기</h1>
     </div>

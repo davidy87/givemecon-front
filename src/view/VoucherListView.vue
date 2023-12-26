@@ -1,7 +1,7 @@
 <template>
   <navbar-header></navbar-header>
 
-  <div id="voucher-list">
+  <div id="voucher-list" class="container">
     <div class="pb-5">
       <h1>{{ this.$route.params.brand }} 기프티콘</h1>
     </div>

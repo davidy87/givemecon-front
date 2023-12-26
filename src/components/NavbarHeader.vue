@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <div class="container-fluid">
+    <div class="container">
       <router-link to="/" class="navbar-brand">
         <img alt="Vue logo" src="../assets/logo.png" style="height:25px;" />
       </router-link>

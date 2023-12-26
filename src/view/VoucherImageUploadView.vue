@@ -1,7 +1,7 @@
 <template>
   <navbar-header></navbar-header>
 
-  <div id="voucher-image-upload">
+  <div id="voucher-image-upload" class="container">
     <h1>판매</h1>
 
     <div class="container py-5"> 

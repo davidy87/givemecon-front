@@ -1,7 +1,7 @@
 <template>
   <navbar-header :key="componentKey"></navbar-header>
 
-  <div id="login">
+  <div id="login" class="container">
     <div class="container py-5">
       <h1>로그인</h1>
     </div>
