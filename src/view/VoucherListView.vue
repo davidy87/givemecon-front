@@ -41,7 +41,6 @@ export default {
   methods: {
     onLoad() {
       axios
-        // .get('/api/brands/' + this.$route.query.brandName + '/vouchers')
         .get('/api/vouchers?brandName=' + this.$route.query.brandName)
         .then((result) => {
           console.log(result);

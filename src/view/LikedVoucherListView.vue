@@ -6,9 +6,16 @@
       <h1>찜 리스트</h1>
     </div>
 
-    <div v-if="this.deleted !== ''" class="container px-5">
+    <div v-if="this.deleted" class="container px-5">
       <div class="alert alert-success">
-        {{ this.deleted }}가 찜 리스트에서 제거되었습니다.
+        <div class="row row-cols-auto align-items-center justify-content-center">
+          <div class="col">
+            {{ this.deleted.title }}가 찜 리스트에서 제거되었습니다. 
+          </div>
+          <div class="col">
+            <button @click="onRollBackClick" class="btn btn-outline-primary">되돌리기</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -57,7 +64,7 @@ export default {
       },
 
       likedVouchers : new Map(),
-      deleted : '',
+      deleted : null,
     }
   },
 
@@ -80,13 +87,14 @@ export default {
       axios
         .delete('/api/liked-vouchers/' + voucherId, { headers: this.headers })
         .then(() => {
-          this.deleted = this.likedVouchers.get(voucherId).title;
+          this.deleted = this.likedVouchers.get(voucherId);
           this.likedVouchers.delete(voucherId);
-
-          this.sleep(5000).then(() => {
-            this.deleted = '';
-          });
         });
+    },
+
+    onRollBackClick() {
+      this.likedVouchers.set(this.deleted.id, this.deleted);
+      this.deleted = null;
     },
 
     onVoucherClick(id) {
@@ -95,9 +103,7 @@ export default {
 
     sleep(ms) {
       return new Promise((r) => setTimeout(r, ms));
-    },
-
-    
+    }
   },
 
   mounted() {
