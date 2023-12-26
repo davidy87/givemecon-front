@@ -3,7 +3,7 @@
 
   <div id="voucher-list">
     <div class="pb-5">
-      <h1>{{ this.$route.params.brandName }} 기프티콘</h1>
+      <h1>{{ this.$route.params.brand }} 기프티콘</h1>
     </div>
 
     <div class="container-fluid">
@@ -41,7 +41,7 @@ export default {
   methods: {
     onLoad() {
       axios
-        .get('/api/vouchers?brandName=' + this.$route.query.brandName)
+        .get('/api/vouchers?brandName=' + this.$route.query.brand)
         .then((result) => {
           console.log(result);
           this.vouchers = result.data;

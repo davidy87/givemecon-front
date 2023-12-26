@@ -167,20 +167,19 @@ export default {
     onLikeClick() {
       if (!localStorage.getItem('accessToken')) {
         alert('로그인 후 이용해주세요.');
-        this.$router.push('/login');
         return;
       }
 
       axios
-      .post('/api/liked-vouchers', this.voucher.id, { headers : this.headers })
-      .then((response) => {
-        console.log(response.data);
-        alert('찜 리스트에 추가되었습니다.');
-      })
-      .catch((error) => {
-        console.log(error);
-        requestNewAccessToken(this.$router);
-      });
+        .post('/api/liked-vouchers', this.voucher.id, { headers : this.headers })
+        .then((response) => {
+          console.log(response.data);
+          alert('찜 리스트에 추가되었습니다.');
+        })
+        .catch((error) => {
+          console.log(error);
+          requestNewAccessToken(this.$router);
+        });
     },
 
     onPurchaseClick() {

@@ -10,7 +10,7 @@
       <div class="alert alert-success">
         <div class="row row-cols-auto align-items-center justify-content-center">
           <div class="col">
-            {{ this.deleted.title }}가 찜 리스트에서 제거되었습니다. 
+            {{ this.deleted.title }}가 찜 리스트에서 제거되었습니다.
           </div>
           <div class="col">
             <button @click="onRollBackClick" class="btn btn-outline-primary">되돌리기</button>
@@ -61,6 +61,7 @@ export default {
     return {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+        'Content-Type': 'application/json'
       },
 
       likedVouchers : new Map(),
@@ -93,8 +94,16 @@ export default {
     },
 
     onRollBackClick() {
-      this.likedVouchers.set(this.deleted.id, this.deleted);
-      this.deleted = null;
+      axios
+        .post('/api/liked-vouchers', this.deleted.id, { headers : this.headers })
+        .then(() => {
+          this.likedVouchers.set(this.deleted.id, this.deleted);
+          this.deleted = null;
+        })
+        .catch((error) => {
+          console.log(error);
+          requestNewAccessToken(this.$router);
+        });
     },
 
     onVoucherClick(id) {

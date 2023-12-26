@@ -85,7 +85,7 @@ export default {
     },
 
     onBrandClick(brandName) {
-      this.$router.push({ path : '/vouchers', query : { brandName : brandName } })
+      this.$router.push({ path : '/vouchers', query : { brand : brandName } })
     },
   },
 
