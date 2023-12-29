@@ -52,8 +52,13 @@ export default {
     onLoad() {
       const params = this.$route.query;
 
-      if (params.oauth2Error === 'true') {
-        alert('로그인 시도 중 문제가 생겼습니다. 다시 시도해주세요.');
+      if (params.error === 'true') {
+        if (params.state === 'duplicate-email') {
+          alert('이미 해당 이메일로 가입된 계정이 존재합니다. 다른 방법으로 시도해주세요.');
+        } else {
+          alert('로그인 시도 중 문제가 생겼습니다. 다시 시도해주세요.');
+        }
+
         this.$router.replace('/login');
       }
 
