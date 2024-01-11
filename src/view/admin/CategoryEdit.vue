@@ -5,14 +5,76 @@
     </div>
 
     <div class="container">
-      <ul class="list-group">
-        <li v-for="category in categories" :key="category" class="list-group-item d-flex">
-          <img class="card-img-top" style="width: 8rem;" src="../../assets/logo.png">
-          <div class="container d-flex align-items-center">
-            {{ category.name }}
+      <div class="d-flex align-items-center justify-content-center">
+        <div class="row row-cols-auto justify-content-center">
+          <div class="col p-3" v-for="category in categories" :key="category">
+            <button @click="onCategoryClick(category)"
+                    data-bs-toggle="modal" data-bs-target="#edit-category"
+                    class="card align-items-center mx-auto" style="width: 8rem;">
+              <img class="card-img-top" src="../../assets/logo.png">
+              <p>{{ category.name }}</p>
+            </button>
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="container pt-3">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-category">카테고리 추가하기</button>
+      </div>
+    </div>
+
+    <!-- 카테고리 추가 모달 -->
+    <div class="modal fade" id="add-category">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5 fw-bold">카테고리 추가</h1>
+            <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex align-items-center justify-content-center">
+              <div class="container">
+                <div class="input-group mb-3">
+                  <label class="input-group-text">카테고리 이름</label>
+                  <input v-model="newCategory.name" type="text" class="form-control" required>
+                </div>
+                <div class="input-group mb-3 pb-3">
+                  <label class="input-group-text">이미지</label>
+                  <input @click="onImageUpload" type="file" class="form-control">
+                </div>
+                <button @click="onAddCategoryClick" class="btn btn-primary">추가하기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 카테고리 수정 모달 -->
+    <div class="modal fade" id="edit-category">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5 fw-bold">카테고리 수정</h1>
+            <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex align-items-center justify-content-center">
+              <div class="container">
+                <div class="input-group mb-3">
+                  <label class="input-group-text">수정할 이름</label>
+                  <input v-model="categoryToEdit.name" type="text" class="form-control" required>
+                </div>
+                <div class="input-group mb-3 pb-3">
+                  <label class="input-group-text">수정할 이미지</label>
+                  <input @click="onImageUpload" type="file" class="form-control">
+                </div>
+                <button @click="onEditCategoryClick" class="btn btn-primary">추가하기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     
   </div>
@@ -20,24 +82,97 @@
 
 <script>
 import axios from 'axios';
+import { requestNewAccessToken } from '@/modules/utilities.js'
 
 export default {
   name: 'CategoryEdit',
   data() {
     return {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+        'Content-Type': 'application/json'
+      },
       categories : [],
+      categoryToEdit : {
+        id : 0,
+        name : '',
+        icon : ''
+      },
+      newCategory : {
+        name : '',
+        icon : ''
+      }
     }
   },
 
   methods: {
     onLoad() {
       axios
-        .get("/api/categories")
-        .then((result) => {
-          console.log(result);
-          this.categories = result.data;
+        .get('/api/categories')
+        .then((response) => {
+          console.log(response.data);
+          this.categories = response.data;
         });
     },
+
+    onImageUpload(e) {
+      const target = e.target;
+
+      if (target.files.length == 1) {
+        this.newCategory.icon = target.files[0];
+      }
+    },
+
+    onAddCategoryClick() {
+      console.log(this.newCategory);
+
+      if (this.newCategory.name === '') {
+        alert('카테고리 이름을 입력해주세요.');
+        return;
+      }
+
+      axios
+        .post('/api/categories', this.newCategory, { headers : this.headers })
+        .then((response) => {
+          console.log(response);
+          alert('카테고리가 추가되었습니다.');
+          this.$router.go(0);
+        })
+        .catch((error) => {
+          console.log(error);
+          requestNewAccessToken(this.$router);
+        });
+    },
+
+    onCategoryClick(category) {
+      this.categoryToEdit = structuredClone(category);
+    },
+
+    onEditCategoryClick() {
+      console.log(this.categoryToEdit);
+
+      if (this.categoryToEdit.name === '') {
+        alert('카테고리 이름을 입력해주세요.');
+        return;
+      }
+
+      const requestBody = {
+        name: this.categoryToEdit.name,
+        icon: this.categoryToEdit.icon
+      }
+
+      axios
+        .put('/api/categories/' + this.categoryToEdit.id, requestBody, { headers : this.headers })
+        .then((response) => {
+          console.log(response);
+          alert('카테고리가 수정되었습니다.');
+          this.$router.go(0);
+        })
+        .catch((error) => {
+          console.log(error);
+          requestNewAccessToken(this.$router);
+        });
+    }
   },
 
   mounted() {
@@ -56,6 +191,7 @@ export default {
   margin-top: 60px;
   margin-bottom: 60px;
 }
+
 .list-group, .list-group-item {
   border-width: thick;
 }
