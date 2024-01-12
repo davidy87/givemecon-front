@@ -13,7 +13,6 @@ import LikedVoucherListView from '@/view/LikedVoucherListView.vue'
 import MyVouchersView from '@/view/MyVouchersView.vue'
 import ValidVoucherView from '@/view/ValidVoucherView.vue'
 import AdminView from '@/view/admin/AdminView.vue'
-import AdminSignupView from '@/view/admin/AdminSignupView.vue'
 import AdminLoginView from '@/view/admin/AdminLoginView.vue'
 import AdminHomeView from '@/view/admin/AdminHomeView.vue'
 import CategoryEdit from "@/view/admin/CategoryEdit.vue"
@@ -34,7 +33,6 @@ const routes = [
   { path: '/purchase', component: PurchaseView, meta: { requiresAuth: true } },
   { path: '/my-vouchers', component: MyVouchersView, meta: { requiresAuth: true } },
   { path: '/my-vouchers/valid/:id', component: ValidVoucherView, meta: { requiresAuth: true } },
-  { path: '/admin/signup', component: AdminSignupView },
   { path: '/admin/login', component: AdminLoginView },
   { path: '/admin',
     component: AdminView, 
