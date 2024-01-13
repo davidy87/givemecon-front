@@ -3,15 +3,12 @@
     <div class="form-signin">
       <h1 class="h3 mb-3 fw-normal">관리자 로그인</h1>
       <div class="form-floating mb-3">
-        <input v-model="loginRequest.username" class="form-control" placeholder="name@example.com">
-        <label for="floatingInput">아이디</label>
+        <input v-model="loginRequest.email" type="email" class="form-control" placeholder="name@example.com">
+        <label for="floatingInput">이메일</label>
       </div>
       <div class="form-floating mb-3">
         <input v-model="loginRequest.password" type="password" class="form-control" placeholder="Password">
         <label for="floatingPassword">비밀번호</label>
-      </div>
-      <div class="container pb-3">
-        <router-link to="/admin/signup">회원가입</router-link>
       </div>
       <button @click="onLoginClick" class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
     </div>
@@ -27,7 +24,7 @@ export default {
   data() {
     return {
       loginRequest : {
-        username: '',
+        email: '',
         password: ''
       }
     }
@@ -39,14 +36,17 @@ export default {
         .post('/api/members/admin/login', this.loginRequest)
         .then((response) => {
           console.log(response.data);
-          localStorage.setItem('grantType', response.data.grantType);
-          localStorage.setItem('accessToken', response.data.accessToken);
-          localStorage.setItem('refreshToken', response.data.refreshToken);
-          localStorage.setItem('role', response.data.role);
+
+          Object.entries(response.data).forEach(entry => {
+            const [key, value] = entry;
+            localStorage.setItem(key, value);
+          });
+
           this.$router.replace('/admin');
         })
         .catch((error) => {
           console.log(error.response.data);
+          
           if (error.response.data.error.code === '001') {
             alert('아이디 혹은 비밀번호가 올바르지 않습니다.');
           }

@@ -46,7 +46,7 @@
                   <input v-model="newBrand.name" type="text" class="form-control" required>
                 </div>
                 <div class="input-group mb-3 pb-3">
-                  <label class="input-group-text">브랜드 이미지</label>
+                  <label class="input-group-text">이미지</label>
                   <input @click="onImageUpload" type="file" class="form-control">
                 </div>
                 <button @click="onAddBrandClick" class="btn btn-primary">추가하기</button>
@@ -68,14 +68,14 @@
             <div class="d-flex align-items-center justify-content-center">
               <div class="container">
                 <div class="input-group mb-3">
-                  <label class="input-group-text">수정할 브랜드 이름</label>
+                  <label class="input-group-text">브랜드 이름</label>
                   <input v-model="brandToEdit.name" type="text" class="form-control" :placeholder="brandToEdit.name" required>
                 </div>
                 <div class="input-group mb-3 pb-3">
-                  <label class="input-group-text">수정할 이미지</label>
+                  <label class="input-group-text">이미지</label>
                   <input @click="onImageUpload" type="file" class="form-control">
                 </div>
-                <button @click="onEditBrandClick" class="btn btn-primary">추가하기</button>
+                <button @click="onEditBrandClick" class="btn btn-primary">수정하기</button>
               </div>
             </div>
           </div>

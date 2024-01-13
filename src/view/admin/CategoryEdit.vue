@@ -11,7 +11,8 @@
             <button @click="onCategoryClick(category)"
                     data-bs-toggle="modal" data-bs-target="#edit-category"
                     class="card align-items-center mx-auto" style="width: 8rem;">
-              <img class="card-img-top" src="../../assets/logo.png">
+              <!-- <img class="card-img-top" src="../../assets/logo.png"> -->
+              <img class="card-img-top" :src="category.icon">
               <p>{{ category.name }}</p>
             </button>
           </div>
@@ -40,7 +41,7 @@
                 </div>
                 <div class="input-group mb-3 pb-3">
                   <label class="input-group-text">이미지</label>
-                  <input @click="onImageUpload" type="file" class="form-control">
+                  <input @change="onImageUpload" type="file" class="form-control">
                 </div>
                 <button @click="onAddCategoryClick" class="btn btn-primary">추가하기</button>
               </div>
@@ -62,21 +63,20 @@
             <div class="d-flex align-items-center justify-content-center">
               <div class="container">
                 <div class="input-group mb-3">
-                  <label class="input-group-text">수정할 이름</label>
+                  <label class="input-group-text">카테고리 이름</label>
                   <input v-model="categoryToEdit.name" type="text" class="form-control" required>
                 </div>
                 <div class="input-group mb-3 pb-3">
-                  <label class="input-group-text">수정할 이미지</label>
+                  <label class="input-group-text">이미지</label>
                   <input @click="onImageUpload" type="file" class="form-control">
                 </div>
-                <button @click="onEditCategoryClick" class="btn btn-primary">추가하기</button>
+                <button @click="onEditCategoryClick" class="btn btn-primary">수정하기</button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
   </div>
 </template>
 
