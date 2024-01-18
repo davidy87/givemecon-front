@@ -11,8 +11,9 @@
             <button @click="onCategoryClick(category)"
                     data-bs-toggle="modal" data-bs-target="#edit-category"
                     class="card align-items-center mx-auto" style="width: 8rem;">
-              <!-- <img class="card-img-top" src="../../assets/logo.png"> -->
-              <img class="card-img-top" :src="category.icon">
+              <div class="container p-3">
+                <img class="card-img-top" :src=category.icon>
+              </div>
               <p>{{ category.name }}</p>
             </button>
           </div>
@@ -81,7 +82,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { requestNewAccessToken } from '@/modules/utilities.js'
 
 export default {
@@ -90,7 +91,7 @@ export default {
     return {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
-        'Content-Type': 'application/json'
+        'Content-Type': 'multipart/form-data'
       },
       categories : [],
       categoryToEdit : {
@@ -124,15 +125,19 @@ export default {
     },
 
     onAddCategoryClick() {
-      console.log(this.newCategory);
+      console.log(this.newCategory.icon);
 
       if (this.newCategory.name === '') {
         alert('카테고리 이름을 입력해주세요.');
         return;
       }
 
+      let formData = new FormData();
+      formData.append('name', this.newCategory.name);
+      formData.append('icon', this.newCategory.icon);
+
       axios
-        .post('/api/categories', this.newCategory, { headers : this.headers })
+        .post('/api/categories', formData, { headers : this.headers })
         .then((response) => {
           console.log(response);
           alert('카테고리가 추가되었습니다.');
@@ -140,7 +145,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          requestNewAccessToken(this.$router);
+          if (error.response.status === HttpStatusCode.Unauthorized) {
+            requestNewAccessToken(this.$router);
+          }
         });
     },
 
@@ -149,20 +156,17 @@ export default {
     },
 
     onEditCategoryClick() {
-      console.log(this.categoryToEdit);
-
       if (this.categoryToEdit.name === '') {
         alert('카테고리 이름을 입력해주세요.');
         return;
       }
 
-      const requestBody = {
-        name: this.categoryToEdit.name,
-        icon: this.categoryToEdit.icon
-      }
+      let formData = new FormData();
+      formData.append('name', this.categoryToEdit.name);
+      formData.append('icon', this.categoryToEdit.icon);
 
       axios
-        .put('/api/categories/' + this.categoryToEdit.id, requestBody, { headers : this.headers })
+        .put('/api/categories/' + this.categoryToEdit.id, formData, { headers : this.headers })
         .then((response) => {
           console.log(response);
           alert('카테고리가 수정되었습니다.');
@@ -170,7 +174,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          requestNewAccessToken(this.$router);
+          if (error.response.status === HttpStatusCode.Unauthorized) {
+            requestNewAccessToken(this.$router);
+          }
         });
     }
   },

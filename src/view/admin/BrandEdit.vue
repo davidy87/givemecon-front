@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 import { ref } from "vue";
 import { requestNewAccessToken } from '@/modules/utilities.js'
 
@@ -96,7 +96,7 @@ export default {
     return {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
-        'Content-Type': 'application/json'
+        'Content-Type': 'multipart/form-data'
       },
       brands : [],
       pagedBrands : [],
@@ -137,15 +137,17 @@ export default {
     },
 
     onAddBrandClick() {
-      console.log(this.newBrand);
-
       if (this.newBrand.name === '') {
         alert('브랜드 이름을 입력해주세요.');
         return;
       }
 
+      let formData = new FormData();
+      formData.append('name', this.newBrand.name);
+      formData.append('icon', this.newBrand.icon);
+
       axios
-        .post('/api/brands', this.newBrand, { headers : this.headers })
+        .post('/api/brands', formData, { headers : this.headers })
         .then((response) => {
           console.log(response);
           alert('브랜드가 추가되었습니다.');
@@ -153,7 +155,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          requestNewAccessToken(this.$router);
+          if (error.response.status === HttpStatusCode.Unauthorized) {
+            requestNewAccessToken(this.$router);
+          }
         });
     },
 
@@ -165,13 +169,12 @@ export default {
         return;
       }
 
-      const requestBody = {
-        name: this.brandToEdit.name,
-        icon: this.brandToEdit.icon
-      }
+      let formData = new FormData();
+      formData.append('name', this.brandToEdit.name);
+      formData.append('icon', this.brandToEdit.icon);
 
       axios
-        .put('/api/brands/' + this.brandToEdit.id, requestBody, { headers : this.headers })
+        .put('/api/brands/' + this.brandToEdit.id, formData, { headers : this.headers })
         .then((response) => {
           console.log(response);
           alert('브랜드가 수정되었습니다.');
@@ -179,7 +182,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          requestNewAccessToken(this.$router);
+          if (error.response.status === HttpStatusCode.Unauthorized) {
+            requestNewAccessToken(this.$router);
+          }
         });
     },
 
