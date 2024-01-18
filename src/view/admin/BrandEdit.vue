@@ -10,7 +10,7 @@
           <div class="col p-3" v-for="brand in pagedBrands" :key="brand">
             <button @click="onBrandClick(brand)"
                     class="card align-items-center mx-auto" data-bs-toggle="modal" data-bs-target="#edit-brand" style="width: 8rem;">
-              <img class="card-img-top" src="../../assets/logo.png">
+              <img class="card-img-top p-3" :src=brand.icon>
               <p>{{ brand.name }}</p>
             </button>
           </div>
@@ -42,12 +42,22 @@
             <div class="d-flex align-items-center justify-content-center">
               <div class="container">
                 <div class="input-group mb-3">
+                  <label class="input-group-text">카테고리 설정</label>
+                  <select class="form-select" v-model="newBrand.categoryId">
+                    <option selected v-bind:value="0">--- 카테고리 ---</option>
+                    <option v-for="category in categories" :key="category" v-bind:value="category.id">
+                      {{ category.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="input-group mb-3">
                   <label class="input-group-text">브랜드 이름</label>
                   <input v-model="newBrand.name" type="text" class="form-control" required>
                 </div>
                 <div class="input-group mb-3 pb-3">
                   <label class="input-group-text">이미지</label>
-                  <input @click="onImageUpload" type="file" class="form-control">
+                  <input @change="onImageUpload($event, newBrand)" type="file" class="form-control">
                 </div>
                 <button @click="onAddBrandClick" class="btn btn-primary">추가하기</button>
               </div>
@@ -68,12 +78,21 @@
             <div class="d-flex align-items-center justify-content-center">
               <div class="container">
                 <div class="input-group mb-3">
+                  <label class="input-group-text">카테고리 설정</label>
+                  <select class="form-select" v-model="brandToEdit.categoryId">
+                    <option selected v-bind:value="0">--- 카테고리 ---</option>
+                    <option v-for="category in categories" :key="category" v-bind:value="category.id">
+                      {{ category.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="input-group mb-3">
                   <label class="input-group-text">브랜드 이름</label>
                   <input v-model="brandToEdit.name" type="text" class="form-control" :placeholder="brandToEdit.name" required>
                 </div>
                 <div class="input-group mb-3 pb-3">
                   <label class="input-group-text">이미지</label>
-                  <input @click="onImageUpload" type="file" class="form-control">
+                  <input @click="onImageUpload($event, brandToEdit)" type="file" class="form-control">
                 </div>
                 <button @click="onEditBrandClick" class="btn btn-primary">수정하기</button>
               </div>
@@ -98,15 +117,18 @@ export default {
         'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
         'Content-Type': 'multipart/form-data'
       },
+      categories : [],
       brands : [],
       pagedBrands : [],
       currentPage : ref(1),
       brandToEdit : {
         id : 0,
+        categoryId : 0,
         name : '',
         icon : ''
       },
       newBrand : {
+        categoryId : 0,
         name : '',
         icon : ''
       }
@@ -116,6 +138,13 @@ export default {
   methods: {
     onLoad() {
       axios
+        .get('/api/categories')
+        .then((response) => {
+          console.log(response.data);
+          this.categories = response.data;
+        });
+
+      axios
         .get("/api/brands")
         .then((response) => {
           console.log(response);
@@ -124,11 +153,11 @@ export default {
         });
     },
 
-    onImageUpload(e) {
+    onImageUpload(e, brand) {
       const target = e.target;
 
       if (target.files.length == 1) {
-        this.newBrand.icon = target.files[0];
+        brand.icon = target.files[0];
       }
     },
 
@@ -137,12 +166,18 @@ export default {
     },
 
     onAddBrandClick() {
+      if (this.newBrand.categoryId == 0) {
+        alert('카테고리를 선택해주세요.');
+        return;
+      }
+
       if (this.newBrand.name === '') {
         alert('브랜드 이름을 입력해주세요.');
         return;
       }
 
       let formData = new FormData();
+      formData.append('categoryId', this.newBrand.categoryId);
       formData.append('name', this.newBrand.name);
       formData.append('icon', this.newBrand.icon);
 
@@ -162,7 +197,10 @@ export default {
     },
 
     onEditBrandClick() {
-      console.log(this.brandToEdit);
+      if (this.newBrand.categoryId == 0) {
+        alert('카테고리를 선택해주세요.');
+        return;
+      }
 
       if (this.brandToEdit.name === '') {
         alert('브랜드 이름을 입력해주세요.');
@@ -170,6 +208,7 @@ export default {
       }
 
       let formData = new FormData();
+      formData.append('categoryId', this.brandToEdit.categoryId);
       formData.append('name', this.brandToEdit.name);
       formData.append('icon', this.brandToEdit.icon);
 

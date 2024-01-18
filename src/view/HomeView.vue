@@ -12,7 +12,7 @@
           <div class="col p-4" v-for="category in categories" :key="category">
             <button @click="onCategoryClick(category.id, category.name)" 
                     class="card align-items-center mx-auto" data-bs-toggle="modal" data-bs-target="#brands" style="width: 8rem;">
-              <img class="card-img-top" src="../assets/logo.png">
+              <img class="card-img-top p-3" :src=category.icon>
               <p>{{ category.name }}</p>
             </button>
           </div>
@@ -32,7 +32,7 @@
               <div class="row row-col-auto justify-content-center">
                 <div class="col p-3" v-for="brand in brands" :key="brand">                  
                   <button @click="onBrandClick(brand.name)" class="card align-items-center mx-auto" style="width: 8rem;">
-                    <img class="card-img-top" src="../assets/logo.png">
+                    <img class="card-img-top p-3" :src=brand.icon>
                     <div class="card-body" style="width: inherit;">
                       <span class="card-text" >{{ brand.name }}</span>
                     </div>

@@ -11,9 +11,7 @@
             <button @click="onCategoryClick(category)"
                     data-bs-toggle="modal" data-bs-target="#edit-category"
                     class="card align-items-center mx-auto" style="width: 8rem;">
-              <div class="container p-3">
-                <img class="card-img-top" :src=category.icon>
-              </div>
+              <img class="card-img-top p-3" :src=category.icon>
               <p>{{ category.name }}</p>
             </button>
           </div>
@@ -42,7 +40,7 @@
                 </div>
                 <div class="input-group mb-3 pb-3">
                   <label class="input-group-text">이미지</label>
-                  <input @change="onImageUpload" type="file" class="form-control">
+                  <input @change="onImageUpload($event, newCategory)" type="file" class="form-control">
                 </div>
                 <button @click="onAddCategoryClick" class="btn btn-primary">추가하기</button>
               </div>
@@ -69,7 +67,7 @@
                 </div>
                 <div class="input-group mb-3 pb-3">
                   <label class="input-group-text">이미지</label>
-                  <input @click="onImageUpload" type="file" class="form-control">
+                  <input @change="onImageUpload($event, categoryToEdit)" type="file" class="form-control">
                 </div>
                 <button @click="onEditCategoryClick" class="btn btn-primary">수정하기</button>
               </div>
@@ -116,11 +114,11 @@ export default {
         });
     },
 
-    onImageUpload(e) {
+    onImageUpload(e, category) {
       const target = e.target;
 
       if (target.files.length == 1) {
-        this.newCategory.icon = target.files[0];
+        category.icon = target.files[0];
       }
     },
 
