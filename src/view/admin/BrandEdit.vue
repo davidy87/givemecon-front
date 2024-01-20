@@ -20,7 +20,7 @@
       <div class="container pt-3">
         <vue-awesome-paginate
           :total-items="brands.length"
-          :items-per-page="10"
+          :items-per-page="16"
           :max-pages-shown="3"
           v-model="currentPage"
           :on-click="onClickHandler"
@@ -145,7 +145,7 @@ export default {
         .then((response) => {
           console.log(response);
           this.brands = response.data;
-          this.pagedBrands = this.brands.slice(0, 10);
+          this.pagedBrands = this.brands.slice(0, 16);
         });
     },
 
@@ -239,7 +239,7 @@ export default {
     onClickHandler(page) {
       console.log(page);
       this.currentPage = ref(page);
-      this.pagedBrands = this.brands.slice((page - 1) * 10, page * 10);
+      this.pagedBrands = this.brands.slice((page - 1) * 16, page * 16);
     }
   },
 
