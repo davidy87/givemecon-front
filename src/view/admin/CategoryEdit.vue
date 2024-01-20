@@ -169,8 +169,8 @@ export default {
         .post('/api/categories/' + this.categoryToEdit.id, formData, getRequestHeaders("multipart/form-data"))
         .then((response) => {
           console.log(response);
-          // alert('카테고리가 수정되었습니다.');
-          // this.$router.go(0);
+          alert('카테고리가 수정되었습니다.');
+          this.$router.go(0);
         })
         .catch((error) => {
           console.log(error);
