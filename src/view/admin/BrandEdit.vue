@@ -107,16 +107,12 @@
 <script>
 import axios, { HttpStatusCode } from 'axios';
 import { ref } from "vue";
-import { requestNewAccessToken } from '@/modules/utilities.js'
+import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
 
 export default {
   name: 'BrandEdit',
   data() {
     return {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
-        'Content-Type': 'multipart/form-data'
-      },
       categories : [],
       brands : [],
       pagedBrands : [],
@@ -192,7 +188,7 @@ export default {
       formData.append('icon', this.newBrand.icon);
 
       axios
-        .post('/api/brands', formData, { headers : this.headers })
+        .post('/api/brands', formData, getRequestHeaders("multipart/form-data"))
         .then((response) => {
           console.log(response);
           alert('브랜드가 추가되었습니다.');
@@ -201,7 +197,7 @@ export default {
         .catch((error) => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router);
+            requestNewAccessToken(this.$router, this.onAddBrandClick);
           }
         });
     },
@@ -226,7 +222,7 @@ export default {
       }
 
       axios
-        .post('/api/brands/' + this.brandToEdit.id, formData, { headers : this.headers })
+        .post('/api/brands/' + this.brandToEdit.id, formData, getRequestHeaders("multipart/form-data"))
         .then((response) => {
           console.log(response);
           alert('브랜드가 수정되었습니다.');
@@ -235,7 +231,7 @@ export default {
         .catch((error) => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router);
+            requestNewAccessToken(this.$router, this.onEditBrandClick);
           }
         });
     },

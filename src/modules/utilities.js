@@ -1,11 +1,12 @@
 import axios, { HttpStatusCode } from "axios";
 
-export const requestNewAccessToken = (router) => {
+export const requestNewAccessToken = (router, callback) => {
   axios
     .get('/api/auth/refresh', { headers: { 'Refresh-Token' : localStorage.getItem('refreshToken') } })
     .then((response) => {
       console.log(response);
       localStorage.setItem('accessToken', response.data);
+      callback();
     })
     .catch((error) => {
       if (error.response.status === HttpStatusCode.Unauthorized) {
@@ -14,4 +15,13 @@ export const requestNewAccessToken = (router) => {
         router.replace('/login');
       }
     });
+}
+
+export const getRequestHeaders = (mediaType) => {
+  return {
+    headers : {
+      'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+      'Content-Type': mediaType
+    }
+  };
 }

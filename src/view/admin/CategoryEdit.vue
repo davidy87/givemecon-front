@@ -81,16 +81,12 @@
 
 <script>
 import axios, { HttpStatusCode } from 'axios';
-import { requestNewAccessToken } from '@/modules/utilities.js'
+import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
 
 export default {
   name: 'CategoryEdit',
   data() {
     return {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
-        'Content-Type': 'multipart/form-data'
-      },
       categories : [],
       newCategory : {
         name : '',
@@ -138,7 +134,7 @@ export default {
       formData.append('icon', this.newCategory.icon);
 
       axios
-        .post('/api/categories', formData, { headers : this.headers })
+        .post('/api/categories', formData, getRequestHeaders("multipart/form-data"))
         .then((response) => {
           console.log(response);
           alert('카테고리가 추가되었습니다.');
@@ -147,7 +143,7 @@ export default {
         .catch((error) => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router);
+            requestNewAccessToken(this.$router, this.onAddCategoryClick);
           }
         });
     },
@@ -170,16 +166,16 @@ export default {
       }
 
       axios
-        .put('/api/categories/' + this.categoryToEdit.id, formData, { headers : this.headers })
+        .post('/api/categories/' + this.categoryToEdit.id, formData, getRequestHeaders("multipart/form-data"))
         .then((response) => {
           console.log(response);
-          alert('카테고리가 수정되었습니다.');
-          this.$router.go(0);
+          // alert('카테고리가 수정되었습니다.');
+          // this.$router.go(0);
         })
         .catch((error) => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router);
+            requestNewAccessToken(this.$router, this.onEditCategoryClick);
           }
         });
     }
