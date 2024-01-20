@@ -44,8 +44,8 @@
                 <div class="input-group mb-3">
                   <label class="input-group-text">카테고리 설정</label>
                   <select class="form-select" v-model="newBrand.categoryId">
-                    <option selected v-bind:value="0">--- 카테고리 ---</option>
-                    <option v-for="category in categories" :key="category" v-bind:value="category.id">
+                    <option disabled :value=0>--- 카테고리 선택 ---</option>
+                    <option v-for="category in categories" :key="category" :value="category.id">
                       {{ category.name }}
                     </option>
                   </select>
@@ -80,8 +80,8 @@
                 <div class="input-group mb-3">
                   <label class="input-group-text">카테고리 설정</label>
                   <select class="form-select" v-model="brandToEdit.categoryId">
-                    <option selected v-bind:value="0">--- 카테고리 ---</option>
-                    <option v-for="category in categories" :key="category" v-bind:value="category.id">
+                    <option disabled :value=0>--- 카테고리 선택 ---</option>
+                    <option v-for="category in categories" :key="category" :value="category.id">
                       {{ category.name }}
                     </option>
                   </select>
@@ -92,7 +92,7 @@
                 </div>
                 <div class="input-group mb-3 pb-3">
                   <label class="input-group-text">이미지</label>
-                  <input @click="onImageUpload($event, brandToEdit)" type="file" class="form-control">
+                  <input @change="onImageUpload($event, brandToEdit)" type="file" class="form-control">
                 </div>
                 <button @click="onEditBrandClick" class="btn btn-primary">수정하기</button>
               </div>
@@ -121,16 +121,16 @@ export default {
       brands : [],
       pagedBrands : [],
       currentPage : ref(1),
+      newBrand : {
+        categoryId : 0,
+        name : '',
+        icon : null
+      },
       brandToEdit : {
         id : 0,
         categoryId : 0,
         name : '',
-        icon : ''
-      },
-      newBrand : {
-        categoryId : 0,
-        name : '',
-        icon : ''
+        icon : null
       }
     }
   },
@@ -162,17 +162,27 @@ export default {
     },
 
     onBrandClick(brand) {
-      this.brandToEdit = structuredClone(brand);
+      this.brandToEdit = {
+        id : brand.id,
+        categoryId : 0,
+        name : brand.name,
+        icon : null
+      }
     },
 
     onAddBrandClick() {
-      if (this.newBrand.categoryId == 0) {
+      if (this.newBrand.categoryId === 0) {
         alert('카테고리를 선택해주세요.');
         return;
       }
 
       if (this.newBrand.name === '') {
         alert('브랜드 이름을 입력해주세요.');
+        return;
+      }
+
+      if (this.newBrand.icon === null) {
+        alert('브랜드 사진을 첨부해주세요.');
         return;
       }
 
@@ -197,7 +207,7 @@ export default {
     },
 
     onEditBrandClick() {
-      if (this.newBrand.categoryId == 0) {
+      if (this.brandToEdit.categoryId === 0) {
         alert('카테고리를 선택해주세요.');
         return;
       }
@@ -210,10 +220,13 @@ export default {
       let formData = new FormData();
       formData.append('categoryId', this.brandToEdit.categoryId);
       formData.append('name', this.brandToEdit.name);
-      formData.append('icon', this.brandToEdit.icon);
+
+      if (this.brandToEdit.icon !== null) {
+        formData.append('icon', this.brandToEdit.icon);
+      }
 
       axios
-        .put('/api/brands/' + this.brandToEdit.id, formData, { headers : this.headers })
+        .post('/api/brands/' + this.brandToEdit.id, formData, { headers : this.headers })
         .then((response) => {
           console.log(response);
           alert('브랜드가 수정되었습니다.');

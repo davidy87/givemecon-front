@@ -92,14 +92,14 @@ export default {
         'Content-Type': 'multipart/form-data'
       },
       categories : [],
+      newCategory : {
+        name : '',
+        icon : null
+      },
       categoryToEdit : {
         id : 0,
         name : '',
-        icon : ''
-      },
-      newCategory : {
-        name : '',
-        icon : ''
+        icon : null
       }
     }
   },
@@ -123,10 +123,13 @@ export default {
     },
 
     onAddCategoryClick() {
-      console.log(this.newCategory.icon);
-
       if (this.newCategory.name === '') {
         alert('카테고리 이름을 입력해주세요.');
+        return;
+      }
+
+      if (this.newCategory.icon === null) {
+        alert('카테고리 사진을 첨부해주세요.');
         return;
       }
 
@@ -161,7 +164,10 @@ export default {
 
       let formData = new FormData();
       formData.append('name', this.categoryToEdit.name);
-      formData.append('icon', this.categoryToEdit.icon);
+
+      if (this.categoryToEdit.icon !== null) {
+        formData.append('icon', this.categoryToEdit.icon);
+      }
 
       axios
         .put('/api/categories/' + this.categoryToEdit.id, formData, { headers : this.headers })
