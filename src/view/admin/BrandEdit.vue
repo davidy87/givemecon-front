@@ -10,7 +10,7 @@
           <div class="col p-3" v-for="brand in pagedBrands" :key="brand">
             <button @click="onBrandClick(brand)"
                     class="card align-items-center mx-auto" data-bs-toggle="modal" data-bs-target="#edit-brand" style="width: 8rem;">
-              <img class="card-img-top p-3" :src=brand.icon>
+              <img class="card-img-top p-3" :src=brand.iconUrl>
               <p>{{ brand.name }}</p>
             </button>
           </div>
@@ -120,13 +120,13 @@ export default {
       newBrand : {
         categoryId : 0,
         name : '',
-        icon : null
+        iconFile : null
       },
       brandToEdit : {
         id : 0,
         categoryId : 0,
         name : '',
-        icon : null
+        iconFile : null
       }
     }
   },
@@ -153,7 +153,7 @@ export default {
       const target = e.target;
 
       if (target.files.length == 1) {
-        brand.icon = target.files[0];
+        brand.iconFile = target.files[0];
       }
     },
 
@@ -162,22 +162,22 @@ export default {
         id : brand.id,
         categoryId : 0,
         name : brand.name,
-        icon : null
+        iconFile : null
       }
     },
 
     onAddBrandClick() {
-      if (this.newBrand.categoryId === 0) {
+      if (!this.newBrand.categoryId) {
         alert('카테고리를 선택해주세요.');
         return;
       }
 
-      if (this.newBrand.name === '') {
+      if (!this.newBrand.name) {
         alert('브랜드 이름을 입력해주세요.');
         return;
       }
 
-      if (this.newBrand.icon === null) {
+      if (!this.newBrand.iconFile) {
         alert('브랜드 사진을 첨부해주세요.');
         return;
       }
@@ -185,7 +185,7 @@ export default {
       let formData = new FormData();
       formData.append('categoryId', this.newBrand.categoryId);
       formData.append('name', this.newBrand.name);
-      formData.append('icon', this.newBrand.icon);
+      formData.append('iconFile', this.newBrand.iconFile);
 
       axios
         .post('/api/brands', formData, getRequestHeaders("multipart/form-data"))
@@ -203,12 +203,12 @@ export default {
     },
 
     onEditBrandClick() {
-      if (this.brandToEdit.categoryId === 0) {
+      if (!this.brandToEdit.categoryId) {
         alert('카테고리를 선택해주세요.');
         return;
       }
 
-      if (this.brandToEdit.name === '') {
+      if (!this.brandToEdit.name === '') {
         alert('브랜드 이름을 입력해주세요.');
         return;
       }
@@ -216,10 +216,7 @@ export default {
       let formData = new FormData();
       formData.append('categoryId', this.brandToEdit.categoryId);
       formData.append('name', this.brandToEdit.name);
-
-      if (this.brandToEdit.icon !== null) {
-        formData.append('icon', this.brandToEdit.icon);
-      }
+      formData.append('iconFile', this.brandToEdit.iconFile);
 
       axios
         .post('/api/brands/' + this.brandToEdit.id, formData, getRequestHeaders("multipart/form-data"))

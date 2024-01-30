@@ -11,7 +11,7 @@
             <button @click="onCategoryClick(category)"
                     data-bs-toggle="modal" data-bs-target="#edit-category"
                     class="card align-items-center mx-auto" style="width: 8rem;">
-              <img class="card-img-top p-3" :src=category.icon>
+              <img class="card-img-top p-3" :src=category.iconUrl>
               <p>{{ category.name }}</p>
             </button>
           </div>
@@ -90,12 +90,12 @@ export default {
       categories : [],
       newCategory : {
         name : '',
-        icon : null
+        iconFile : null
       },
       categoryToEdit : {
         id : 0,
         name : '',
-        icon : null
+        iconFile : null
       }
     }
   },
@@ -114,24 +114,24 @@ export default {
       const target = e.target;
 
       if (target.files.length == 1) {
-        category.icon = target.files[0];
+        category.iconFile = target.files[0];
       }
     },
 
     onAddCategoryClick() {
-      if (this.newCategory.name === '') {
+      if (!this.newCategory.name) {
         alert('카테고리 이름을 입력해주세요.');
         return;
       }
 
-      if (this.newCategory.icon === null) {
+      if (!this.newCategory.iconFile) {
         alert('카테고리 사진을 첨부해주세요.');
         return;
       }
 
       let formData = new FormData();
       formData.append('name', this.newCategory.name);
-      formData.append('icon', this.newCategory.icon);
+      formData.append('iconFile', this.newCategory.iconFile);
 
       axios
         .post('/api/categories', formData, getRequestHeaders("multipart/form-data"))
@@ -153,17 +153,14 @@ export default {
     },
 
     onEditCategoryClick() {
-      if (this.categoryToEdit.name === '') {
+      if (!this.categoryToEdit.name) {
         alert('카테고리 이름을 입력해주세요.');
         return;
       }
 
       let formData = new FormData();
       formData.append('name', this.categoryToEdit.name);
-
-      if (this.categoryToEdit.icon !== null) {
-        formData.append('icon', this.categoryToEdit.icon);
-      }
+      formData.append('iconFile', this.categoryToEdit.iconFile);
 
       axios
         .post('/api/categories/' + this.categoryToEdit.id, formData, getRequestHeaders("multipart/form-data"))
