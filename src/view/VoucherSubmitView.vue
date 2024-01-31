@@ -8,7 +8,7 @@
       <div class="d-flex justify-content-center">
         <div class="card" style="width: auto; height: auto;">
           <div class="container py-3">
-            <img v-bind:src="voucherPost.image" class="card-img-top" style="width: 500px; height: 500px;" />
+            <img v-bind:src="imagePreviewUrl" class="card-img-top p-3" style="width: 500px; height: 500px;" />
           </div>
           <div class="card-body">
             <ul id="details-list-group" class="list-group">
@@ -30,7 +30,7 @@
 
       <div class="container py-5">
         <div>
-          <span class="fw-semibold">입력된 쿠폰 정보를 모두 확인했어요.</span>
+          <span class="fw-semibold">입력된 쿠폰 정보를 모두 확인해주세요.</span>
         </div>
         <div>
           <span>상품명, 교환처, 유효기간, 바코드가 모두 사진과 일치하는지 확인하세요.</span>
@@ -54,22 +54,29 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken } from '@/modules/utilities.js'
-import axios from 'axios';
+import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
+import { computed } from "vue";
+import { useStore } from "vuex";
+import axios, { HttpStatusCode } from 'axios';
 
 export default {
   name: 'VoucherSubmitView',
   components: {
     NavbarHeader,
   },
+
+  setup() {
+    const store = useStore();
+    const imageFile = computed(() => store.state.imageFile);
+    const imagePreviewUrl = computed(() => store.state.imagePreviewUrl);
+
+    return {imageFile, imagePreviewUrl}
+  },
+
   data() {
     return {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-      },
-
       voucherPost : {
-        image : this.$route.query.img,
+        imageFile : this.imageFile,
         title : "",
         price : 0,
         expDate : "",
@@ -80,15 +87,35 @@ export default {
   
   methods: {
     onCancelClick() {
-      if (confirm('판매를 취소하시겠습니까?') === true) {
+      if (confirm('판매를 취소하시겠습니까?')) {
         this.$router.replace('/sell');
       }
     },
 
     onContinueClick() {
-      if (confirm('이 기프티콘을 판매하시겠습니까?') === true) {
+      if (!this.voucherPost.title) {
+        alert("상품명을 확인해주세요.");
+        return;
+      }
+
+      if (!this.voucherPost.price) {
+        alert("가격을 확인해주세요.");
+        return;
+      }
+
+      if (!this.voucherPost.expDate) {
+        alert("유효기간을 확인해주세요.");
+        return;
+      }
+
+      if (!this.voucherPost.barcode) {
+        alert("바코드를 확인해주세요.");
+        return;
+      }
+
+      if (confirm('이 기프티콘을 판매하시겠습니까?')) {
         axios
-          .post('/api/vouchers-for-sale', this.voucherPost, { headers: this.headers })
+          .post('/api/vouchers-for-sale', this.voucherPost, getRequestHeaders("multipart/form-data"))
           .then((response) => {
             console.log(response.data);
             alert('판매 등록이 완료되었습니다.');
@@ -96,7 +123,9 @@ export default {
           })
           .catch((error) => {
             console.log(error);
-            requestNewAccessToken(this.$router);
+            if (error.response.status === HttpStatusCode.Unauthorized) {
+              requestNewAccessToken(this.$router);
+            }
           });
       }
     },

@@ -45,8 +45,8 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken } from '@/modules/utilities.js'
-import axios from 'axios';
+import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
+import axios, { HttpStatusCode } from 'axios';
 import { computed } from "vue";
 import { useStore } from "vuex";
 
@@ -65,15 +65,6 @@ export default {
     const remove = (voucher) => store.commit('remove', voucher);
 
     return { toPurchaseList, totalCount, totalPrice, remove };
-  },
-
-  data() {
-    return {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
-        'Content-Type': 'application/json'
-      },
-    }
   },
 
   methods: {
@@ -99,7 +90,7 @@ export default {
       if (confirm('결제하시겠습니까?')) {
         alert('결제가 완료되었습니다.\n구매하신 기프티콘은 내콘함에서 확인하실 수 있습니다.');
         axios
-          .post('/api/purchased-vouchers', Array.from(this.toPurchaseList.keys()), { headers : this.headers })
+          .post('/api/purchased-vouchers', Array.from(this.toPurchaseList.keys()), getRequestHeaders("application/json"))
           .then((response) => {
             console.log(response.status);
             console.log(response.data);
@@ -107,7 +98,9 @@ export default {
           })
           .catch((error) => {
             console.log(error);
-            requestNewAccessToken(this.$router);
+            if (error.response.status === HttpStatusCode.Unauthorized) {
+              requestNewAccessToken(this.$router);
+            }
           });
       }
     },

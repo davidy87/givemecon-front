@@ -14,7 +14,7 @@
     </div>
 
     <div class="container py-5">
-      <img id="preview" />
+      <img id="preview" class="p-3"/>
     </div>
 
     <div class="container py-5">
@@ -26,6 +26,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import { useStore } from "vuex";
 
 export default {
   name: 'VoucherImageUploadView',
@@ -33,9 +34,17 @@ export default {
     NavbarHeader,
   },
 
+  setup() {
+    const store = useStore();
+    const imageSetter = (imageInfo) => store.commit('setImageInfo', imageInfo);
+
+    return {imageSetter};
+  },
+
   data() {
     return {
-      imageFile : '',
+      imagePreviewUrl : "",
+      imageFile : null,
     }
   },
 
@@ -44,24 +53,31 @@ export default {
       const target = e.target;
 
       if (target.files.length == 1) {
-        this.imageFile = URL.createObjectURL(target.files[0]);
-        document.getElementById('preview').src = this.imageFile;
+        this.imageFile = target.files[0];
+        this.imagePreviewUrl = URL.createObjectURL(this.imageFile);
+
+        this.imageSetter({
+          imageFile : this.imageFile, 
+          imagePreviewUrl: this.imagePreviewUrl
+        });
+        
+        document.getElementById("preview").src = this.imagePreviewUrl;
       } else {
-        document.getElementById('preview').src = '';
+        this.imagePreviewUrl = "";
       }
     },
 
     onUploadClick() {
-      if (this.imageFile === '') {
+      if (!this.imageFile) {
         alert("기프티콘 사진을 등록하세요.");
       } else {
-        this.$router.push({ path: '/sell/details', query: { img: this.imageFile }});
+        this.$router.push('/sell/details');
       }
     }
   },
 
   mounted() {
-    this.imageFile = '';
+    this.imageFile = "";
   }
 }
 </script>

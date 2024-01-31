@@ -32,7 +32,7 @@
               <div class="row row-cols-auto justify-content-center">
                 <div class="col p-4" v-for="voucher in unusedVouchers" :key="voucher">
                   <button @click="onUnusedVoucherClick(voucher.id)" class="card align-items-center mx-auto" style="width: 8rem;">
-                    <img class="card-img-top" src="../assets/logo.png">
+                    <img class="card-img-top" :src="voucher.imageUrl">
                     <div class="card-body">
                       <p class="card-text">{{ voucher.title }}</p>
                       <p class="card-text">{{ Intl.NumberFormat('en-US').format(voucher.price) }} 원</p>
@@ -72,8 +72,8 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken } from '@/modules/utilities.js'
-import axios from 'axios';
+import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
+import axios, { HttpStatusCode } from 'axios';
 
 export default {
   name: 'MyVouchersView',
@@ -83,10 +83,6 @@ export default {
 
   data() {
     return {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-      },
-
       unusedVouchers : [],
       usedVouchers : []
     }
@@ -95,7 +91,7 @@ export default {
   methods: {
     onLoad() {
       axios
-        .get('/api/purchased-vouchers', { headers : this.headers })
+        .get('/api/purchased-vouchers', getRequestHeaders())
         .then((response) => {
           response.data.forEach(voucher => {
             if (voucher.valid) {
@@ -107,7 +103,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          requestNewAccessToken(this.$router);
+          if (error.response.status === HttpStatusCode.Unauthorized) {
+            requestNewAccessToken(this.$router);
+          }
         });
     },
 

@@ -47,9 +47,9 @@
 </template>
 
 <script>
-import axios from 'axios';
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken } from '@/modules/utilities.js'
+import axios, { HttpStatusCode } from 'axios';
+import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
 
 export default {
   name: 'LikedVoucherListView',
@@ -59,11 +59,6 @@ export default {
 
   data() {
     return {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
-        'Content-Type': 'application/json'
-      },
-
       likedVouchers : new Map(),
       deleted : null,
     }
@@ -72,7 +67,7 @@ export default {
   methods: {
     onLoad() {
       axios
-        .get('/api/liked-vouchers', { headers: this.headers })
+        .get('/api/liked-vouchers', getRequestHeaders())
         .then((response) => {
           response.data.forEach((likedVoucher) => {
             this.likedVouchers.set(likedVoucher.id, likedVoucher)
@@ -80,13 +75,15 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          requestNewAccessToken(this.$router);
+          if (error.response.status === HttpStatusCode.Unauthorized) {
+            requestNewAccessToken(this.$router);
+          }
         });
     },
 
     onDeleteClick(voucherId) {
       axios
-        .delete('/api/liked-vouchers/' + voucherId, { headers: this.headers })
+        .delete('/api/liked-vouchers/' + voucherId, getRequestHeaders())
         .then(() => {
           this.deleted = this.likedVouchers.get(voucherId);
           this.likedVouchers.delete(voucherId);
@@ -95,14 +92,16 @@ export default {
 
     onRollBackClick() {
       axios
-        .post('/api/liked-vouchers', this.deleted.id, { headers : this.headers })
+        .post('/api/liked-vouchers', this.deleted.id, getRequestHeaders())
         .then(() => {
           this.likedVouchers.set(this.deleted.id, this.deleted);
           this.deleted = null;
         })
         .catch((error) => {
           console.log(error);
-          requestNewAccessToken(this.$router);
+          if (error.response.status === HttpStatusCode.Unauthorized) {
+            requestNewAccessToken(this.$router);
+          }
         });
     },
 

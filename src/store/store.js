@@ -5,6 +5,8 @@ export default createStore({
     toPurchaseList: new Map(),
     totalCount: 0,
     totalPrice: 0,
+    imageFile: null,
+    imagePreviewUrl: ""
   },
 
   mutations: {
@@ -19,11 +21,16 @@ export default createStore({
       })
     },
 
+    setImageInfo(state, value) {
+      state.imageFile = value.imageFile;
+      state.imagePreviewUrl = value.imagePreviewUrl;
+    },
+
     remove(state, value) {
       state.totalCount -= state.toPurchaseList.get(value);
       state.totalPrice -= value.price * state.toPurchaseList.get(value);
 
       state.toPurchaseList.delete(value);
-    }
+    },
   }
 });

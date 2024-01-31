@@ -3,7 +3,7 @@
 
   <div id="voucher" class="container">
     <div class="container">
-      <img src="../assets/logo.png" alt="">
+      <img :src=voucher.imageUrl alt="">
     </div>
 
     <div class="container">
@@ -123,8 +123,8 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken } from '@/modules/utilities.js'
-import axios from 'axios';
+import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
+import axios, { HttpStatusCode } from 'axios';
 import { useStore } from "vuex";
 
 export default {
@@ -142,11 +142,6 @@ export default {
 
   data() {
     return {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
-        'Content-Type': 'application/json'
-      },
-
       voucher: {},
       voucherForSaleList: [],
       toPurchaseList: new Map(),
@@ -171,14 +166,16 @@ export default {
       }
 
       axios
-        .post('/api/liked-vouchers', this.voucher.id, { headers : this.headers })
+        .post('/api/liked-vouchers', this.voucher.id, getRequestHeaders("application/json"))
         .then((response) => {
           console.log(response.data);
           alert('찜 리스트에 추가되었습니다.');
         })
         .catch((error) => {
           console.log(error);
-          requestNewAccessToken(this.$router);
+          if (error.response.status === HttpStatusCode.Unauthorized) {
+            requestNewAccessToken(this.$router);
+          }
         });
     },
 
