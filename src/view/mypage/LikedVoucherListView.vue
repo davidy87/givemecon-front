@@ -23,11 +23,10 @@
       <div class="d-flex align-items-center justify-content-center">
         <div class="row row-cols-auto justify-content-center">
           <div class="col p-4" v-for="[voucherId, voucher] in likedVouchers" :key="voucherId">
-
             <div class="row">
               <div class="col-sm-8">
                 <button @click="onVoucherClick(voucherId)" class="card align-items-center mx-auto" style="width: 8rem;">
-                  <img class="card-img-top" src="../assets/logo.png">
+                  <img class="card-img-top" :src=voucher.imageUrl>
                   <div class="card-body">
                     <p class="card-text">{{ voucher.title }}</p>
                     <p class="card-text">{{ Intl.NumberFormat('en-US').format(voucher.price) }} 원</p>
