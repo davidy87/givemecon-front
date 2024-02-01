@@ -86,6 +86,12 @@ export default {
         .then(() => {
           this.deleted = this.likedVouchers.get(voucherId);
           this.likedVouchers.delete(voucherId);
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response.status === HttpStatusCode.Unauthorized) {
+            requestNewAccessToken(this.$router);
+          }
         });
     },
 
