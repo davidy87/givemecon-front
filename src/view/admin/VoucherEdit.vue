@@ -44,7 +44,7 @@
                 <div class="row row-col-auto justify-content-center">
                   <div class="col p-3" v-for="voucher in vouchers" :key="voucher">                  
                     <button class="card align-items-center mx-auto" style="width: 8rem;">
-                      <img class="card-img-top p-3" :src=voucher.iconUrl>
+                      <img class="card-img-top p-3" :src=voucher.imageUrl>
                       <div class="card-body" style="width: inherit;">
                         <span class="card-text" >{{ voucher.title }}</span>
                       </div>
@@ -99,8 +99,9 @@ export default {
     return {
       categories : [],
       brands : [],
-      selectedBrand : {},
       vouchers : [],
+      selectedCategory : {},
+      selectedBrand : {},
       newVoucher : {
         title : "",
         imageFile : null
@@ -119,6 +120,7 @@ export default {
     },
 
     onCategoryClick(category) {
+      this.selectedCategory = category;
       axios
         .get("/api/brands?categoryId=" + category.id)
         .then((response) => {
@@ -155,6 +157,7 @@ export default {
       }
 
       let formData = new FormData();
+      formData.append("brandId", this.selectedBrand.id)
       formData.append("price", 0);
       formData.append("title", this.newVoucher.title);
       formData.append("imageFile", this.newVoucher.imageFile);
@@ -164,6 +167,7 @@ export default {
         .then((response) => {
           console.log(response);
           alert("기프티콘 판매 목록이 추가되었습니다.");
+          this.$router.go(0);
         })
         .catch((error) => {
           console.log(error);
