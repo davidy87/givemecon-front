@@ -24,6 +24,11 @@
                   <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">브랜드 관리</span>
                 </a>
               </li>
+              <li>
+                <a @click="onVoucherEditClick" class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">기프티콘 관리</span>
+                </a>
+              </li>
             </ul>
             <hr>
             <div v-if="accessToken" class="dropdown pb-4">
@@ -52,7 +57,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -76,6 +80,10 @@ export default {
     
     onBrandEditClick() {
       this.$router.push('/admin/brands');
+    },
+
+    onVoucherEditClick() {
+      this.$router.push('/admin/vouchers');
     },
 
     onLogoutClick() {

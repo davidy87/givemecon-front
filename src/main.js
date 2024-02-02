@@ -20,6 +20,7 @@ import AdminLoginView from '@/view/admin/AdminLoginView.vue'
 import AdminHomeView from '@/view/admin/AdminHomeView.vue'
 import CategoryEdit from "@/view/admin/CategoryEdit.vue"
 import BrandEdit from "@/view/admin/BrandEdit.vue"
+import VoucherEdit from "@/view/admin/VoucherEdit.vue"
 
 import { createRouter, createWebHistory } from 'vue-router'
 import VueAwesomePaginate from "vue-awesome-paginate";
@@ -54,6 +55,11 @@ const routes = [
       {
         path: '/admin/brands',
         component: BrandEdit,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: "/admin/vouchers",
+        component: VoucherEdit,
         meta: { requiresAuth: true }
       }
     ]
