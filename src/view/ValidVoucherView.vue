@@ -3,7 +3,7 @@
 
   <div id="valid-voucher" class="container">
     <div class="container">
-      <img src="../assets/logo.png" alt="">
+      <img :src="voucher.imageUrl" alt="">
     </div>
     <div class="container">
       <div class="container py-5">

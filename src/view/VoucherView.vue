@@ -3,7 +3,7 @@
 
   <div id="voucher" class="container">
     <div class="container">
-      <img :src=voucher.imageUrl alt="">
+      <img :src="voucher.imageUrl" alt="">
     </div>
 
     <div class="container">
