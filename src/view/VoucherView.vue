@@ -123,7 +123,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/modules/utilities.js'
 import axios, { HttpStatusCode } from 'axios';
 import { useStore } from "vuex";
 
@@ -166,7 +166,7 @@ export default {
       }
 
       axios
-        .post('/api/liked-vouchers', this.voucher.id, getRequestHeaders("application/json"))
+        .post('/api/liked-vouchers', this.voucher.id, getRequestHeaders(ContentType.APPLICATION_JSON))
         .then((response) => {
           console.log(response.data);
           alert('찜 리스트에 추가되었습니다.');

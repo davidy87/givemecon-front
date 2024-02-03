@@ -188,7 +188,7 @@ export default {
       formData.append('iconFile', this.newBrand.iconFile);
 
       axios
-        .post('/api/brands', formData, getRequestHeaders("multipart/form-data"))
+        .post('/api/brands', formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
         .then((response) => {
           console.log(response);
           alert('브랜드가 추가되었습니다.');
@@ -219,7 +219,7 @@ export default {
       formData.append('iconFile', this.brandToEdit.iconFile);
 
       axios
-        .post('/api/brands/' + this.brandToEdit.id, formData, getRequestHeaders("multipart/form-data"))
+        .post('/api/brands/' + this.brandToEdit.id, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
         .then((response) => {
           console.log(response);
           alert('브랜드가 수정되었습니다.');

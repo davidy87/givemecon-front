@@ -43,7 +43,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/modules/utilities.js'
 import axios, { HttpStatusCode } from 'axios';
 
 
@@ -62,7 +62,7 @@ export default {
   methods: {
     onLoad() {
       axios
-        .get('/api/purchased-vouchers/' + this.$route.params.id, getRequestHeaders("application/json"))
+        .get('/api/purchased-vouchers/' + this.$route.params.id, getRequestHeaders(ContentType.APPLICATION_JSON))
         .then((response) => {
           this.voucher = response.data;
         })
@@ -77,7 +77,7 @@ export default {
     onUsedClick() {
       if (confirm('사용완료 하시겠습니까?')) {
         axios
-          .put('/api/purchased-vouchers/' + this.$route.params.id, {}, getRequestHeaders("application/json"))
+          .put('/api/purchased-vouchers/' + this.$route.params.id, {}, getRequestHeaders(ContentType.APPLICATION_JSON))
           .then((response) => {
             console.log(response);
             this.$router.replace('/my-vouchers');

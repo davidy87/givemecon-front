@@ -45,7 +45,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/modules/utilities.js'
 import axios, { HttpStatusCode } from 'axios';
 import { computed } from "vue";
 import { useStore } from "vuex";
@@ -90,7 +90,7 @@ export default {
       if (confirm('결제하시겠습니까?')) {
         alert('결제가 완료되었습니다.\n구매하신 기프티콘은 내콘함에서 확인하실 수 있습니다.');
         axios
-          .post('/api/purchased-vouchers', Array.from(this.toPurchaseList.keys()), getRequestHeaders("application/json"))
+          .post('/api/purchased-vouchers', Array.from(this.toPurchaseList.keys()), getRequestHeaders(ContentType.APPLICATION_JSON))
           .then((response) => {
             console.log(response.status);
             console.log(response.data);

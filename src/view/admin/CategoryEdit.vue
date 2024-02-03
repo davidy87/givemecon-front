@@ -81,7 +81,7 @@
 
 <script>
 import axios, { HttpStatusCode } from 'axios';
-import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/modules/utilities.js'
 
 export default {
   name: 'CategoryEdit',
@@ -134,7 +134,7 @@ export default {
       formData.append('iconFile', this.newCategory.iconFile);
 
       axios
-        .post('/api/categories', formData, getRequestHeaders("multipart/form-data"))
+        .post('/api/categories', formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
         .then((response) => {
           console.log(response);
           alert('카테고리가 추가되었습니다.');
@@ -163,7 +163,7 @@ export default {
       formData.append('iconFile', this.categoryToEdit.iconFile);
 
       axios
-        .post('/api/categories/' + this.categoryToEdit.id, formData, getRequestHeaders("multipart/form-data"))
+        .post('/api/categories/' + this.categoryToEdit.id, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
         .then((response) => {
           console.log(response);
           alert('카테고리가 수정되었습니다.');

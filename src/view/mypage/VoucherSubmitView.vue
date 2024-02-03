@@ -54,7 +54,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/modules/utilities.js'
 import { computed } from "vue";
 import { useStore } from "vuex";
 import axios, { HttpStatusCode } from 'axios';
@@ -115,7 +115,7 @@ export default {
 
       if (confirm('이 기프티콘을 판매하시겠습니까?')) {
         axios
-          .post('/api/vouchers-for-sale', this.voucherPost, getRequestHeaders("multipart/form-data"))
+          .post('/api/vouchers-for-sale', this.voucherPost, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
           .then((response) => {
             console.log(response.data);
             alert('판매 등록이 완료되었습니다.');
