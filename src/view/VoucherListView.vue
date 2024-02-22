@@ -25,32 +25,36 @@
 </template>
   
 <script>
-import axios from 'axios';
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import * as voucherApi from '@/modules/api/voucher';
 
 export default {
   name: 'VoucherListView',
   components: {
     NavbarHeader
   },
+
   data() {
     return {
       vouchers : [],
     };
-  }, 
+  },
+
   methods: {
     onLoad() {
-      axios
-        .get('/api/vouchers?brandName=' + this.$route.query.brand)
-        .then((result) => {
-          console.log(result);
-          this.vouchers = result.data;
+      voucherApi
+        .findAllByBrandName(this.$route.query.brand)
+        .then(response => {
+          console.log(response);
+          this.vouchers = response.data;
         });
     },
+
     onVoucherClick(id) {
       this.$router.push('/vouchers/' + id);
     }
   },
+
   created() {
     this.onLoad();
   }

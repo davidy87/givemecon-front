@@ -1,4 +1,5 @@
-import base from "./base";
+import base from './base';
+import { getRequestHeaders, ContentType } from '../utilities';
 
 export async function save(formData) {
   return base.post('/brands', formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA));

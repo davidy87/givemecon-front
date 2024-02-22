@@ -80,8 +80,9 @@
 </template>
 
 <script>
-import axios, { HttpStatusCode } from 'axios';
-import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/modules/utilities.js'
+import { HttpStatusCode } from 'axios';
+import { requestNewAccessToken } from '@/modules/utilities';
+import * as categoryApi from '@/modules/api/category';
 
 export default {
   name: 'CategoryEdit',
@@ -102,9 +103,9 @@ export default {
 
   methods: {
     onLoad() {
-      axios
-        .get('/api/categories')
-        .then((response) => {
+      categoryApi
+        .findAll()
+        .then(response => {
           console.log(response.data);
           this.categories = response.data;
         });
@@ -132,15 +133,15 @@ export default {
       let formData = new FormData();
       formData.append('name', this.newCategory.name);
       formData.append('iconFile', this.newCategory.iconFile);
-
-      axios
-        .post('/api/categories', formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
-        .then((response) => {
+      
+      categoryApi
+        .save(formData)
+        .then(response => {
           console.log(response);
           alert('카테고리가 추가되었습니다.');
           this.$router.go(0);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
             requestNewAccessToken(this.$router, this.onAddCategoryClick);
@@ -162,14 +163,14 @@ export default {
       formData.append('name', this.categoryToEdit.name);
       formData.append('iconFile', this.categoryToEdit.iconFile);
 
-      axios
-        .post('/api/categories/' + this.categoryToEdit.id, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
-        .then((response) => {
+      categoryApi
+        .update(this.categoryToEdit.id, formData)
+        .then(response => {
           console.log(response);
           alert('카테고리가 수정되었습니다.');
           this.$router.go(0);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
             requestNewAccessToken(this.$router, this.onEditCategoryClick);

@@ -47,8 +47,9 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import axios, { HttpStatusCode } from 'axios';
-import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
+import { HttpStatusCode } from 'axios';
+import { requestNewAccessToken } from '@/modules/utilities';
+import * as likedVoucherApi from '@/modules/api/liked-voucher';
 
 export default {
   name: 'LikedVoucherListView',
@@ -65,14 +66,14 @@ export default {
 
   methods: {
     onLoad() {
-      axios
-        .get('/api/liked-vouchers', getRequestHeaders())
-        .then((response) => {
+      likedVoucherApi
+        .findAll()
+        .then(response => {
           response.data.forEach((likedVoucher) => {
             this.likedVouchers.set(likedVoucher.id, likedVoucher)
           });
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
             requestNewAccessToken(this.$router);
@@ -81,13 +82,13 @@ export default {
     },
 
     onDeleteClick(voucherId) {
-      axios
-        .delete('/api/liked-vouchers/' + voucherId, getRequestHeaders())
+      likedVoucherApi
+        .deleteByVoucherId(voucherId)
         .then(() => {
           this.deleted = this.likedVouchers.get(voucherId);
           this.likedVouchers.delete(voucherId);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
             requestNewAccessToken(this.$router);
@@ -96,13 +97,13 @@ export default {
     },
 
     onRollBackClick() {
-      axios
-        .post('/api/liked-vouchers', this.deleted.id, getRequestHeaders())
+      likedVoucherApi
+        .undoDelete(this.deleted.id)
         .then(() => {
           this.likedVouchers.set(this.deleted.id, this.deleted);
           this.deleted = null;
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
             requestNewAccessToken(this.$router);

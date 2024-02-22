@@ -54,10 +54,11 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/modules/utilities.js'
-import { computed } from "vue";
-import { useStore } from "vuex";
-import axios, { HttpStatusCode } from 'axios';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+import { HttpStatusCode } from 'axios';
+import { requestNewAccessToken } from '@/modules/utilities';
+import * as voucherForSaleApi from '@/modules/api/voucher-for-sale';
 
 export default {
   name: 'VoucherSubmitView',
@@ -77,10 +78,10 @@ export default {
     return {
       voucherPost : {
         imageFile : this.imageFile,
-        title : "",
+        title : '',
         price : 0,
-        expDate : "",
-        barcode : "",
+        expDate : '',
+        barcode : '',
       }
     }
   },
@@ -94,34 +95,34 @@ export default {
 
     onContinueClick() {
       if (!this.voucherPost.title) {
-        alert("상품명을 확인해주세요.");
+        alert('상품명을 확인해주세요.');
         return;
       }
 
       if (!this.voucherPost.price) {
-        alert("가격을 확인해주세요.");
+        alert('가격을 확인해주세요.');
         return;
       }
 
       if (!this.voucherPost.expDate) {
-        alert("유효기간을 확인해주세요.");
+        alert('유효기간을 확인해주세요.');
         return;
       }
 
       if (!this.voucherPost.barcode) {
-        alert("바코드를 확인해주세요.");
+        alert('바코드를 확인해주세요.');
         return;
       }
 
       if (confirm('이 기프티콘을 판매하시겠습니까?')) {
-        axios
-          .post('/api/vouchers-for-sale', this.voucherPost, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
-          .then((response) => {
+        voucherForSaleApi
+          .save(this.voucherPost)
+          .then(response => {
             console.log(response.data);
             alert('판매 등록이 완료되었습니다.');
             this.$router.replace('/');
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             if (error.response.status === HttpStatusCode.Unauthorized) {
               requestNewAccessToken(this.$router);

@@ -48,8 +48,9 @@
 </template>
 
 <script>
-import axios from 'axios';
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import * as categoryApi from '@/modules/api/category';
+import * as brandApi from '@/modules/api/brand';
 
 export default {
   name: 'HomeView',
@@ -61,31 +62,36 @@ export default {
     return {
       categories : [],
       brands : [],
-      modalHeader : "",
+      modalHeader : '',
     };
   },
 
   methods: {
     onLoad() {
-      axios
-        .get("/api/categories")
-        .then((result) => {
-          console.log(result);
-          this.categories = result.data;
+      categoryApi
+        .findAll()
+        .then(response => {
+          console.log(response);
+          this.categories = response.data;
         });
     },
 
     onCategoryClick(categoryId, categoryName) {
       this.modalHeader = categoryName;
-      axios
-        .get('/api/brands?categoryId=' + categoryId)
-        .then((result) => {
-          this.brands = result.data;
-        });
+      brandApi
+        .findAllByCategoryId(categoryId)
+        .then(response => {
+          this.brands = response.data;
+        })
     },
 
     onBrandClick(brandName) {
-      this.$router.push({ path : '/vouchers', query : { brand : brandName } })
+      this.$router.push({ 
+        path: '/vouchers', 
+        query: { 
+          brand: brandName 
+        } 
+      });
     },
   },
 

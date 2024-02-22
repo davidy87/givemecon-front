@@ -43,8 +43,9 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/modules/utilities.js'
-import axios, { HttpStatusCode } from 'axios';
+import { HttpStatusCode } from 'axios';
+import { requestNewAccessToken } from '@/modules/utilities';
+import * as purchasedVoucherApi from '@/modules/api/purchased-voucher';
 
 
 export default {
@@ -61,12 +62,12 @@ export default {
 
   methods: {
     onLoad() {
-      axios
-        .get('/api/purchased-vouchers/' + this.$route.params.id, getRequestHeaders(ContentType.APPLICATION_JSON))
-        .then((response) => {
+      purchasedVoucherApi
+        .findById(this.$route.params.id)
+        .then(response => {
           this.voucher = response.data;
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
             requestNewAccessToken(this.$router);
@@ -76,13 +77,13 @@ export default {
 
     onUsedClick() {
       if (confirm('사용완료 하시겠습니까?')) {
-        axios
-          .put('/api/purchased-vouchers/' + this.$route.params.id, {}, getRequestHeaders(ContentType.APPLICATION_JSON))
-          .then((response) => {
+        purchasedVoucherApi
+          .updateValidity(this.$route.params.id)
+          .then(response => {
             console.log(response);
             this.$router.replace('/my-vouchers');
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             if (error.response.status === HttpStatusCode.Unauthorized) {
               requestNewAccessToken(this.$router);

@@ -105,9 +105,11 @@
 </template>
 
 <script>
-import axios, { HttpStatusCode } from 'axios';
-import { ref } from "vue";
-import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
+import { HttpStatusCode } from 'axios';
+import { ref } from 'vue';
+import { requestNewAccessToken } from '@/modules/utilities';
+import * as categoryApi from '@/modules/api/category';
+import * as brandApi from '@/modules/api/brand';
 
 export default {
   name: 'BrandEdit',
@@ -133,16 +135,16 @@ export default {
 
   methods: {
     onLoad() {
-      axios
-        .get('/api/categories')
-        .then((response) => {
+      categoryApi
+        .findAll()
+        .then(response => {
           console.log(response.data);
           this.categories = response.data;
         });
 
-      axios
-        .get("/api/brands")
-        .then((response) => {
+      brandApi
+        .findAll()
+        .then(response => {
           console.log(response);
           this.brands = response.data;
           this.pagedBrands = this.brands.slice(0, 16);
@@ -187,14 +189,14 @@ export default {
       formData.append('name', this.newBrand.name);
       formData.append('iconFile', this.newBrand.iconFile);
 
-      axios
-        .post('/api/brands', formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
-        .then((response) => {
+      brandApi
+        .save(formData)
+        .then(response => {
           console.log(response);
           alert('브랜드가 추가되었습니다.');
           this.$router.go(0);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
             requestNewAccessToken(this.$router, this.onAddBrandClick);
@@ -218,14 +220,14 @@ export default {
       formData.append('name', this.brandToEdit.name);
       formData.append('iconFile', this.brandToEdit.iconFile);
 
-      axios
-        .post('/api/brands/' + this.brandToEdit.id, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
-        .then((response) => {
+      brandApi
+        .update(this.brandToEdit.id, formData)
+        .then(response => {
           console.log(response);
           alert('브랜드가 수정되었습니다.');
           this.$router.go(0);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
             requestNewAccessToken(this.$router, this.onEditBrandClick);

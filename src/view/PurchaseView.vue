@@ -45,10 +45,11 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/modules/utilities.js'
-import axios, { HttpStatusCode } from 'axios';
-import { computed } from "vue";
-import { useStore } from "vuex";
+import { HttpStatusCode } from 'axios';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+import { requestNewAccessToken } from '@/modules/utilities'
+import * as purchasedVoucherApi from '@/modules/api/purchased-voucher';
 
 
 export default {
@@ -88,15 +89,14 @@ export default {
     onPayClick() {
       // TODO: 결제 방법 추가 필요
       if (confirm('결제하시겠습니까?')) {
-        alert('결제가 완료되었습니다.\n구매하신 기프티콘은 내콘함에서 확인하실 수 있습니다.');
-        axios
-          .post('/api/purchased-vouchers', Array.from(this.toPurchaseList.keys()), getRequestHeaders(ContentType.APPLICATION_JSON))
-          .then((response) => {
-            console.log(response.status);
+        purchasedVoucherApi
+          .save(Array.from(this.toPurchaseList.keys()))
+          .then(response => {
+            alert('결제가 완료되었습니다.\n구매하신 기프티콘은 내콘함에서 확인하실 수 있습니다.');
             console.log(response.data);
             this.$router.replace('/');
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             if (error.response.status === HttpStatusCode.Unauthorized) {
               requestNewAccessToken(this.$router);

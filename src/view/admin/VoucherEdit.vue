@@ -129,8 +129,12 @@
 </template>
 
 <script>
-import axios, { HttpStatusCode } from 'axios';
-import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/modules/utilities.js'
+import { HttpStatusCode } from 'axios';
+import { requestNewAccessToken } from '@/modules/utilities';
+import * as categoryApi from '@/modules/api/category';
+import * as brandApi from '@/modules/api/brand';
+import * as voucherApi from '@/modules/api/voucher';
+
 
 export default {
   name: 'VoucherEdit',
@@ -157,9 +161,9 @@ export default {
 
   methods: {
     onLoad() {
-      axios
-        .get("/api/categories")
-        .then((response) => {
+      categoryApi
+        .findAll()
+        .then(response => {
           console.log(response.data);
           this.categories = response.data;
         });
@@ -167,18 +171,18 @@ export default {
 
     onCategoryClick(category) {
       this.selectedCategory = category;
-      axios
-        .get("/api/brands?categoryId=" + category.id)
-        .then((response) => {
+      brandApi
+        .findAllByCategoryId(category.id)
+        .then(response => {
           this.brands = response.data;
         });
     },
 
     onBrandClick(brand) {
       this.selectedBrand = brand;
-      axios
-        .get("/api/vouchers?brandName=" + brand.name)
-        .then((response) => {
+      voucherApi
+        .findAllByBrandName(brand.name)
+        .then(response => {
           this.vouchers = response.data;
         });
     },
@@ -213,19 +217,19 @@ export default {
       }
 
       let formData = new FormData();
-      formData.append("brandId", this.selectedBrand.id)
-      formData.append("price", 0);
-      formData.append("title", this.newVoucher.title);
-      formData.append("imageFile", this.newVoucher.imageFile);
+      formData.append('brandId', this.selectedBrand.id)
+      formData.append('price', 0);
+      formData.append('title', this.newVoucher.title);
+      formData.append('imageFile', this.newVoucher.imageFile);
 
-      axios
-        .post("/api/vouchers", formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
-        .then((response) => {
+      voucherApi
+        .save(formData)
+        .then(response => {
           console.log(response);
-          alert(response.data.title + " 기프티콘 판매 목록이 추가되었습니다.");
+          alert(response.data.title + ' 기프티콘 판매 목록이 추가되었습니다.');
           this.$router.go(0);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
             requestNewAccessToken(this.$router, this.onAddVoucherClick);
@@ -235,19 +239,19 @@ export default {
 
     onEditVoucherClick() {
       let formData = new FormData();
-      formData.append("title", this.voucherToEdit.newTitle);
-      formData.append("description", this.voucherToEdit.newDescription);
-      formData.append("caution", this.voucherToEdit.newCaution);
-      formData.append("imageFile", this.voucherToEdit.imageFile);
-
-      axios
-        .post("/api/vouchers/" + this.voucherToEdit.id, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
-        .then((response) => {
+      formData.append('title', this.voucherToEdit.newTitle);
+      formData.append('description', this.voucherToEdit.newDescription);
+      formData.append('caution', this.voucherToEdit.newCaution);
+      formData.append('imageFile', this.voucherToEdit.imageFile);
+      
+      voucherApi
+        .update(this.voucherToEdit.id, formData)
+        .then(response => {
           console.log(response);
-          alert("기프티콘 판매 목록 수정이 완료되었습니다.");
+          alert('기프티콘 판매 목록 수정이 완료되었습니다.');
           this.$router.go(0);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
             requestNewAccessToken(this.$router, this.onAddVoucherClick);

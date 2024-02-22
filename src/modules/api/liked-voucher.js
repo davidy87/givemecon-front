@@ -1,5 +1,5 @@
-import base from "./base";
-import { getRequestHeaders, ContentType } from '@/modules/utilities.js'
+import base from './base';
+import { getRequestHeaders, ContentType } from '../utilities';
 
 export async function addToLikedList(voucherId) {
   return base.post('/liked-vouchers', voucherId, getRequestHeaders(ContentType.APPLICATION_JSON));
@@ -10,9 +10,9 @@ export async function findAll() {
 }
 
 export async function undoDelete(id) {
-  return base.post('/api/liked-vouchers', id, getRequestHeaders());
+  return base.post('/liked-vouchers', id, getRequestHeaders());
 }
 
 export async function deleteByVoucherId(voucherId) {
-  return base.delete('/api/liked-vouchers/' + voucherId, getRequestHeaders());
+  return base.delete('/liked-vouchers/' + voucherId, getRequestHeaders());
 }

@@ -123,9 +123,11 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/modules/utilities.js'
-import axios, { HttpStatusCode } from 'axios';
-import { useStore } from "vuex";
+import { HttpStatusCode } from 'axios';
+import { useStore } from 'vuex';
+import { requestNewAccessToken } from '@/modules/utilities'
+import * as voucherApi from '@/modules/api/voucher';
+import * as likedVoucherApi from '@/modules/api/liked-voucher';
 
 export default {
   name: 'VoucherView',
@@ -152,9 +154,9 @@ export default {
 
   methods: {
     onLoad() {
-      axios
-        .get('/api/vouchers/' + this.$route.params.id)
-        .then((response) => {
+      voucherApi
+        .findAllById(this.$route.params.id)
+        .then(response => {
           this.voucher = response.data;
         });
     },
@@ -165,13 +167,13 @@ export default {
         return;
       }
 
-      axios
-        .post('/api/liked-vouchers', this.voucher.id, getRequestHeaders(ContentType.APPLICATION_JSON))
-        .then((response) => {
+      likedVoucherApi
+        .addToLikedList(this.voucher.id)
+        .then(response => {
           console.log(response.data);
           alert('찜 리스트에 추가되었습니다.');
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
             requestNewAccessToken(this.$router);
@@ -180,9 +182,9 @@ export default {
     },
 
     onPurchaseClick() {
-      axios
-        .get('/api/vouchers/' + this.voucher.id + '/selling-list')
-        .then((response) => {
+      voucherApi
+        .findSellingList(this.voucher.id)
+        .then(response => {
           this.voucherForSaleList = response.data;
           this.voucherForSaleList.forEach((voucherForSale) => voucherForSale['voucherId'] = this.voucher.id);
         });

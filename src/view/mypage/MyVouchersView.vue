@@ -72,8 +72,9 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { requestNewAccessToken, getRequestHeaders } from '@/modules/utilities.js'
-import axios, { HttpStatusCode } from 'axios';
+import { HttpStatusCode } from 'axios';
+import { requestNewAccessToken } from '@/modules/utilities';
+import * as purchasedVoucherApi from '@/modules/api/purchased-voucher';
 
 export default {
   name: 'MyVouchersView',
@@ -90,9 +91,9 @@ export default {
 
   methods: {
     onLoad() {
-      axios
-        .get('/api/purchased-vouchers', getRequestHeaders())
-        .then((response) => {
+      purchasedVoucherApi
+        .findAll()
+        .then(response => {
           response.data.forEach(voucher => {
             if (voucher.valid) {
               this.unusedVouchers.push(voucher);
@@ -101,7 +102,7 @@ export default {
             }
           })
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
             requestNewAccessToken(this.$router);
