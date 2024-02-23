@@ -1,22 +1,34 @@
-import base from './base';
+import http from './http';
 import { getRequestHeaders, ContentType } from '../utilities';
 
+const BASE_URL = '/vouchers';
+
 export async function save(formData) {
-  return base.post('/vouchers', formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA));
+  return http.post(BASE_URL, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA));
 }
 
-export async function findAllById(id) {
-  return base.get('/vouchers/' + id);
+export async function findAll() {
+  return http.get(BASE_URL);
 }
 
 export async function findAllByBrandName(brandName) {
-  return base.get('/vouchers?brandName=' + brandName);
+  const payload = {
+    params: {
+      brandName: brandName
+    }
+  };
+
+  return http.get(BASE_URL, payload);
+}
+
+export async function findAllById(id) {
+  return http.get(BASE_URL + `/${id}`);
 }
 
 export async function findSellingList(voucherId) {
-  return base.get('/vouchers/' + voucherId + '/selling-list');
+  return http.get(BASE_URL + `/${voucherId}/selling-list`);
 }
 
 export async function update(id, formData) {
-  return base.post('/vouchers/' + id, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA));
+  return http.post(BASE_URL + `/${id}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA));
 }

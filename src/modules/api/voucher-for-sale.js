@@ -1,6 +1,8 @@
-import base from './base';
+import http from './http';
 import { getRequestHeaders, ContentType } from '../utilities';
 
+const BASE_URL = '/vouchers-for-sale';
+
 export async function save(voucherPost) {
-  return base.post('/api/vouchers-for-sale', voucherPost, getRequestHeaders(ContentType.MULITPART_FORM_DATA));
+  return http.post(BASE_URL, voucherPost, getRequestHeaders(ContentType.MULITPART_FORM_DATA));
 }

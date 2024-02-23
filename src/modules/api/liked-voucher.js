@@ -1,18 +1,20 @@
-import base from './base';
+import http from './http';
 import { getRequestHeaders, ContentType } from '../utilities';
 
+const BASE_URL = '/liked-vouchers';
+
 export async function addToLikedList(voucherId) {
-  return base.post('/liked-vouchers', voucherId, getRequestHeaders(ContentType.APPLICATION_JSON));
+  return http.post(BASE_URL, voucherId, getRequestHeaders(ContentType.APPLICATION_JSON));
 }
 
 export async function findAll() {
-  return base.get('/liked-vouchers', getRequestHeaders());
+  return http.get(BASE_URL, getRequestHeaders());
 }
 
 export async function undoDelete(id) {
-  return base.post('/liked-vouchers', id, getRequestHeaders());
+  return http.post(BASE_URL, id, getRequestHeaders());
 }
 
 export async function deleteByVoucherId(voucherId) {
-  return base.delete('/liked-vouchers/' + voucherId, getRequestHeaders());
+  return http.delete(BASE_URL + `/${voucherId}`, getRequestHeaders());
 }

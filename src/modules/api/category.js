@@ -1,14 +1,16 @@
-import base from './base';
+import http from './http';
 import { getRequestHeaders, ContentType } from '../utilities';
 
+const BASE_URL = '/categories';
+
 export async function save(formData) {
-  return base.post('/categories', formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA));
+  return http.post(BASE_URL, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA));
 }
 
 export async function findAll() {
-  return base.get('/categories');
+  return http.get(BASE_URL);
 }
 
 export async function update(categoryId, formData) {
-  return base.post('/categories/' + categoryId, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
+  return http.post(BASE_URL + `/${categoryId}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
 }

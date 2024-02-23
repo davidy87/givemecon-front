@@ -1,18 +1,20 @@
-import base from './base';
+import http from './http';
 import { getRequestHeaders, ContentType } from '../utilities';
 
+const BASE_URL = '/purchased-vouchers';
+
 export async function save(toPurchaseList) {
-  return base.post('/purchased-vouchers', toPurchaseList, getRequestHeaders(ContentType.APPLICATION_JSON));
+  return http.post(BASE_URL, toPurchaseList, getRequestHeaders(ContentType.APPLICATION_JSON));
 }
 
 export async function findAll() {
-  return base.get('/purchased-vouchers', getRequestHeaders());
+  return http.get(BASE_URL, getRequestHeaders());
 }
 
 export async function findById(id) {
-  return base.get('/purchased-vouchers/' + id, getRequestHeaders(ContentType.APPLICATION_JSON));
+  return http.get(BASE_URL + `/${id}`, getRequestHeaders(ContentType.APPLICATION_JSON));
 }
 
 export async function updateValidity(id) {
-  return base.put('/purchased-vouchers/' + id, {}, getRequestHeaders(ContentType.APPLICATION_JSON));
+  return http.put(BASE_URL + `/${id}`, {}, getRequestHeaders(ContentType.APPLICATION_JSON));
 }
