@@ -200,6 +200,11 @@ export default {
     },
 
     onContinueClick() {
+      if (!this.voucherToPost.imageFile) {
+        alert('기프티콘 이미지를 확인해주세요.');
+        return;
+      }
+
       if (!this.voucherToPost.title) {
         alert('상품명을 확인해주세요.');
         return;
@@ -231,7 +236,7 @@ export default {
           .catch(error => {
             console.log(error);
             if (error.response.status === HttpStatusCode.Unauthorized) {
-              requestNewAccessToken(this.$router);
+              requestNewAccessToken(this.$router, this.onContinueClick);
             }
           });
       }
