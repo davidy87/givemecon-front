@@ -28,6 +28,6 @@ export const getRequestHeaders = (mediaType) => {
 
 export const ContentType = {
   APPLICATION_JSON: "application/json",
-  MULITPART_FORM_DATA: "mulitpart/form-data"
+  MULITPART_FORM_DATA: "multipart/form-data"
 }
 Object.freeze(ContentType);

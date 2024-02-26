@@ -169,6 +169,7 @@ export default {
       selectedCategory : {},
       selectedBrand : {},
       voucherToPost : {
+        voucherId : null,
         imageFile : this.imageFile,
         title : '상품명을 선택해주세요.',
         price : null,
@@ -183,6 +184,7 @@ export default {
       caetgoryApi
         .findAll()
         .then(response => {
+          console.log(response.data);
           this.categories = response.data;
         })
         .catch(error => {
@@ -200,13 +202,15 @@ export default {
     },
 
     onContinueClick() {
+      console.log(this.voucherToPost);
+
       if (!this.voucherToPost.imageFile) {
         alert('기프티콘 이미지를 확인해주세요.');
         return;
       }
 
-      if (!this.voucherToPost.title) {
-        alert('상품명을 확인해주세요.');
+      if (!this.voucherToPost.voucherId || !this.voucherToPost.title) {
+        alert('상품명을 다시 선택해주세요.');
         return;
       }
 
@@ -247,6 +251,7 @@ export default {
       brandApi
         .findAllByCategoryId(category.id)
         .then(response => {
+          console.log(response.data);
           this.brands = response.data;
         });
     },
@@ -256,11 +261,13 @@ export default {
       voucherApi
         .findAllByBrandName(brand.name)
         .then(response => {
+          console.log(response.data);
           this.vouchers = response.data;
         });
     },
 
     onVoucherClick(voucher) {
+      this.voucherToPost.voucherId = voucher.id;
       this.voucherToPost.title = voucher.title;
     }
   },
