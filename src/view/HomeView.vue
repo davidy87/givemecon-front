@@ -49,6 +49,8 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
+import { HttpStatusCode } from 'axios';
+import { requestNewAccessToken } from '@/modules/utilities'
 import * as categoryApi from '@/modules/api/category';
 import * as brandApi from '@/modules/api/brand';
 
@@ -73,6 +75,12 @@ export default {
         .then(response => {
           console.log(response);
           this.categories = response.data;
+        })
+        .catch(error => {
+          console.log(error);
+          if (error.response.status === HttpStatusCode.Unauthorized) {
+            requestNewAccessToken(this.$router);
+          }
         });
     },
 
