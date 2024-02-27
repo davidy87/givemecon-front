@@ -8,7 +8,7 @@ export async function save(formData) {
 }
 
 export async function findAll() {
-  return http.get(BASE_URL);
+  return http.get(BASE_URL, getRequestHeaders());
 }
 
 export async function update(categoryId, formData) {

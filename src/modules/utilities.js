@@ -1,12 +1,21 @@
 import axios, { HttpStatusCode } from "axios";
 
 export const requestNewAccessToken = (router, callback) => {
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  if (!refreshToken) {
+    return;
+  }
+
   axios
-    .get('/api/auth/refresh', { headers: { 'Refresh-Token' : localStorage.getItem('refreshToken') } })
+    .get('/api/auth/refresh', { headers: { 'Refresh-Token' : refreshToken } })
     .then((response) => {
       console.log(response);
       localStorage.setItem('accessToken', response.data);
-      callback();
+
+      if (callback) {
+        callback;
+      }
     })
     .catch((error) => {
       if (error.response.status === HttpStatusCode.Unauthorized) {

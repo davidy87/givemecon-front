@@ -186,12 +186,6 @@ export default {
         .then(response => {
           console.log(response.data);
           this.categories = response.data;
-        })
-        .catch(error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router);
-          }
         });
     },
 
