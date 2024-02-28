@@ -1,4 +1,5 @@
-import axios, { HttpStatusCode } from "axios";
+import { HttpStatusCode } from 'axios';
+import * as tokenApi from '@/modules/api/token';
 
 export const requestNewAccessToken = (router, callback) => {
   const refreshToken = localStorage.getItem('refreshToken');
@@ -7,9 +8,9 @@ export const requestNewAccessToken = (router, callback) => {
     return;
   }
 
-  axios
-    .get('/api/auth/refresh', { headers: { 'Refresh-Token' : refreshToken } })
-    .then((response) => {
+  tokenApi
+    .reissueAccessToken(refreshToken)
+    .then(response => {
       console.log(response);
       localStorage.setItem('accessToken', response.data);
 
@@ -17,7 +18,7 @@ export const requestNewAccessToken = (router, callback) => {
         callback;
       }
     })
-    .catch((error) => {
+    .catch(error => {
       if (error.response.status === HttpStatusCode.Unauthorized) {
         alert('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');
         localStorage.clear();
@@ -27,12 +28,18 @@ export const requestNewAccessToken = (router, callback) => {
 }
 
 export const getRequestHeaders = (mediaType) => {
-  return {
-    headers : {
-      'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
-      'Content-Type': mediaType
-    }
-  };
+  const accessToken = localStorage.getItem('accessToken');
+  const headers = {};
+
+  if (accessToken) {
+    headers['Authorization'] = 'Bearer ' + accessToken;
+  }
+
+  if (mediaType) {
+    headers['Content-Type'] = mediaType;
+  }
+
+  return { headers };
 }
 
 export const ContentType = {
