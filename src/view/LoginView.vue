@@ -62,10 +62,10 @@ export default {
         this.$router.replace('/login');
       }
 
-      if (params.grantType !== undefined) {
-        localStorage.setItem('grantType', params.grantType);
-        localStorage.setItem('accessToken', params.accessToken);
-        localStorage.setItem('refreshToken', params.refreshToken);
+      if (params.grant_type !== undefined) {
+        localStorage.setItem('grantType', params.grant_type);
+        localStorage.setItem('accessToken', params.access_token);
+        localStorage.setItem('refreshToken', params.refresh_token);
         localStorage.setItem('username', params.username);
         this.componentKey += 1;
         this.$router.push('/');
