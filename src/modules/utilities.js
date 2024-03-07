@@ -2,14 +2,8 @@ import { HttpStatusCode } from 'axios';
 import * as tokenApi from '@/modules/api/token';
 
 export const requestNewAccessToken = (router, callback) => {
-  const refreshToken = localStorage.getItem('refreshToken');
-
-  if (!refreshToken) {
-    return;
-  }
-
   tokenApi
-    .reissueAccessToken(refreshToken)
+    .reissueAccessToken()
     .then(response => {
       console.log(response);
       localStorage.setItem('accessToken', response.data);
@@ -34,12 +28,20 @@ export const getRequestHeaders = (mediaType) => {
   if (accessToken) {
     headers['Authorization'] = 'Bearer ' + accessToken;
   }
-
+  
   if (mediaType) {
     headers['Content-Type'] = mediaType;
   }
 
   return { headers };
+}
+
+export const getRefreshTokenHeader = () => {
+  return { 
+      headers: { 
+        Authorization: localStorage.getItem('refreshToken')
+      }
+    };
 }
 
 export const ContentType = {
