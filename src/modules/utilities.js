@@ -22,11 +22,12 @@ export const requestNewAccessToken = (router, callback) => {
 }
 
 export const getRequestHeaders = (mediaType) => {
+  const grantType = localStorage.getItem('grantType');
   const accessToken = localStorage.getItem('accessToken');
   const headers = {};
 
-  if (accessToken) {
-    headers['Authorization'] = 'Bearer ' + accessToken;
+  if (grantType && accessToken) {
+    headers['Authorization'] = `${grantType} ${accessToken}`;
   }
   
   if (mediaType) {
@@ -37,9 +38,12 @@ export const getRequestHeaders = (mediaType) => {
 }
 
 export const getRefreshTokenHeader = () => {
+  const grantType = localStorage.getItem('grantType');
+  const refreshToken = localStorage.getItem('refreshToken');
+
   return { 
-      headers: { 
-        Authorization: localStorage.getItem('refreshToken')
+      headers: {
+        Authorization: `${grantType} ${refreshToken}`
       }
     };
 }

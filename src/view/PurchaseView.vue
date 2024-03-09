@@ -45,10 +45,8 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { HttpStatusCode } from 'axios';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import { requestNewAccessToken } from '@/modules/utilities'
 import * as purchasedVoucherApi from '@/modules/api/purchased-voucher';
 
 
@@ -94,13 +92,11 @@ export default {
           .then(response => {
             alert('결제가 완료되었습니다.\n구매하신 기프티콘은 내콘함에서 확인하실 수 있습니다.');
             console.log(response.data);
-            this.$router.replace('/');
+            this.$router.replace('/'); 
           })
           .catch(error => {
             console.log(error);
-            if (error.response.status === HttpStatusCode.Unauthorized) {
-              requestNewAccessToken(this.$router);
-            }
+            alert('결제에 실패하였습니다. 다시 시도해주세요.');
           });
       }
     },
