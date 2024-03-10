@@ -167,10 +167,11 @@ export default {
           console.log(response.data);
           this.categories = response.data;
         })
-        .catch(error => {
+        .catch(async error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router, this.onLoad);
+            await requestNewAccessToken(this.$router);
+            this.onLoad();
           }
         });
     },
@@ -235,10 +236,11 @@ export default {
           alert(response.data.title + ' 기프티콘 판매 목록이 추가되었습니다.');
           this.$router.go(0);
         })
-        .catch(error => {
+        .catch(async error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router, this.onAddVoucherClick);
+            await requestNewAccessToken(this.$router);
+            this.onAddVoucherClick();
           }
         });
     },
@@ -257,10 +259,11 @@ export default {
           alert('기프티콘 판매 목록 수정이 완료되었습니다.');
           this.$router.go(0);
         })
-        .catch(error => {
+        .catch(async error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router, this.onAddVoucherClick);
+            await requestNewAccessToken(this.$router);
+            this.onEditVoucherClick();
           }
         });
     }

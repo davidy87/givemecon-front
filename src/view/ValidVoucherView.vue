@@ -83,10 +83,11 @@ export default {
             console.log(response);
             this.$router.replace('/my-vouchers');
           })
-          .catch(error => {
+          .catch(async error => {
             console.log(error);
             if (error.response.status === HttpStatusCode.Unauthorized) {
-              requestNewAccessToken(this.$router, this.onUsedClick);
+              await requestNewAccessToken(this.$router);
+              this.onUsedClick();
             }
           });
       }

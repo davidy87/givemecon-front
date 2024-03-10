@@ -109,10 +109,11 @@ export default {
           console.log(response.data);
           this.categories = response.data;
         })
-        .catch(error => {
+        .catch(async error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router, this.onLoad);
+            await requestNewAccessToken(this.$router);
+            this.onLoad();
           }
         });
     },
@@ -147,10 +148,11 @@ export default {
           alert('카테고리가 추가되었습니다.');
           this.$router.go(0);
         })
-        .catch(error => {
+        .catch(async error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router, this.onAddCategoryClick);
+            await requestNewAccessToken(this.$router);
+            this.onAddCategoryClic();
           }
         });
     },
@@ -176,10 +178,11 @@ export default {
           alert('카테고리가 수정되었습니다.');
           this.$router.go(0);
         })
-        .catch(error => {
+        .catch(async error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router, this.onEditCategoryClick);
+            await requestNewAccessToken(this.$router);
+            this.onEditCategoryClick();
           }
         });
     }

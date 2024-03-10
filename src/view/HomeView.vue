@@ -76,10 +76,11 @@ export default {
           console.log(response);
           this.categories = response.data;
         })
-        .catch(error => {
+        .catch(async error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router, this.onLoad);
+            await requestNewAccessToken(this.$router);
+            this.onLoad();
           }
         });
     },

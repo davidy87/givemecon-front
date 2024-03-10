@@ -141,10 +141,11 @@ export default {
           console.log(response.data);
           this.categories = response.data;
         })
-        .catch(error => {
+        .catch(async error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router, this.onLoad);
+            await requestNewAccessToken(this.$router);
+            this.onLoad();
           }
         });
 
@@ -202,10 +203,11 @@ export default {
           alert('브랜드가 추가되었습니다.');
           this.$router.go(0);
         })
-        .catch(error => {
+        .catch(async error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router, this.onAddBrandClick);
+            await requestNewAccessToken(this.$router);
+            this.onAddBrandClick();
           }
         });
     },
@@ -233,10 +235,11 @@ export default {
           alert('브랜드가 수정되었습니다.');
           this.$router.go(0);
         })
-        .catch(error => {
+        .catch(async error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router, this.onEditBrandClick);
+            await requestNewAccessToken(this.$router);
+            this.onEditBrandClick();
           }
         });
     },

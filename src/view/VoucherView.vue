@@ -173,10 +173,11 @@ export default {
           console.log(response.data);
           alert('찜 리스트에 추가되었습니다.');
         })
-        .catch(error => {
+        .catch(async error => {
           console.log(error);
           if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router, this.onLikeClick);
+            await requestNewAccessToken(this.$router);
+            this.onLikeClick();
           }
         });
     },
