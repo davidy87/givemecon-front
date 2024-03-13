@@ -32,11 +32,13 @@ export const getRequestHeaders = (mediaType) => {
 
 export const getRefreshTokenHeader = () => {
   const grantType = localStorage.getItem('grantType');
+  const accessToken = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
 
   return { 
       headers: {
-        Authorization: `${grantType} ${refreshToken}`
+        'Authorization': `${grantType} ${accessToken}`,
+        'Refresh-Token': `${grantType} ${refreshToken}`
       }
     };
 }
