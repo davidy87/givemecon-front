@@ -3,8 +3,11 @@ import * as tokenApi from '@/modules/api/token';
 
 export const requestNewAccessToken = async (router) => {
   try {
-    let response = await tokenApi.reissueAccessToken();
-    localStorage.setItem('accessToken', response.data);
+    let response = await tokenApi.reissueToken();
+    Object.entries(response.data).forEach(([key, value]) => {
+      localStorage.setItem(key, value);
+    });
+
   } catch (error) {
     if (error.response.status === HttpStatusCode.Unauthorized) {
       alert('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');
