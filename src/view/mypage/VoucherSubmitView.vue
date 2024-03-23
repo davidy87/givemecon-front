@@ -237,12 +237,7 @@ export default {
 
     onCategoryClick(category) {
       this.selectedCategory = category;
-      brandApi
-        .findAllByCategoryId(category.id)
-        .then(response => {
-          console.log(response.data);
-          this.brands = response.data;
-        });
+      brandApi.findAllByCategoryId(category.id, this.brands);
     },
 
     onBrandClick(brand) {
