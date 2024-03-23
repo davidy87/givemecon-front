@@ -39,7 +39,7 @@ export async function findAll(brands, pagedBrands) {
     });
 }
 
-export async function findAllByCategoryId(brands, categoryId) {
+export async function findAllByCategoryId(categoryId, brands) {
   const payload = {
     params : {
       categoryId: categoryId
