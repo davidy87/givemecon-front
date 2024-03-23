@@ -49,8 +49,6 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken } from '@/modules/utilities'
 import * as categoryApi from '@/modules/api/category';
 import * as brandApi from '@/modules/api/brand';
 
@@ -70,28 +68,12 @@ export default {
 
   methods: {
     onLoad() {
-      categoryApi
-        .findAll()
-        .then(response => {
-          console.log(response);
-          this.categories = response.data;
-        })
-        .catch(async error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            await requestNewAccessToken(this.$router);
-            this.onLoad();
-          }
-        });
+      categoryApi.findAll(this.categories, this.$router)
     },
 
     onCategoryClick(categoryId, categoryName) {
       this.modalHeader = categoryName;
-      brandApi
-        .findAllByCategoryId(categoryId)
-        .then(response => {
-          this.brands = response.data;
-        })
+      brandApi.findAllByCategoryId(this.brands, categoryId);
     },
 
     onBrandClick(brandName) {

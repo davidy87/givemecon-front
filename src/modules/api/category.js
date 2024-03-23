@@ -1,16 +1,67 @@
 import http from './http';
-import { getRequestHeaders, ContentType } from '../utilities';
+import { HttpStatusCode } from 'axios';
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '../utilities';
 
 const BASE_URL = '/categories';
 
-export async function save(formData) {
-  return http.post(BASE_URL, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA));
+export function save(formData, router) {
+  http
+    .post(BASE_URL, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
+    .then(
+      (response) => {
+        console.log(response);
+        alert('카테고리가 추가되었습니다.');
+        router.go(0);
+      },
+      async (error) => {
+        console.log(error);
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          await requestNewAccessToken(router);
+          save(formData, router);
+        }
+      }
+    )
 }
 
-export async function findAll() {
-  return http.get(BASE_URL, getRequestHeaders());
+// export async function findAll() {
+//   return http.get(BASE_URL, getRequestHeaders());
+// }
+
+export function findAll(categories, router) {
+  http
+    .get(BASE_URL, getRequestHeaders())
+    .then(
+      (response) => {
+        console.log(response);
+        response.data.forEach((category) => {
+          categories.push(category);
+        });
+      },
+      async (error) => {
+        console.log(error);
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          await requestNewAccessToken(router);
+          findAll(categories, router);
+        }
+      },
+    );
 }
 
-export async function update(categoryId, formData) {
-  return http.post(BASE_URL + `/${categoryId}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
+export function update(categoryId, formData, router) {
+  http
+    .post(BASE_URL + `/${categoryId}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
+    .then(
+      (response) => {
+        console.log(response);
+        alert('카테고리가 수정되었습니다.');
+        router.go(0);
+      },
+      async (error) => {
+        console.log(error);
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          await requestNewAccessToken(router);
+          update(categoryId, formData, router);
+        }
+      }
+    );
 }

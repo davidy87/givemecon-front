@@ -80,8 +80,6 @@
 </template>
 
 <script>
-import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken } from '@/modules/utilities';
 import * as categoryApi from '@/modules/api/category';
 
 export default {
@@ -103,19 +101,7 @@ export default {
 
   methods: {
     onLoad() {
-      categoryApi
-        .findAll()
-        .then(response => {
-          console.log(response.data);
-          this.categories = response.data;
-        })
-        .catch(async error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            await requestNewAccessToken(this.$router);
-            this.onLoad();
-          }
-        });
+      categoryApi.findAll(this.categories, this.$router);
     },
 
     onImageUpload(e, category) {
@@ -140,21 +126,8 @@ export default {
       let formData = new FormData();
       formData.append('name', this.newCategory.name);
       formData.append('iconFile', this.newCategory.iconFile);
-      
-      categoryApi
-        .save(formData)
-        .then(response => {
-          console.log(response);
-          alert('카테고리가 추가되었습니다.');
-          this.$router.go(0);
-        })
-        .catch(async error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            await requestNewAccessToken(this.$router);
-            this.onAddCategoryClic();
-          }
-        });
+
+      categoryApi.save(formData, this.$router);
     },
 
     onCategoryClick(category) {
@@ -171,20 +144,7 @@ export default {
       formData.append('name', this.categoryToEdit.name);
       formData.append('iconFile', this.categoryToEdit.iconFile);
 
-      categoryApi
-        .update(this.categoryToEdit.id, formData)
-        .then(response => {
-          console.log(response);
-          alert('카테고리가 수정되었습니다.');
-          this.$router.go(0);
-        })
-        .catch(async error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            await requestNewAccessToken(this.$router);
-            this.onEditCategoryClick();
-          }
-        });
+      categoryApi.update(this.categoryToEdit.id, formData, this.$router);
     }
   },
 

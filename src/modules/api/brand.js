@@ -11,14 +11,22 @@ export async function findAll() {
   return http.get(BASE_URL);
 }
 
-export async function findAllByCategoryId(categoryId) {
+export function findAllByCategoryId(brands, categoryId) {
   const payload = {
     params : {
       categoryId: categoryId
     }
   };
 
-  return http.get(BASE_URL, payload);
+  http
+    .get(BASE_URL, payload)
+    .then(
+      (response) => {
+        response.data.forEach((brand) => {
+          brands.push(brand);
+        });
+      }
+    );
 }
 
 export async function update(id, formData) {
