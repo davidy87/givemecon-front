@@ -43,10 +43,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken } from '@/modules/utilities';
 import * as purchasedVoucherApi from '@/modules/api/purchased-voucher';
-
 
 export default {
   name: 'ValidVoucherView',
@@ -62,34 +59,12 @@ export default {
 
   methods: {
     onLoad() {
-      purchasedVoucherApi
-        .findById(this.$route.params.id)
-        .then(response => {
-          this.voucher = response.data;
-        })
-        .catch(error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.onLoad);
-          }
-        });
+      purchasedVoucherApi.findById(this.$route.params.id, this.voucher);
     },
 
     onUsedClick() {
       if (confirm('사용완료 하시겠습니까?')) {
-        purchasedVoucherApi
-          .updateValidity(this.$route.params.id)
-          .then(response => {
-            console.log(response);
-            this.$router.replace('/my-vouchers');
-          })
-          .catch(async error => {
-            console.log(error);
-            if (error.response.status === HttpStatusCode.Unauthorized) {
-              await requestNewAccessToken(this.$router);
-              this.onUsedClick();
-            }
-          });
+        purchasedVoucherApi.updateValidity(this.$route.params.id, this.$router);
       }
     },
 

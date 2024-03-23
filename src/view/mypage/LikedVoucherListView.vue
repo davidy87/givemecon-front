@@ -47,8 +47,6 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken } from '@/modules/utilities';
 import * as likedVoucherApi from '@/modules/api/liked-voucher';
 
 export default {
@@ -66,49 +64,17 @@ export default {
 
   methods: {
     onLoad() {
-      likedVoucherApi
-        .findAll()
-        .then(response => {
-          response.data.forEach((likedVoucher) => {
-            this.likedVouchers.set(likedVoucher.id, likedVoucher)
-          });
-        })
-        .catch(error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router);
-          }
-        });
+      likedVoucherApi.findAll(this.likedVouchers, this.$router);
     },
 
     onDeleteClick(voucherId) {
-      likedVoucherApi
-        .deleteByVoucherId(voucherId)
-        .then(() => {
-          this.deleted = this.likedVouchers.get(voucherId);
-          this.likedVouchers.delete(voucherId);
-        })
-        .catch(error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router);
-          }
-        });
+      this.deleted = {};
+      likedVoucherApi.deleteByVoucherId(voucherId, this.likedVouchers, this.deleted, this.$router);
     },
 
     onRollBackClick() {
-      likedVoucherApi
-        .undoDelete(this.deleted.id)
-        .then(() => {
-          this.likedVouchers.set(this.deleted.id, this.deleted);
-          this.deleted = null;
-        })
-        .catch(error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router);
-          }
-        });
+      likedVoucherApi.undoDelete(this.deleted, this.likedVouchers, this.$router);
+      this.deleted = null;
     },
 
     onVoucherClick(id) {

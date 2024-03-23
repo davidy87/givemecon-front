@@ -73,7 +73,7 @@ export default {
 
     onCategoryClick(categoryId, categoryName) {
       this.modalHeader = categoryName;
-      brandApi.findAllByCategoryId(this.brands, categoryId);
+      brandApi.findAllByCategoryId(categoryId, this.brands);
     },
 
     onBrandClick(brandName) {

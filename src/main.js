@@ -12,8 +12,7 @@ import VoucherImageUploadView from '@/view/mypage/VoucherImageUploadView.vue'
 import VoucherSubmitView from '@/view/mypage/VoucherSubmitView.vue'
 import LikedVoucherListView from '@/view/mypage/LikedVoucherListView.vue'
 import MyVouchersView from '@/view/mypage/MyVouchersView.vue'
-
-import ValidVoucherView from '@/view/ValidVoucherView.vue'
+import ValidVoucherView from '@/view/mypage/ValidVoucherView.vue'
 
 import AdminView from '@/view/admin/AdminView.vue'
 import AdminLoginView from '@/view/admin/AdminLoginView.vue'

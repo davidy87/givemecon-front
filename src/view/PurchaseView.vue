@@ -87,17 +87,7 @@ export default {
     onPayClick() {
       // TODO: 결제 방법 추가 필요
       if (confirm('결제하시겠습니까?')) {
-        purchasedVoucherApi
-          .save(Array.from(this.toPurchaseList.keys()))
-          .then(response => {
-            alert('결제가 완료되었습니다.\n구매하신 기프티콘은 내콘함에서 확인하실 수 있습니다.');
-            console.log(response.data);
-            this.$router.replace('/'); 
-          })
-          .catch(error => {
-            console.log(error);
-            alert('결제에 실패하였습니다. 다시 시도해주세요.');
-          });
+        purchasedVoucherApi.save(Array.from(this.toPurchaseList.keys()), this.$router);
       }
     },
 

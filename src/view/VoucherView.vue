@@ -123,9 +123,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { HttpStatusCode } from 'axios';
 import { useStore } from 'vuex';
-import { requestNewAccessToken } from '@/modules/utilities'
 import * as voucherApi from '@/modules/api/voucher';
 import * as likedVoucherApi from '@/modules/api/liked-voucher';
 
@@ -167,19 +165,7 @@ export default {
         return;
       }
 
-      likedVoucherApi
-        .addToLikedList(this.voucher.id)
-        .then(response => {
-          console.log(response.data);
-          alert('찜 리스트에 추가되었습니다.');
-        })
-        .catch(async error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            await requestNewAccessToken(this.$router);
-            this.onLikeClick();
-          }
-        });
+      likedVoucherApi.addToLikedList(this.voucher.id, this.$router);
     },
 
     onPurchaseClick() {
