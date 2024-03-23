@@ -68,7 +68,7 @@ export default {
 
   methods: {
     onLoad() {
-      categoryApi.findAll(this.categories, this.$router)
+      categoryApi.findAll(this.categories, this.$router);
     },
 
     onCategoryClick(categoryId, categoryName) {
@@ -80,7 +80,7 @@ export default {
       this.$router.push({ 
         path: '/vouchers', 
         query: { 
-          brand: brandName 
+          brand: brandName
         } 
       });
     },

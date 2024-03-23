@@ -23,19 +23,17 @@ export function save(formData, router) {
     )
 }
 
-// export async function findAll() {
-//   return http.get(BASE_URL, getRequestHeaders());
-// }
-
 export function findAll(categories, router) {
   http
     .get(BASE_URL, getRequestHeaders())
     .then(
       (response) => {
         console.log(response);
-        response.data.forEach((category) => {
-          categories.push(category);
-        });
+        if (categories.length === 0) {
+          response.data.forEach((category) => {
+            categories.push(category);
+          });
+        }
       },
       async (error) => {
         console.log(error);

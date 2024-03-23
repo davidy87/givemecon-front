@@ -161,19 +161,7 @@ export default {
 
   methods: {
     onLoad() {
-      categoryApi
-        .findAll()
-        .then(response => {
-          console.log(response.data);
-          this.categories = response.data;
-        })
-        .catch(async error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            await requestNewAccessToken(this.$router);
-            this.onLoad();
-          }
-        });
+      categoryApi.findAll(this.categories, this.$router);
     },
 
     onCategoryClick(category) {

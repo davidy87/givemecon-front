@@ -181,18 +181,7 @@ export default {
   
   methods: {
     onLoad() {
-      caetgoryApi
-        .findAll()
-        .then(response => {
-          console.log(response.data);
-          this.categories = response.data;
-        })
-        .catch(error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            requestNewAccessToken(this.$router);
-          }
-        });
+      caetgoryApi.findAll(this.categories, this.$router);
     },
 
     onCancelClick() {
