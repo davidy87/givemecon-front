@@ -129,8 +129,6 @@
 </template>
 
 <script>
-import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken } from '@/modules/utilities';
 import * as categoryApi from '@/modules/api/category';
 import * as brandApi from '@/modules/api/brand';
 import * as voucherApi from '@/modules/api/voucher';
@@ -172,11 +170,8 @@ export default {
 
     onBrandClick(brand) {
       this.selectedBrand = brand;
-      voucherApi
-        .findAllByBrandName(brand.name)
-        .then(response => {
-          this.vouchers = response.data;
-        });
+      this.vouchers = [];
+      voucherApi.findAllByBrandName(brand.name, this.vouchers);
     },
 
     onImageUpload(e, voucher) {
@@ -214,20 +209,7 @@ export default {
       formData.append('title', this.newVoucher.title);
       formData.append('imageFile', this.newVoucher.imageFile);
 
-      voucherApi
-        .save(formData)
-        .then(response => {
-          console.log(response);
-          alert(response.data.title + ' 기프티콘 판매 목록이 추가되었습니다.');
-          this.$router.go(0);
-        })
-        .catch(async error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            await requestNewAccessToken(this.$router);
-            this.onAddVoucherClick();
-          }
-        });
+      voucherApi.save(formData, this.$router);
     },
 
     onEditVoucherClick() {
@@ -237,20 +219,7 @@ export default {
       formData.append('caution', this.voucherToEdit.newCaution);
       formData.append('imageFile', this.voucherToEdit.imageFile);
       
-      voucherApi
-        .update(this.voucherToEdit.id, formData)
-        .then(response => {
-          console.log(response);
-          alert('기프티콘 판매 목록 수정이 완료되었습니다.');
-          this.$router.go(0);
-        })
-        .catch(async error => {
-          console.log(error);
-          if (error.response.status === HttpStatusCode.Unauthorized) {
-            await requestNewAccessToken(this.$router);
-            this.onEditVoucherClick();
-          }
-        });
+      voucherApi.update(this.voucherToEdit.id, formData, this.$router);
     }
   },
 

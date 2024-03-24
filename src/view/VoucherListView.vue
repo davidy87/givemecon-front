@@ -42,12 +42,7 @@ export default {
 
   methods: {
     onLoad() {
-      voucherApi
-        .findAllByBrandName(this.$route.query.brand)
-        .then(response => {
-          console.log(response);
-          this.vouchers = response.data;
-        });
+      voucherApi.findAllByBrandName(this.$route.query.brand, this.vouchers);
     },
 
     onVoucherClick(id) {

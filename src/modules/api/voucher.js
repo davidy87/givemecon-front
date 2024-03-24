@@ -1,34 +1,89 @@
 import http from './http';
-import { getRequestHeaders, ContentType } from '../utilities';
+import { HttpStatusCode } from 'axios';
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '../utilities';
 
-const BASE_URL = '/vouchers';
+const BASE_PATH = '/vouchers';
 
-export async function save(formData) {
-  return http.post(BASE_URL, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA));
+export async function save(formData, router) {
+  http
+    .post(BASE_PATH, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
+    .then(
+      (response) => {
+        console.log(response);
+        alert(response.data.title + ' 기프티콘 판매 목록이 추가되었습니다.');
+        router.go(0);
+      },
+      async (error) => {
+        console.log(error);
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          await requestNewAccessToken(router);
+          save(formData, router);
+        }
+      }
+    );
 }
 
-export async function findAll() {
-  return http.get(BASE_URL);
-}
-
-export async function findAllByBrandName(brandName) {
+export async function findAllByBrandName(brandName, vouchers) {
   const payload = {
     params: {
       brandName: brandName
     }
   };
 
-  return http.get(BASE_URL, payload);
+  http
+    .get(BASE_PATH, payload)
+    .then(
+      (response) => {
+        console.log(response);
+        if (vouchers.length === 0) {
+          response.data.forEach(voucher => {
+            vouchers.push(voucher);
+          });
+        }
+      }
+    );
 }
 
-export async function findAllById(id) {
-  return http.get(BASE_URL + `/${id}`);
+export async function findById(id, voucher) {
+  http
+    .get(BASE_PATH + `/${id}`)
+    .then((response) => {
+      console.log(response);
+      Object.entries(response.data).forEach(([key, value]) => {
+        voucher[key] = value;
+      })
+    });
 }
 
-export async function findSellingList(voucherId) {
-  return http.get(BASE_URL + `/${voucherId}/selling-list`);
+export async function findSellingList(voucherId, voucherForSaleList) {
+  http
+    .get(BASE_PATH + `/${voucherId}/selling-list`)
+    .then((response) => {
+      console.log(response);
+      if (voucherForSaleList.length === 0) {
+        response.data.forEach((voucherForSale) => {
+          voucherForSale['voucherId'] = voucherId;
+          voucherForSaleList.push(voucherForSale);
+        });
+      }
+    });
 }
 
-export async function update(id, formData) {
-  return http.post(BASE_URL + `/${id}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA));
+export async function update(id, formData, router) {
+  http
+    .post(BASE_PATH + `/${id}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
+    .then(
+      (response) => {
+        console.log(response);
+        alert('기프티콘 판매 목록 수정이 완료되었습니다.');
+        router.go(0);
+      },
+      async (error) => {
+        console.log(error);
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          await requestNewAccessToken(router);
+          update(id, formData, router);
+        }
+      }
+    );
 }

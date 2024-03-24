@@ -140,8 +140,6 @@
 import NavbarHeader from '@/components/NavbarHeader.vue';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken } from '@/modules/utilities';
 import * as caetgoryApi from '@/modules/api/category';
 import * as brandApi from '@/modules/api/brand';
 import * as voucherApi from '@/modules/api/voucher';
@@ -219,35 +217,20 @@ export default {
       }
 
       if (confirm('이 기프티콘을 판매하시겠습니까?')) {
-        voucherForSaleApi
-          .save(this.voucherToPost)
-          .then(response => {
-            console.log(response.data);
-            alert('판매 등록이 완료되었습니다.');
-            this.$router.replace('/');
-          })
-          .catch(error => {
-            console.log(error);
-            if (error.response.status === HttpStatusCode.Unauthorized) {
-              requestNewAccessToken(this.$router, this.onContinueClick);
-            }
-          });
+        voucherForSaleApi.save(this.voucherToPost, this.$router);
       }
     },
 
     onCategoryClick(category) {
       this.selectedCategory = category;
+      this.brands = [];
       brandApi.findAllByCategoryId(category.id, this.brands);
     },
 
     onBrandClick(brand) {
       this.selectedBrand = brand;
-      voucherApi
-        .findAllByBrandName(brand.name)
-        .then(response => {
-          console.log(response.data);
-          this.vouchers = response.data;
-        });
+      this.vouchers = [];
+      voucherApi.findAllByBrandName(brand.name, this.vouchers);
     },
 
     onVoucherClick(voucher) {

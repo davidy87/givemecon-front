@@ -152,11 +152,7 @@ export default {
 
   methods: {
     onLoad() {
-      voucherApi
-        .findAllById(this.$route.params.id)
-        .then(response => {
-          this.voucher = response.data;
-        });
+      voucherApi.findById(this.$route.params.id, this.voucher);
     },
 
     onLikeClick() {
@@ -164,17 +160,11 @@ export default {
         alert('로그인 후 이용해주세요.');
         return;
       }
-
       likedVoucherApi.addToLikedList(this.voucher.id, this.$router);
     },
 
     onPurchaseClick() {
-      voucherApi
-        .findSellingList(this.voucher.id)
-        .then(response => {
-          this.voucherForSaleList = response.data;
-          this.voucherForSaleList.forEach((voucherForSale) => voucherForSale['voucherId'] = this.voucher.id);
-        });
+      voucherApi.findSellingList(this.voucher.id, this.voucherForSaleList);
     },
 
     onFinalPurchaseClick() {
