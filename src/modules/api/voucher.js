@@ -36,7 +36,7 @@ export async function findAllByBrandName(brandName, vouchers) {
       (response) => {
         console.log(response);
         if (vouchers.length === 0) {
-          response.data.forEach(voucher => {
+          response.data.vouchers.forEach(voucher => {
             vouchers.push(voucher);
           });
         }

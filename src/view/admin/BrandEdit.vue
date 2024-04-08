@@ -19,9 +19,9 @@
       <hr>
       <div class="container pt-3">
         <vue-awesome-paginate
-          :total-items="brands.length"
-          :items-per-page="16"
-          :max-pages-shown="3"
+          :total-items="itemsPerPage * totalPages"
+          :items-per-page="itemsPerPage"
+          :max-pages-shown="totalPages"
           v-model="currentPage"
           :on-click="onClickHandler"
         />
@@ -114,9 +114,10 @@ export default {
   data() {
     return {
       categories : [],
-      brands : [],
       pagedBrands : [],
       currentPage : ref(1),
+      itemsPerPage : 1,
+      totalPages : 1,
       newBrand : {
         categoryId : 0,
         name : '',
@@ -134,7 +135,18 @@ export default {
   methods: {
     onLoad() {
       categoryApi.findAll(this.categories, this.$router);
-      brandApi.findAll(this.brands, this.pagedBrands);
+      brandApi
+        .findPage()
+        .then(
+          response => {
+            console.log(response);
+            let data = response.data;
+            this.currentPage = ref(data.number + 1);
+            this.totalPages = data.totalPages;
+            this.itemsPerPage = data.size;
+            this.pagedBrands = data.brands;
+          }
+        );
     },
 
     onImageUpload(e, brand) {
@@ -198,9 +210,19 @@ export default {
     },
 
     onClickHandler(page) {
-      console.log(page);
-      this.currentPage = ref(page);
-      this.pagedBrands = this.brands.slice((page - 1) * 16, page * 16);
+      console.log('current page = ' + page);
+
+      brandApi
+        .findPage(page)
+        .then(
+          response => {
+            let data = response.data;
+            this.currentPage = ref(data.number + 1);
+            this.totalPages = data.totalPages;
+            this.itemsPerPage = data.size;
+            this.pagedBrands = data.brands;
+          }
+        );
     }
   },
 

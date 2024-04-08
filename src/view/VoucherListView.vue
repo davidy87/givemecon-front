@@ -14,7 +14,7 @@
               <img class="card-img-top p-3" :src="voucher.imageUrl">
               <div class="card-body">
                 <p class="card-text">{{ voucher.title }}</p>
-                <p class="card-text">{{ Intl.NumberFormat('en-US').format(voucher.price) }} 원</p>
+                <p class="card-text">{{ Intl.NumberFormat('en-US').format(voucher.minPrice) }} 원</p>
               </div>
             </button>
           </div>

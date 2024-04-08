@@ -73,7 +73,14 @@ export default {
 
     onCategoryClick(categoryId, categoryName) {
       this.modalHeader = categoryName;
-      brandApi.findAllByCategoryId(categoryId, this.brands);
+
+      brandApi.findPage(categoryId)
+        .then(
+          response => {
+            console.log(response);
+            this.brands = response.data.brands;
+          }
+        );
     },
 
     onBrandClick(brandName) {

@@ -23,20 +23,17 @@ export async function save(formData, router) {
     );
 }
 
-export async function findAll(brands, pagedBrands) {
-  http
-    .get(BASE_URL)
-    .then(response => {
-      console.log(response);
-      if (brands.length === 0) {
-        response.data.forEach((brand) => {
-          brands.push(brand);
-        });
-        brands.slice(0, 16).forEach((pagedBrand) => {
-          pagedBrands.push(pagedBrand);
-        })
-      }
-    });
+export async function findPage(categoryId, page, size, sort) {
+  const payload = {
+    params : {
+      categoryId: categoryId,
+      page: page - 1,
+      size: size,
+      sort: sort,
+    }
+  };
+
+  return http.get(BASE_URL, payload);
 }
 
 export async function findAllByCategoryId(categoryId, brands) {
@@ -51,7 +48,7 @@ export async function findAllByCategoryId(categoryId, brands) {
     .then(
       (response) => {
         if (brands.length === 0) {
-          response.data.forEach((brand) => {
+          response.data.brands.forEach((brand) => {
             brands.push(brand);
           });
         }

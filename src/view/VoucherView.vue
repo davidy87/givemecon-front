@@ -12,7 +12,7 @@
       </div>
 
       <div class="container">
-        <h4 class="text-start">{{ format(voucher.price) }} 원</h4>
+        <h4 class="text-start">{{ format(voucher.minPrice) }} 원</h4>
       </div>
 
       <div class="container py-4">

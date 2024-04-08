@@ -28,7 +28,7 @@ export async function findAll(unusedVouchers, usedVouchers, router) {
     .get(BASE_URL, getRequestHeaders())
     .then(
       (response) => {
-        response.data.forEach(voucher => {
+        response.data.purchasedVouchers.forEach(voucher => {
           if (voucher.valid) {
             unusedVouchers.push(voucher);
           } else {
