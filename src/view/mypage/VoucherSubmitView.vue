@@ -153,10 +153,8 @@ export default {
 
   setup() {
     const store = useStore();
-    const imageFile = computed(() => store.state.imageFile);
-    const imagePreviewUrl = computed(() => store.state.imagePreviewUrl);
-
-    return {imageFile, imagePreviewUrl}
+    const imageInfo = computed(() => store.state.imageInfo);
+    return { imageInfo }
   },
 
   data() {
@@ -166,13 +164,14 @@ export default {
       vouchers : [],
       selectedCategory : {},
       selectedBrand : {},
+      imagePreviewUrl: this.imageInfo.imagePreviewUrl,
       voucherToPost : {
         voucherId : null,
-        imageFile : this.imageFile,
         title : '상품명을 선택해주세요.',
         price : null,
-        expDate : '',
-        barcode : '',
+        expDate : this.imageInfo.expDate,
+        barcode : this.imageInfo.barcode,
+        imageFile : this.imageInfo.imageFile
       }
     }
   },

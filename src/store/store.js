@@ -5,8 +5,7 @@ export default createStore({
     toPurchaseList: new Map(),
     totalCount: 0,
     totalPrice: 0,
-    imageFile: null,
-    imagePreviewUrl: ""
+    imageInfo: {}
   },
 
   mutations: {
@@ -21,9 +20,10 @@ export default createStore({
       })
     },
 
-    setImageInfo(state, value) {
-      state.imageFile = value.imageFile;
-      state.imagePreviewUrl = value.imagePreviewUrl;
+    setImageInfo(state, data) {
+      Object.entries(data).forEach(([key, value]) => {
+        state.imageInfo[key] = value;
+      });
     },
 
     remove(state, value) {
