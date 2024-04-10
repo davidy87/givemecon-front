@@ -14,7 +14,7 @@
             <ul id="details-list-group" class="list-group">
               <span class="d-flex">상품명</span>
               <nav class="btn list-group-item">
-                <a class="dropdown-item text-left" v-text="voucherToPost.title" data-bs-toggle="modal" data-bs-target="#confirmChange"></a>
+                <a class="dropdown-item text-left" v-text="voucherToPost.title" data-bs-toggle="modal" data-bs-target="#confirmChange" text="상품명을 선택해주세요."></a>
               </nav>
               <br>
               <span class="d-flex">가격</span>
@@ -167,7 +167,7 @@ export default {
       imagePreviewUrl: this.imageInfo.imagePreviewUrl,
       voucherToPost : {
         voucherId : null,
-        title : '상품명을 선택해주세요.',
+        title : null,
         price : null,
         expDate : this.imageInfo.expDate,
         barcode : this.imageInfo.barcode,
