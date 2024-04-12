@@ -55,18 +55,8 @@ export async function findById(id, voucher) {
     });
 }
 
-export async function findSellingList(voucherId, voucherForSaleList) {
-  http
-    .get(BASE_PATH + `/${voucherId}/selling-list`)
-    .then((response) => {
-      console.log(response);
-      if (voucherForSaleList.length === 0) {
-        response.data.forEach((voucherForSale) => {
-          voucherForSale['voucherId'] = voucherId;
-          voucherForSaleList.push(voucherForSale);
-        });
-      }
-    });
+export async function findSellingList(voucherId) {
+  return http.get(BASE_PATH + `/${voucherId}/selling-list`);
 }
 
 export async function update(id, formData, router) {

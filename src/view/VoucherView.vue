@@ -66,12 +66,12 @@
               <div class="d-flex">
                 <h6 class="fw-semibold">상품 목록</h6>
               </div>
-              <button class="list-group-item list-group-item-action d-flex justify-content-between align-items-start" v-for="voucherForSale in voucherForSaleList" :key="voucherForSale"
+              <button v-bind:disabled="getStock(voucherForSale) == 0" class="list-group-item list-group-item-action d-flex justify-content-between align-items-start" v-for="voucherForSale in voucherForSaleList" :key="voucherForSale"
                       @click="onVoucherForSaleClick(voucherForSale)">
                 <div class="ms-2 me-auto">
                   <div>{{ voucherForSale.expDate }} 까지</div>
-                  <small v-if="false">
-                    남은 수량 ??개
+                  <small v-if="getStock(voucherForSale) <= 10" class="text-danger">
+                    남은 수량 {{ getStock(voucherForSale) }}개
                   </small>
                 </div>
                 <span class="fw-semibold">{{ format(voucherForSale.price) }} 원</span>
@@ -87,11 +87,11 @@
                   <button @click="onDeleteClick(voucher)" class="btn btn-sm btn-close"></button>
                 </div>
                 <div class="d-flex align-items-center py-2">
-                  <div class="ms-2 me-auto">
+                  <div class="ms-3 me-auto">
                     <div class="input-group">
-                      <button @click="onMinusClick(voucher)" class="btn btn-sm btn-outline-secondary" type="button">-</button>
+                      <button v-bind:disabled="count == 1" @click="onMinusClick(voucher)" class="btn btn-sm btn-outline-secondary" type="button">-</button>
                       <span class="form-control">{{ count }}</span>
-                      <button @click="onPlusClick(voucher)" class="btn btn-sm btn-outline-secondary" type="button">+</button>
+                      <button v-bind:disabled="getStock(voucher) == 0" @click="onPlusClick(voucher)" class="btn btn-sm btn-outline-secondary" type="button">+</button>
                     </div>
                   </div>
                   <span>{{ format(voucher.price * count) }}원</span>
@@ -144,6 +144,7 @@ export default {
     return {
       voucher: {},
       voucherForSaleList: [],
+      voucherForSaleStock: new Map(),
       toPurchaseList: new Map(),
       total: 0,
       totalPrice: 0,
@@ -164,7 +165,25 @@ export default {
     },
 
     onPurchaseClick() {
-      voucherApi.findSellingList(this.voucher.id, this.voucherForSaleList);
+      this.toPurchaseList = new Map();
+      this.voucherForSaleStock = new Map();
+      this.total = 0;
+      this.totalPrice = 0;
+
+      voucherApi
+        .findSellingList(this.voucher.id)
+        .then((response) => {
+          console.log(response);
+          this.voucherForSaleList = response.data;
+          
+          this.voucherForSaleList.forEach(voucherForSale => {
+            if (this.voucherForSaleStock.has(voucherForSale.expDate)) {
+              this.setStock(voucherForSale, this.getStock(voucherForSale) + 1);
+            } else {
+              this.setStock(voucherForSale, 1);
+            }
+          })
+        });
     },
 
     onFinalPurchaseClick() {
@@ -178,11 +197,11 @@ export default {
     },
 
     onVoucherForSaleClick(voucherForSale) {
-      if (!this.toPurchaseList.has(voucherForSale)) {
-        this.toPurchaseList.set(voucherForSale, 1);
-      } else {
+      if (this.toPurchaseList.has(voucherForSale)) {
         const count = this.toPurchaseList.get(voucherForSale);
         this.toPurchaseList.set(voucherForSale, count + 1);
+      } else {
+        this.toPurchaseList.set(voucherForSale, 1);
       }
       this.updateTotalResult(voucherForSale, 1);
     },
@@ -197,9 +216,13 @@ export default {
     },
 
     onPlusClick(voucherForSale) {
+      const stock = this.getStock(voucherForSale);
       const count = this.toPurchaseList.get(voucherForSale);
-      this.toPurchaseList.set(voucherForSale, count + 1);
-      this.updateTotalResult(voucherForSale, 1);
+
+      if (count < stock) {
+        this.toPurchaseList.set(voucherForSale, count + 1);
+        this.updateTotalResult(voucherForSale, 1);
+      }
     },
 
     onDeleteClick(voucherForSale) {
@@ -209,8 +232,21 @@ export default {
     },
 
     updateTotalResult(voucherForSale, count) {
-      this.total += count;
-      this.totalPrice += voucherForSale.price * count;
+      const stock = this.getStock(voucherForSale);
+
+      if (stock - count >= 0) {
+        this.total += count;
+        this.totalPrice += voucherForSale.price * count;
+        this.setStock(voucherForSale, stock - count);
+      }
+    },
+
+    getStock(voucherForSale) {
+      return this.voucherForSaleStock.get(voucherForSale.expDate);
+    },
+
+    setStock(voucherForSale, stock) {
+      this.voucherForSaleStock.set(voucherForSale.expDate, stock);
     },
 
     format(price) {
