@@ -31,9 +31,15 @@
         <div class="tab-content text-start py-5">
           <div class="tab-pane fade show active" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab" tabindex="0">
             <h4>상품설명</h4>
+            <div>
+              {{ voucher.description }}
+            </div>
           </div>
           <div class="tab-pane fade" id="caution-tab-pane" role="tabpanel" aria-labelledby="caution-tab" tabindex="0">
             <h4>유의사항</h4>
+            <div>
+              {{ voucher.caution }}
+            </div>
           </div>
         </div>
       </div>

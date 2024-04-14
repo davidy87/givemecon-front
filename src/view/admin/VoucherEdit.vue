@@ -144,14 +144,14 @@ export default {
       selectedCategory : {},
       selectedBrand : {},
       newVoucher : {
-        title : null,
-        imageFile : null
+        title : '',
+        imageFile : ''
       },
       voucherToEdit : {
         id : 0,
-        newTitle : null,
-        newDescription : null,
-        newCaution : null,
+        newTitle : '',
+        newDescription : '',
+        newCaution : '',
         imageFile : null
       }
     }
@@ -185,6 +185,8 @@ export default {
     onVoucherClick(voucher) {
       this.voucherToEdit.id = voucher.id;
       this.voucherToEdit.newTitle = voucher.title;
+      this.voucherToEdit.newDescription = voucher.description;
+      this.voucherToEdit.newCaution = voucher.caution;
     },
 
     onAddVoucherClick() {
@@ -202,22 +204,24 @@ export default {
         alert("이미지를 첨부해주세요.");
         return;
       }
-
-      let formData = new FormData();
-      formData.append('brandId', this.selectedBrand.id)
-      formData.append('price', 0);
-      formData.append('title', this.newVoucher.title);
-      formData.append('imageFile', this.newVoucher.imageFile);
+      
+      const formData = {
+        brandId: this.selectedBrand.id,
+        price: 0,
+        title: this.newVoucher.title,
+        imageFile: this.newVoucher.imageFile
+      }
 
       voucherApi.save(formData, this.$router);
     },
 
     onEditVoucherClick() {
-      let formData = new FormData();
-      formData.append('title', this.voucherToEdit.newTitle);
-      formData.append('description', this.voucherToEdit.newDescription);
-      formData.append('caution', this.voucherToEdit.newCaution);
-      formData.append('imageFile', this.voucherToEdit.imageFile);
+      let formData = {
+        title: this.voucherToEdit.newTitle,
+        description: this.voucherToEdit.newDescription,
+        caution: this.voucherToEdit.newCaution,
+        imageFile: this.voucherToEdit.imageFile
+      }
       
       voucherApi.update(this.voucherToEdit.id, formData, this.$router);
     }
