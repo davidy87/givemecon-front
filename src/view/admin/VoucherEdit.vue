@@ -77,9 +77,17 @@
                     <label class="input-group-text">기프티콘 상품명</label>
                     <input v-model="newVoucher.title" type="text" class="form-control" required>
                   </div>
+                  <div class="input-group mb-3">
+                    <label class="input-group-text">상품 설명</label>
+                    <input v-model="newVoucher.description" type="text" class="form-control" placeholder="생략 가능">
+                  </div>
+                  <div class="input-group mb-3">
+                    <label class="input-group-text">유의사항</label>
+                    <input v-model="newVoucher.caution" type="text" class="form-control" placeholder="생략 가능">
+                  </div>
                   <div class="input-group mb-3 pb-3">
                     <label class="input-group-text">이미지</label>
-                    <input @change="onImageUpload($event, newVoucher)" type="file" class="form-control">
+                    <input @change="onImageUpload($event, newVoucher)" type="file" class="form-control" required>
                   </div>
                   <button @click="onAddVoucherClick" class="btn btn-primary">추가하기</button>
                 </div>
@@ -144,7 +152,10 @@ export default {
       selectedCategory : {},
       selectedBrand : {},
       newVoucher : {
+        price : 0,
         title : '',
+        description: '',
+        caution: '',
         imageFile : ''
       },
       voucherToEdit : {
@@ -152,7 +163,7 @@ export default {
         newTitle : '',
         newDescription : '',
         newCaution : '',
-        imageFile : null
+        newImageFile : null
       }
     }
   },
@@ -204,11 +215,14 @@ export default {
         alert("이미지를 첨부해주세요.");
         return;
       }
-      
+
       const formData = {
+        categoryId: this.selectedCategory.id,
         brandId: this.selectedBrand.id,
-        price: 0,
+        price: this.newVoucher.price,
         title: this.newVoucher.title,
+        description: this.newVoucher.description,
+        caution: this.newVoucher.caution,
         imageFile: this.newVoucher.imageFile
       }
 
@@ -216,11 +230,11 @@ export default {
     },
 
     onEditVoucherClick() {
-      let formData = {
+      const formData = {
         title: this.voucherToEdit.newTitle,
         description: this.voucherToEdit.newDescription,
         caution: this.voucherToEdit.newCaution,
-        imageFile: this.voucherToEdit.imageFile
+        imageFile: this.voucherToEdit.newImageFile
       }
       
       voucherApi.update(this.voucherToEdit.id, formData, this.$router);
