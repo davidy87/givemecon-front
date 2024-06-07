@@ -123,12 +123,7 @@ export default {
         name : '',
         iconFile : null
       },
-      brandToEdit : {
-        id : 0,
-        categoryId : 0,
-        name : '',
-        iconFile : null
-      }
+      brandToEdit : {}
     }
   },
 
@@ -158,12 +153,8 @@ export default {
     },
 
     onBrandClick(brand) {
-      this.brandToEdit = {
-        id : brand.id,
-        categoryId : 0,
-        name : brand.name,
-        iconFile : null
-      }
+      this.brandToEdit.id = brand.id;
+      this.brandToEdit.name = brand.name;
     },
 
     onAddBrandClick() {
@@ -202,9 +193,10 @@ export default {
       }
 
       let formData = new FormData();
-      formData.append('categoryId', this.brandToEdit.categoryId);
-      formData.append('name', this.brandToEdit.name);
-      formData.append('iconFile', this.brandToEdit.iconFile);
+      
+      Object.entries(this.brandToEdit).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
 
       brandApi.update(this.brandToEdit.id, formData, this.$router);
     },

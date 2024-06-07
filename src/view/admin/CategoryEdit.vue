@@ -87,15 +87,8 @@ export default {
   data() {
     return {
       categories : [],
-      newCategory : {
-        name : '',
-        iconFile : null
-      },
-      categoryToEdit : {
-        id : 0,
-        name : '',
-        iconFile : null
-      }
+      newCategory : {},
+      categoryToEdit : {}
     }
   },
 
@@ -124,25 +117,29 @@ export default {
       }
 
       let formData = new FormData();
-      formData.append('name', this.newCategory.name);
-      formData.append('iconFile', this.newCategory.iconFile);
+      Object.entries(this.newCategory).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
 
       categoryApi.save(formData, this.$router);
     },
 
     onCategoryClick(category) {
-      this.categoryToEdit = structuredClone(category);
+      this.categoryToEdit.id = category.id;
+      this.categoryToEdit.name = category.name;
     },
 
     onEditCategoryClick() {
-      if (!this.categoryToEdit.name) {
+      if (!this.categoryToEdit.name.trim()) {
         alert('카테고리 이름을 입력해주세요.');
         return;
       }
 
       let formData = new FormData();
-      formData.append('name', this.categoryToEdit.name);
-      formData.append('iconFile', this.categoryToEdit.iconFile);
+      
+      Object.entries(this.categoryToEdit).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
 
       categoryApi.update(this.categoryToEdit.id, formData, this.$router);
     }
