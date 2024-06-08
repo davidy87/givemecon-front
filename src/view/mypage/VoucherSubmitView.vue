@@ -138,8 +138,6 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-// import { computed } from 'vue';
-// import { useStore } from 'vuex';
 import * as caetgoryApi from '@/modules/api/category';
 import * as brandApi from '@/modules/api/brand';
 import * as voucherApi from '@/modules/api/voucher';

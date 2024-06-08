@@ -46,6 +46,21 @@ export const getRefreshTokenHeader = () => {
     };
 }
 
+export const handleBadRequest = (axiosError) => {
+  console.log(axiosError.response);
+  const fieldErrors = axiosError.response.data.error.fieldErrors;
+  
+  if (fieldErrors) {
+    let fieldErrorMessages = '오류: \n';
+
+    fieldErrors.forEach((fieldError) => {
+      fieldErrorMessages += `${fieldError.message} \n`;
+    });
+
+    alert(fieldErrorMessages);
+  }
+}
+
 export const ContentType = {
   APPLICATION_JSON: "application/json",
   MULITPART_FORM_DATA: "multipart/form-data"
