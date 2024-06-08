@@ -130,8 +130,8 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import * as voucherApi from '@/modules/api/voucher';
-import * as likedVoucherApi from '@/modules/api/liked-voucher';
+import * as voucherApi from '@/api/modules/voucher';
+import * as likedVoucherApi from '@/api/modules/liked-voucher';
 
 export default {
   name: 'VoucherView',
@@ -279,4 +279,4 @@ export default {
 #purchase-list-group #purchase-list-group-item {
   border-radius: 0.25rem;
 }
-</style>
+</style>@/api/voucher@/api/liked-voucher

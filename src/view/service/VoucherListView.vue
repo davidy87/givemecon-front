@@ -26,7 +26,7 @@
   
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import * as voucherApi from '@/modules/api/voucher';
+import * as voucherApi from '@/api/modules/voucher';
 
 export default {
   name: 'VoucherListView',
@@ -67,4 +67,4 @@ export default {
   margin-top: 60px;
   margin-bottom: 60px;
 }
-</style>
+</style>@/api/voucher

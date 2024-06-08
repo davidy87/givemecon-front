@@ -72,7 +72,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import * as purchasedVoucherApi from '@/modules/api/purchased-voucher';
+import * as purchasedVoucherApi from '@/api/modules/purchased-voucher';
 
 export default {
   name: 'MyVouchersView',
@@ -113,4 +113,4 @@ export default {
   margin-top: 60px;
   margin-bottom: 60px;
 }
-</style>
+</style>@/api/purchased-voucher

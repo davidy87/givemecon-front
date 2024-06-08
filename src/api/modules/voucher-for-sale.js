@@ -1,6 +1,6 @@
-import http from './http';
+import http from '../index';
 import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken, getRequestHeaders, ContentType, handleBadRequest } from '../utilities';
+import { requestNewAccessToken, getRequestHeaders, ContentType, handleBadRequest } from '@/util/utilities';
 
 const BASE_PATH = '/vouchers-for-sale';
 

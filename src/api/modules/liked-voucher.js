@@ -1,12 +1,12 @@
-import http from './http';
+import http from '../index';
 import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken, getRequestHeaders, ContentType } from '../utilities';
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/util/utilities';
 
-const BASE_URL = '/liked-vouchers';
+const BASE_PATH = '/liked-vouchers';
 
 export async function addToLikedList(voucherId, router) {
   http
-    .post(BASE_URL, voucherId, getRequestHeaders(ContentType.APPLICATION_JSON))
+    .post(BASE_PATH, voucherId, getRequestHeaders(ContentType.APPLICATION_JSON))
     .then(
       (response) => {
         console.log(response);
@@ -24,7 +24,7 @@ export async function addToLikedList(voucherId, router) {
 
 export function findAll(likedVouchers, router) {
   http
-    .get(BASE_URL, getRequestHeaders())
+    .get(BASE_PATH, getRequestHeaders())
     .then(
       (response) => {
         response.data.vouchers.forEach((likedVoucher) => {
@@ -43,7 +43,7 @@ export function findAll(likedVouchers, router) {
 
 export async function undoDelete(deleted, likedVouchers, router) {
   http
-    .post(BASE_URL, deleted.id, getRequestHeaders())
+    .post(BASE_PATH, deleted.id, getRequestHeaders())
     .then(
       (response) => {
         console.log(response);
@@ -61,7 +61,7 @@ export async function undoDelete(deleted, likedVouchers, router) {
 
 export function deleteByVoucherId(voucherId, likedVouchers, deleted, router) {
   http
-    .delete(BASE_URL + `/${voucherId}`, getRequestHeaders())
+    .delete(`${BASE_PATH}/${voucherId}`, getRequestHeaders())
     .then(
       (response) => {
         console.log(response);

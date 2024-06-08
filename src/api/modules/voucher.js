@@ -1,6 +1,6 @@
-import http from './http';
+import http from '../index';
 import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken, getRequestHeaders, ContentType } from '../utilities';
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/util/utilities';
 
 const BASE_PATH = '/vouchers';
 
@@ -46,7 +46,7 @@ export async function findAllByBrandName(brandName, vouchers) {
 
 export async function findById(id, voucher) {
   http
-    .get(BASE_PATH + `/${id}`)
+    .get(`${BASE_PATH}/${id}`)
     .then((response) => {
       console.log(response);
       Object.entries(response.data).forEach(([key, value]) => {
@@ -56,12 +56,12 @@ export async function findById(id, voucher) {
 }
 
 export async function findSellingList(voucherId) {
-  return http.get(BASE_PATH + `/${voucherId}/selling-list`);
+  return http.get(`${BASE_PATH}/${voucherId}/selling-list`);
 }
 
 export async function update(id, formData, router) {
   http
-    .post(BASE_PATH + `/${id}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
+    .post(`${BASE_PATH}/${id}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
     .then(
       (response) => {
         console.log(response);

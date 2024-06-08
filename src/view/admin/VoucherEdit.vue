@@ -137,9 +137,9 @@
 </template>
 
 <script>
-import * as categoryApi from '@/modules/api/category';
-import * as brandApi from '@/modules/api/brand';
-import * as voucherApi from '@/modules/api/voucher';
+import * as categoryApi from '@/api/modules/category';
+import * as brandApi from '@/api/modules/brand';
+import * as voucherApi from '@/api/modules/voucher';
 
 
 export default {
@@ -246,4 +246,4 @@ export default {
   margin-top: 60px;
   margin-bottom: 60px;
 }
-</style>
+</style>@/api/category@/api/brand@/api/voucher

@@ -45,7 +45,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import * as purchasedVoucherApi from '@/modules/api/purchased-voucher';
+import * as purchasedVoucherApi from '@/api/modules/purchased-voucher';
 
 export default {
   name: 'PurchaseView',
@@ -109,4 +109,4 @@ export default {
 #purchase-list-group #purchase-list-group-item {
   border-radius: 0.25rem;
 }
-</style>
+</style>@/api/purchased-voucher

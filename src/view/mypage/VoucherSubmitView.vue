@@ -138,10 +138,10 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import * as caetgoryApi from '@/modules/api/category';
-import * as brandApi from '@/modules/api/brand';
-import * as voucherApi from '@/modules/api/voucher';
-import * as voucherForSaleApi from '@/modules/api/voucher-for-sale';
+import * as caetgoryApi from '@/api/modules/category';
+import * as brandApi from '@/api/modules/brand';
+import * as voucherApi from '@/api/modules/voucher';
+import * as voucherForSaleApi from '@/api/modules/voucher-for-sale';
 
 export default {
   name: 'VoucherSubmitView',
@@ -247,4 +247,4 @@ export default {
 #details-list-group #details-list-group-item {
   border-radius: 0.25rem;
 }
-</style>
+</style>@/api/category@/api/brand@/api/voucher@/api/voucher-for-sale

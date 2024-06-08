@@ -106,8 +106,8 @@
 
 <script>
 import { ref } from 'vue';
-import * as categoryApi from '@/modules/api/category';
-import * as brandApi from '@/modules/api/brand';
+import * as categoryApi from '@/api/modules/category';
+import * as brandApi from '@/api/modules/brand';
 
 export default {
   name: 'BrandEdit',
@@ -261,4 +261,4 @@ export default {
 .active-page:hover {
   background-color: #2988c8;
 }
-</style>
+</style>@/api/category@/api/brand

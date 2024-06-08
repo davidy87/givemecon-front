@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import * as categoryApi from '@/modules/api/category';
+import * as categoryApi from '@/api/modules/category';
 
 export default {
   name: 'CategoryEdit',
@@ -165,4 +165,4 @@ export default {
 .list-group, .list-group-item {
   border-width: thick;
 }
-</style>
+</style>@/api/category

@@ -1,12 +1,12 @@
-import http from './http';
+import http from '../index';
 import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken, getRequestHeaders, ContentType } from '../utilities';
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/util/utilities';
 
-const BASE_URL = '/purchased-vouchers';
+const BASE_PATH = '/purchased-vouchers';
 
 export async function save(toPurchaseList, router) {
   http
-    .post(BASE_URL, toPurchaseList, getRequestHeaders(ContentType.APPLICATION_JSON))
+    .post(BASE_PATH, toPurchaseList, getRequestHeaders(ContentType.APPLICATION_JSON))
     .then(
       (response) => {
         console.log(response.data);
@@ -25,7 +25,7 @@ export async function save(toPurchaseList, router) {
 
 export async function findAll(unusedVouchers, usedVouchers, router) {
   http
-    .get(BASE_URL, getRequestHeaders())
+    .get(BASE_PATH, getRequestHeaders())
     .then(
       (response) => {
         response.data.purchasedVouchers.forEach(voucher => {
@@ -48,7 +48,7 @@ export async function findAll(unusedVouchers, usedVouchers, router) {
 
 export async function findById(id, voucher, router) {
   http
-    .get(BASE_URL + `/${id}`, getRequestHeaders(ContentType.APPLICATION_JSON))
+    .get(`${BASE_PATH}/${id}`, getRequestHeaders(ContentType.APPLICATION_JSON))
     .then(
       (response) => {
         console.log(response);
@@ -68,7 +68,7 @@ export async function findById(id, voucher, router) {
 
 export async function updateValidity(id, router) {
   http
-    .put(BASE_URL + `/${id}`, {}, getRequestHeaders(ContentType.APPLICATION_JSON))
+    .put(`${BASE_PATH}/${id}`, {}, getRequestHeaders(ContentType.APPLICATION_JSON))
     .then(
       (response) => {
         console.log(response);

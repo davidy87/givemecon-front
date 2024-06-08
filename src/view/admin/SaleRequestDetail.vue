@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import * as voucherForSaleApi from '@/modules/api/voucher-for-sale';
+import * as voucherForSaleApi from '@/api/modules/voucher-for-sale';
 
 export default {
   name: 'SaleRequestDetail',
@@ -90,4 +90,4 @@ export default {
   margin-top: 60px;
   margin-bottom: 60px;
 }
-</style>
+</style>@/api/voucher-for-sale
