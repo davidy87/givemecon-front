@@ -111,7 +111,7 @@
 
             <div class="pb-5 d-flex justify-content-between align-items-start">
               <div class="ms-2 me-auto">
-                <div>총 수량 <span class="text-danger">{{ this.total }}개</span></div>
+                <div>총 수량 <span class="text-danger">{{ this.totalCount }}개</span></div>
               </div>
               <span class="fw-semibold">총 금액 <span class="text-danger">{{ format(this.totalPrice) }}원</span></span>
             </div>
@@ -130,7 +130,6 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { useStore } from 'vuex';
 import * as voucherApi from '@/modules/api/voucher';
 import * as likedVoucherApi from '@/modules/api/liked-voucher';
 
@@ -140,20 +139,13 @@ export default {
     NavbarHeader
   },
 
-  setup() {
-    const store = useStore();
-    return {
-      setter: (toPurchaseList) => store.commit('setToPurchaseList', toPurchaseList)
-    };
-  },
-
   data() {
     return {
       voucher: {},
       voucherForSaleList: [],
       voucherForSaleStock: new Map(),
       toPurchaseList: new Map(),
-      total: 0,
+      totalCount: 0,
       totalPrice: 0,
     }
   },
@@ -174,7 +166,7 @@ export default {
     onPurchaseClick() {
       this.toPurchaseList = new Map();
       this.voucherForSaleStock = new Map();
-      this.total = 0;
+      this.totalCount = 0;
       this.totalPrice = 0;
 
       voucherApi
@@ -194,12 +186,12 @@ export default {
     },
 
     onFinalPurchaseClick() {
-      if (this.total == 0) {
+      if (this.totalCount == 0) {
         alert('구매할 기프티콘을 선택해주세요.');
         return;
       }
 
-      this.setter(this.toPurchaseList);
+      this.$store.commit('purchaseListStore/setPurchaseList', this.toPurchaseList);
       this.$router.push('/purchase');
     },
 
@@ -242,7 +234,7 @@ export default {
       const stock = this.getStock(voucherForSale);
 
       if (stock - count >= 0) {
-        this.total += count;
+        this.totalCount += count;
         this.totalPrice += voucherForSale.price * count;
         this.setStock(voucherForSale, stock - count);
       }

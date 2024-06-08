@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import store from './store/store'
+import store from './store/index'
 import App from './App.vue'
 
 import HomeView from '@/view/HomeView.vue'
@@ -17,6 +17,8 @@ import ValidVoucherView from '@/view/mypage/ValidVoucherView.vue'
 import AdminView from '@/view/admin/AdminView.vue'
 import AdminLoginView from '@/view/admin/AdminLoginView.vue'
 import AdminHomeView from '@/view/admin/AdminHomeView.vue'
+import SaleRequestManage from '@/view/admin/SaleRequestManage.vue'
+import SaleRequestDetail from '@/view/admin/SaleRequestDetail.vue'
 import CategoryEdit from "@/view/admin/CategoryEdit.vue"
 import BrandEdit from "@/view/admin/BrandEdit.vue"
 import VoucherEdit from "@/view/admin/VoucherEdit.vue"
@@ -47,6 +49,16 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
+        path: '/admin/sale-requests',
+        component: SaleRequestManage,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/admin/sale-requests/:id',
+        component: SaleRequestDetail,
+        meta: { requiresAuth: true }
+      },
+      {
         path: '/admin/categories',
         component: CategoryEdit,
         meta: { requiresAuth: true }
@@ -71,7 +83,14 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const adminPathList = ['/admin', '/admin/categories', '/admin/brands'];
+  const adminPathList = [
+    '/admin', 
+    '/admin/sale-requests',
+    '/admin/sale-requests/:id',
+    '/admin/categories', 
+    '/admin/brands',
+    "/admin/vouchers"
+  ];
 
   // 인증되지 않은 상태라면 인증이 필요한 페이지 접속 거부
   if (!localStorage.getItem('accessToken')) {
@@ -87,8 +106,7 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  if (localStorage.getItem('role') !== 'ADMIN' && adminPathList.includes(to.path)) {
-    alert('권한이 없습니다.');
+  if (localStorage.getItem('authority') !== 'ADMIN' && adminPathList.includes(to.path)) {
     next('/');
     return;
   }
@@ -108,4 +126,8 @@ router.beforeEach((to, from, next) => {
   next();
 })
 
-createApp(App).use(router).use(store).use(VueAwesomePaginate).mount('#app')
+createApp(App)
+  .use(router)
+  .use(store)
+  .use(VueAwesomePaginate)
+  .mount('#app')

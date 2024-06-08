@@ -13,7 +13,7 @@
             <div class="ms-2 me-auto">
               {{ voucher.expDate }} 까지
             </div>
-            <button @click="onDeleteClick(voucher)" class="btn btn-sm btn-close"></button>
+            <button @click="onDeleteClick(voucher)" class="btn btn-lg bi bi-trash"></button>
           </div>
           <div class="d-flex align-items-center py-2">
             <div class="ms-2 me-auto">
@@ -45,25 +45,21 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { computed } from 'vue';
-import { useStore } from 'vuex';
 import * as purchasedVoucherApi from '@/modules/api/purchased-voucher';
-
 
 export default {
   name: 'PurchaseView',
+
   components: {
     NavbarHeader
   },
 
-  setup() {
-    const store = useStore();
-    const toPurchaseList = computed(() => store.state.toPurchaseList);
-    const totalCount = computed(() => store.state.totalCount);
-    const totalPrice = computed(() => store.state.totalPrice);
-    const remove = (voucher) => store.commit('remove', voucher);
-
-    return { toPurchaseList, totalCount, totalPrice, remove };
+  data() {
+    return {
+      toPurchaseList: this.$store.getters['purchaseListStore/getPurchaseList'],
+      totalCount: this.$store.getters['purchaseListStore/getTotalCount'],
+      totalPrice: this.$store.getters['purchaseListStore/getTotalPrice'],
+    }
   },
 
   methods: {
@@ -73,9 +69,10 @@ export default {
 
     onDeleteClick(voucher) {
       if (confirm('해당 제품을 제거하시겠습니까?')) {
-        this.remove(voucher);
+        this.$store.commit('purchaseListStore/removePurchase', voucher);
+        const newTotalCount = this.$store.getters['purchaseListStore/getTotalCount'];
 
-        if (this.totalCount === 0) {
+        if (newTotalCount === 0) {
           this.sleep(100).then(() => {
             alert('구매할 기프티콘이 없습니다. 선택화면으로 돌아갑니다.');
             this.$router.go(-1);
