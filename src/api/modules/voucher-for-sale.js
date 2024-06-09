@@ -62,6 +62,8 @@ export async function updateStatus(router, id, statusCode, rejectedReason) {
             alert('기프티콘 판매가 거절되었습니다.');
             break;
         }
+
+        router.replace('/admin/sale-requests');
       },
       async (error) => {
         console.log(error.response);
