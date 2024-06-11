@@ -1,12 +1,12 @@
-import http from './http';
+import http from '../index';
 import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken, getRequestHeaders, ContentType } from '../utilities';
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/util/utilities';
 
-const BASE_URL = '/brands'
+const BASE_PATH = '/brands'
 
 export async function save(formData, router) {
   http
-    .post(BASE_URL, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
+    .post(BASE_PATH, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
     .then(
       (response) => {
         console.log(response);
@@ -33,7 +33,7 @@ export async function findPage(categoryId, page, size, sort) {
     }
   };
 
-  return http.get(BASE_URL, payload);
+  return http.get(BASE_PATH, payload);
 }
 
 export async function findAllByCategoryId(categoryId, brands) {
@@ -44,7 +44,7 @@ export async function findAllByCategoryId(categoryId, brands) {
   };
 
   http
-    .get(BASE_URL, payload)
+    .get(BASE_PATH, payload)
     .then(
       (response) => {
         if (brands.length === 0) {
@@ -58,7 +58,7 @@ export async function findAllByCategoryId(categoryId, brands) {
 
 export async function update(id, formData, router) {
   http
-    .post(BASE_URL + `/${id}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
+    .post(`${BASE_PATH}/${id}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
     .then(
       (response) => {
         console.log(response);

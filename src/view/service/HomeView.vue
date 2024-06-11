@@ -49,8 +49,8 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import * as categoryApi from '@/modules/api/category';
-import * as brandApi from '@/modules/api/brand';
+import * as categoryApi from '@/api/modules/category';
+import * as brandApi from '@/api/modules/brand';
 
 export default {
   name: 'HomeView',
@@ -108,4 +108,4 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-</style>
+</style>@/api/category@/api/brand

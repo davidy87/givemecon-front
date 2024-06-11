@@ -1,12 +1,12 @@
-import http from './http';
+import http from '../index';
 import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken, getRequestHeaders, ContentType } from '../utilities';
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/util/utilities';
 
-const BASE_URL = '/categories';
+const BASE_PATH = '/categories';
 
 export function save(formData, router) {
   http
-    .post(BASE_URL, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
+    .post(BASE_PATH, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
     .then(
       (response) => {
         console.log(response);
@@ -25,7 +25,7 @@ export function save(formData, router) {
 
 export function findAll(categories, router) {
   http
-    .get(BASE_URL, getRequestHeaders())
+    .get(BASE_PATH, getRequestHeaders())
     .then(
       (response) => {
         console.log(response);
@@ -47,7 +47,7 @@ export function findAll(categories, router) {
 
 export function update(categoryId, formData, router) {
   http
-    .post(BASE_URL + `/${categoryId}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
+    .post(`${BASE_PATH}/${categoryId}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
     .then(
       (response) => {
         console.log(response);

@@ -15,6 +15,11 @@
                 </a>
               </li>
               <li>
+                <a @click="onSaleRequestManageClick" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-receipt"></i> <span class="ms-1 d-none d-sm-inline">판매 요청 관리</span>
+                </a>
+              </li>
+              <li>
                 <a @click="onCategoryEditClick" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
                   <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">카테고리 관리</span>
                 </a>
@@ -34,7 +39,7 @@
             <div v-if="accessToken" class="dropdown pb-4">
               <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="../../assets/logo.png" width="30" height="30" class="rounded-circle">
-                <span class="d-none d-sm-inline mx-1">Admin</span>
+                <span class="d-none d-sm-inline mx-1">{{ adminName }}</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                 <li>
@@ -65,13 +70,18 @@ export default {
 
   data() {
     return {
-      accessToken : localStorage.getItem('accessToken')
+      accessToken : localStorage.getItem('accessToken'),
+      adminName : localStorage.getItem('username'),
     }
   },
 
   methods: {
     onAdminHomeClick() {
       this.$router.push('/admin');
+    },
+
+    onSaleRequestManageClick() {
+      this.$router.push('/admin/sale-requests');
     },
 
     onCategoryEditClick() {

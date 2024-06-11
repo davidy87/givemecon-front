@@ -47,7 +47,7 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import * as likedVoucherApi from '@/modules/api/liked-voucher';
+import * as likedVoucherApi from '@/api/modules/liked-voucher';
 
 export default {
   name: 'LikedVoucherListView',
@@ -102,4 +102,4 @@ export default {
   margin-top: 60px;
   margin-bottom: 60px;
 }
-</style>
+</style>@/api/liked-voucher

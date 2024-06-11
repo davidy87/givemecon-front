@@ -33,24 +33,15 @@
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
 import FadeLoader from 'vue-spinner/src/FadeLoader.vue';
-import { useStore } from "vuex";
 import { HttpStatusCode } from 'axios';
-import * as imageApi from '@/modules/api/image-text';
-import { requestNewAccessToken } from '@/modules/utilities';
-
+import * as imageApi from '@/api/modules/image-text';
+import { requestNewAccessToken } from '@/util/utilities';
 
 export default {
   name: 'VoucherImageUploadView',
   components: {
     NavbarHeader,
     FadeLoader
-  },
-
-  setup() {
-    const store = useStore();
-    const imageSetter = (imageInfo) => store.commit('setImageInfo', imageInfo);
-
-    return {imageSetter};
   },
 
   data() {
@@ -86,14 +77,15 @@ export default {
             response => {
               console.log(response);
 
-              this.imageSetter({
+              const uploadedImageInfo = {
                 imageFile: this.imageFile, 
                 imagePreviewUrl: this.imagePreviewUrl,
                 brandName: response.data.brandName,
                 barcode: response.data.barcode,
                 expDate: response.data.expDate
-              });
-              
+              };
+
+              this.$store.commit('uploadedImageInfoStore/setUploadedImageInfo', uploadedImageInfo);
               this.isLoading = false;
               this.$router.push('/sell/details');
             },
@@ -134,4 +126,4 @@ export default {
   transform: translate(-50%, -50%);
   box-shadow: rgba(0, 0, 0, 0.7) 0 0 0 9999px;
 }
-</style>
+</style>@/api/image-text

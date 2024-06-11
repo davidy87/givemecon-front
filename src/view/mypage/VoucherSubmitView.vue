@@ -138,12 +138,10 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import { computed } from 'vue';
-import { useStore } from 'vuex';
-import * as caetgoryApi from '@/modules/api/category';
-import * as brandApi from '@/modules/api/brand';
-import * as voucherApi from '@/modules/api/voucher';
-import * as voucherForSaleApi from '@/modules/api/voucher-for-sale';
+import * as caetgoryApi from '@/api/modules/category';
+import * as brandApi from '@/api/modules/brand';
+import * as voucherApi from '@/api/modules/voucher';
+import * as voucherForSaleApi from '@/api/modules/voucher-for-sale';
 
 export default {
   name: 'VoucherSubmitView',
@@ -151,27 +149,23 @@ export default {
     NavbarHeader,
   },
 
-  setup() {
-    const store = useStore();
-    const imageInfo = computed(() => store.state.imageInfo);
-    return { imageInfo }
-  },
-
   data() {
+    const imageInfo = this.$store.getters['uploadedImageInfoStore/getUploadedImageInfo'];
+
     return {
       categories : [],
       brands : [],
       vouchers : [],
       selectedCategory : {},
       selectedBrand : {},
-      imagePreviewUrl: this.imageInfo.imagePreviewUrl,
+      imagePreviewUrl: imageInfo.imagePreviewUrl,
       voucherToPost : {
         voucherId : null,
         title : null,
         price : null,
-        expDate : this.imageInfo.expDate,
-        barcode : this.imageInfo.barcode,
-        imageFile : this.imageInfo.imageFile
+        expDate : imageInfo.expDate,
+        barcode : imageInfo.barcode,
+        imageFile : imageInfo.imageFile
       }
     }
   },
@@ -253,4 +247,4 @@ export default {
 #details-list-group #details-list-group-item {
   border-radius: 0.25rem;
 }
-</style>
+</style>@/api/category@/api/brand@/api/voucher@/api/voucher-for-sale
