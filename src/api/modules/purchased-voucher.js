@@ -4,9 +4,19 @@ import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/util/ut
 
 const BASE_PATH = '/purchased-vouchers';
 
-export async function save(toPurchaseList, router) {
+export async function save(purchaseList, router) {
+  let requests = [];
+
+  purchaseList.forEach(purchase => {
+    requests.push({voucherForSaleId: purchase.id});
+  })
+
+  const requestBody = {
+    requests
+  }
+
   http
-    .post(BASE_PATH, toPurchaseList, getRequestHeaders(ContentType.APPLICATION_JSON))
+    .post(BASE_PATH, requestBody, getRequestHeaders(ContentType.APPLICATION_JSON))
     .then(
       (response) => {
         console.log(response.data);

@@ -73,45 +73,29 @@
               <div class="d-flex">
                 <h6 class="fw-semibold">상품 목록</h6>
               </div>
-              <button v-bind:disabled="getStock(voucherForSale) == 0" class="list-group-item list-group-item-action d-flex justify-content-between align-items-start" v-for="voucherForSale in voucherForSaleList" :key="voucherForSale"
-                      @click="onVoucherForSaleClick(voucherForSale)">
-                <div class="ms-2 me-auto">
-                  <div>{{ voucherForSale.expDate }} 까지</div>
-                  <small v-if="getStock(voucherForSale) <= 10" class="text-danger">
-                    남은 수량 {{ getStock(voucherForSale) }}개
-                  </small>
+              
+              <div class="list-group-item d-flex justify-content-between align-items-start"
+                    v-bind:disabled="getStock(voucherForSale) == 0"
+                    v-for="voucherForSale in voucherForSaleList" :key="voucherForSale">
+                <div class="form-check">
+                  <input class="form-check-input" 
+                         type="checkbox"
+                         :value="voucherForSale"
+                         v-model="toPurchaseList"
+                         @change="onVoucherForSaleCheck($event, voucherForSale)">
+                  <div class="ms-2 me-auto">
+                    <span class="fw-semibold">{{ voucherForSale.expDate }} 까지</span>
+                  </div>
                 </div>
                 <span class="fw-semibold">{{ format(voucherForSale.price) }} 원</span>
-              </button>
+              </div>
             </div>
-            
-            <ul id="purchase-list-group" class="list-group" v-for="[voucher, count] in toPurchaseList" :key="voucher">
-              <li id="purchase-list-group-item" class="list-group-item">
-                <div class="d-flex justify-content-between align-items-start py-2">
-                  <div class="ms-2 me-auto">
-                    {{ voucher.expDate }} 까지
-                  </div>
-                  <button @click="onDeleteClick(voucher)" class="btn btn-sm btn-close"></button>
-                </div>
-                <div class="d-flex align-items-center py-2">
-                  <div class="ms-3 me-auto">
-                    <div class="input-group">
-                      <button v-bind:disabled="count == 1" @click="onMinusClick(voucher)" class="btn btn-sm btn-outline-secondary" type="button">-</button>
-                      <span class="form-control">{{ count }}</span>
-                      <button v-bind:disabled="getStock(voucher) == 0" @click="onPlusClick(voucher)" class="btn btn-sm btn-outline-secondary" type="button">+</button>
-                    </div>
-                  </div>
-                  <span>{{ format(voucher.price * count) }}원</span>
-                </div>
-              </li>
-              <br>
-            </ul>
-
+      
             <hr>
 
             <div class="pb-5 d-flex justify-content-between align-items-start">
               <div class="ms-2 me-auto">
-                <div>총 수량 <span class="text-danger">{{ this.totalCount }}개</span></div>
+                <div>총 수량 <span class="text-danger">{{ this.totalQuantity }}개</span></div>
               </div>
               <span class="fw-semibold">총 금액 <span class="text-danger">{{ format(this.totalPrice) }}원</span></span>
             </div>
@@ -142,10 +126,10 @@ export default {
   data() {
     return {
       voucher: {},
-      voucherForSaleList: [],
       voucherForSaleStock: new Map(),
-      toPurchaseList: new Map(),
-      totalCount: 0,
+      voucherForSaleList: [],
+      toPurchaseList: [],
+      totalQuantity: 0,
       totalPrice: 0,
     }
   },
@@ -164,9 +148,9 @@ export default {
     },
 
     onPurchaseClick() {
-      this.toPurchaseList = new Map();
+      this.toPurchaseList = [];
       this.voucherForSaleStock = new Map();
-      this.totalCount = 0;
+      this.totalQuantity = 0;
       this.totalPrice = 0;
 
       voucherApi
@@ -186,57 +170,28 @@ export default {
     },
 
     onFinalPurchaseClick() {
-      if (this.totalCount == 0) {
+      if (this.totalQuantity == 0) {
         alert('구매할 기프티콘을 선택해주세요.');
         return;
       }
 
-      this.$store.commit('purchaseListStore/setPurchaseList', this.toPurchaseList);
+      const payload = {
+        purchaseList: this.toPurchaseList,
+        totalQuantity: this.totalQuantity,
+        totalPrice: this.totalPrice,
+      }
+
+      this.$store.commit('purchaseListStore/setPurchaseList', payload);
       this.$router.push('/purchase');
     },
 
-    onVoucherForSaleClick(voucherForSale) {
-      if (this.toPurchaseList.has(voucherForSale)) {
-        const count = this.toPurchaseList.get(voucherForSale);
-        this.toPurchaseList.set(voucherForSale, count + 1);
+    onVoucherForSaleCheck(event, voucherForSale) {
+      if (event.target.checked) {
+        this.totalQuantity++;
+        this.totalPrice += voucherForSale.price;
       } else {
-        this.toPurchaseList.set(voucherForSale, 1);
-      }
-      this.updateTotalResult(voucherForSale, 1);
-    },
-
-    onMinusClick(voucherForSale) {
-      const count = this.toPurchaseList.get(voucherForSale);
-
-      if (count > 1) {
-        this.toPurchaseList.set(voucherForSale, count - 1);
-        this.updateTotalResult(voucherForSale, -1);
-      }
-    },
-
-    onPlusClick(voucherForSale) {
-      const stock = this.getStock(voucherForSale);
-      const count = this.toPurchaseList.get(voucherForSale);
-
-      if (count < stock) {
-        this.toPurchaseList.set(voucherForSale, count + 1);
-        this.updateTotalResult(voucherForSale, 1);
-      }
-    },
-
-    onDeleteClick(voucherForSale) {
-      const count = this.toPurchaseList.get(voucherForSale);
-      this.updateTotalResult(voucherForSale, -count);
-      this.toPurchaseList.delete(voucherForSale);
-    },
-
-    updateTotalResult(voucherForSale, count) {
-      const stock = this.getStock(voucherForSale);
-
-      if (stock - count >= 0) {
-        this.totalCount += count;
-        this.totalPrice += voucherForSale.price * count;
-        this.setStock(voucherForSale, stock - count);
+        this.totalQuantity--;
+        this.totalPrice -= voucherForSale.price;
       }
     },
 

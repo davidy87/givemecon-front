@@ -1,31 +1,26 @@
 const purchaseListStore = {
   namespaced: true,
   state: {
-    purchaseList: new Map(),
-    totalCount: 0,
+    purchaseList: [],
+    totalQuantity: 0,
     totalPrice: 0,
   },
   getters: {
     getPurchaseList: state => state.purchaseList,
-    getTotalCount: state => state.totalCount,
+    getTotalQuantity: state => state.totalQuantity,
     getTotalPrice: state => state.totalPrice,
   },
   mutations: {
     setPurchaseList: (state, payload) => {
-      state.purchaseList = payload;
-      state.totalCount = 0;
-      state.totalPrice = 0;
-
-      state.purchaseList.forEach((value, key) => {
-        state.totalCount += value;
-        state.totalPrice += key.price * value;
-      })
+      state.purchaseList = payload.purchaseList;
+      state.totalQuantity = payload.totalQuantity;
+      state.totalPrice = payload.totalPrice;
     },
 
     removePurchase(state, payload) {
-      state.totalCount -= state.purchaseList.get(payload);
-      state.totalPrice -= payload.price * state.purchaseList.get(payload);
-      state.purchaseList.delete(payload);
+      state.purchaseList.splice(payload, 1);
+      state.totalQuantity--;
+      state.totalPrice -= payload.price;
     },
   },
 };
