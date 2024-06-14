@@ -33,13 +33,15 @@ export async function save(purchaseList, router) {
     );
 }
 
-export async function findAll(unusedVouchers, usedVouchers, router) {
+export async function findAll(router, unusedVouchers, usedVouchers) {
   http
     .get(BASE_PATH, getRequestHeaders())
     .then(
       (response) => {
+        console.log(response.data);
+
         response.data.purchasedVouchers.forEach(voucher => {
-          if (voucher.valid) {
+          if (voucher.status === 'USABLE') {
             unusedVouchers.push(voucher);
           } else {
             usedVouchers.push(voucher);
@@ -76,7 +78,7 @@ export async function findById(id, voucher, router) {
     );
 }
 
-export async function updateValidity(id, router) {
+export async function updateValidity(router, id) {
   http
     .put(`${BASE_PATH}/${id}`, {}, getRequestHeaders(ContentType.APPLICATION_JSON))
     .then(

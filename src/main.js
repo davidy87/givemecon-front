@@ -12,7 +12,7 @@ import VoucherImageUploadView from '@/view/mypage/VoucherImageUploadView.vue'
 import VoucherSubmitView from '@/view/mypage/VoucherSubmitView.vue'
 import LikedVoucherListView from '@/view/mypage/LikedVoucherListView.vue'
 import MyVouchersView from '@/view/mypage/MyVouchersView.vue'
-import ValidVoucherView from '@/view/mypage/ValidVoucherView.vue'
+import UsableVoucherView from '@/view/mypage/UsableVoucherView.vue'
 
 import AdminView from '@/view/admin/AdminView.vue'
 import AdminLoginView from '@/view/admin/AdminLoginView.vue'
@@ -37,7 +37,7 @@ const routes = [
   { path: '/liked-vouchers', component: LikedVoucherListView, meta: { requiresAuth: true } },
   { path: '/purchase', component: PurchaseView, meta: { requiresAuth: true } },
   { path: '/my-vouchers', component: MyVouchersView, meta: { requiresAuth: true } },
-  { path: '/my-vouchers/valid/:id', component: ValidVoucherView, meta: { requiresAuth: true } },
+  { path: '/my-vouchers/usable/:id', component: UsableVoucherView, meta: { requiresAuth: true } },
   { path: '/admin/login', component: AdminLoginView },
   { path: '/admin',
     component: AdminView, 

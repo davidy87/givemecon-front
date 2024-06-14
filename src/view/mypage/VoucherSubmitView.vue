@@ -247,4 +247,4 @@ export default {
 #details-list-group #details-list-group-item {
   border-radius: 0.25rem;
 }
-</style>@/api/category@/api/brand@/api/voucher@/api/voucher-for-sale
+</style>
