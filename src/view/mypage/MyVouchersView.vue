@@ -52,12 +52,13 @@
           <div class="container">
             <div class="d-flex align-items-center justify-content-center">
               <div class="row row-cols-auto justify-content-center">
-                <div class="col p-4" v-for="voucher in usedVouchers" :key="voucher">
+                <div class="col p-3" v-for="voucher in usedVouchers" :key="voucher">
                   <button class="card align-items-center mx-auto" style="width: 8rem;">
-                    <img class="card-img-top" :src=voucher.imageUrl>
-                    <div class="card-body">
+                    <img class="card-img-top p-3" :src=voucher.imageUrl>
+                    <div class="card-body" style="width: inherit;">
                       <p class="card-text">{{ voucher.title }}</p>
                       <p class="card-text">{{ Intl.NumberFormat('en-US').format(voucher.price) }} 원</p>
+                      <p class="card-text text-danger">{{ StatusInfo[voucher.status] }}</p>
                     </div>
                   </button>
                 </div>
@@ -81,19 +82,25 @@ export default {
   },
 
   data() {
+    const StatusInfo = {
+      USED: '사용 완료',
+      EXPIRED: '유효기간 만료'
+    }
+
     return {
       unusedVouchers : [],
-      usedVouchers : []
+      usedVouchers : [],
+      StatusInfo
     }
   },
 
   methods: {
     onLoad() {
-      purchasedVoucherApi.findAll(this.unusedVouchers, this.usedVouchers, this.$router);
+      purchasedVoucherApi.findAll(this.$router, this.unusedVouchers, this.usedVouchers);
     },
 
     onUnusedVoucherClick(id) {
-      this.$router.push('/my-vouchers/valid/' + id);
+      this.$router.push('/my-vouchers/usable/' + id);
     }
   },
 

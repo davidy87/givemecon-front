@@ -3,7 +3,7 @@
 
   <div id="valid-voucher" class="container">
     <div class="container">
-      <img :src="voucher.imageUrl" alt="">
+      <img id='voucher-image' :src="voucher.imageUrl" alt="" height="400" width="400">
     </div>
     <div class="container">
       <div class="container py-5">
@@ -28,9 +28,11 @@
         <div class="tab-content text-start py-5">
           <div class="tab-pane fade show active" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab" tabindex="0">
             <h4>상품설명</h4>
+            {{ voucher.description }}
           </div>
           <div class="tab-pane fade" id="caution-tab-pane" role="tabpanel" aria-labelledby="caution-tab" tabindex="0">
             <h4>유의사항</h4>
+            {{ voucher.caution }}
           </div>
         </div>
       </div>
@@ -44,9 +46,10 @@
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
 import * as purchasedVoucherApi from '@/api/modules/purchased-voucher';
+import mediumZoom from 'medium-zoom';
 
 export default {
-  name: 'ValidVoucherView',
+  name: 'UsableVoucherView',
   components: {
     NavbarHeader
   },
@@ -59,12 +62,13 @@ export default {
 
   methods: {
     onLoad() {
+      mediumZoom(document.querySelector("#voucher-image"));
       purchasedVoucherApi.findById(this.$route.params.id, this.voucher);
     },
 
     onUsedClick() {
       if (confirm('사용완료 하시겠습니까?')) {
-        purchasedVoucherApi.updateValidity(this.$route.params.id, this.$router);
+        purchasedVoucherApi.updateValidity(this.$router, this.$route.params.id);
       }
     },
 
