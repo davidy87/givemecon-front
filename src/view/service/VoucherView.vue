@@ -75,12 +75,11 @@
               </div>
               
               <div class="list-group-item d-flex justify-content-between align-items-start"
-                    v-bind:disabled="getStock(voucherForSale) == 0"
                     v-for="voucherForSale in voucherForSaleList" :key="voucherForSale">
                 <div class="form-check">
                   <input class="form-check-input" 
                          type="checkbox"
-                         :value="voucherForSale"
+                         :value="voucherForSale.id"
                          v-model="toPurchaseList"
                          @change="onVoucherForSaleCheck($event, voucherForSale)">
                   <div class="ms-2 me-auto">
@@ -116,6 +115,7 @@
 import NavbarHeader from '@/components/NavbarHeader.vue';
 import * as voucherApi from '@/api/modules/voucher';
 import * as likedVoucherApi from '@/api/modules/liked-voucher';
+import * as orderApi from '@/api/modules/order';
 
 export default {
   name: 'VoucherView',
@@ -136,7 +136,9 @@ export default {
 
   methods: {
     onLoad() {
-      voucherApi.findById(this.$route.params.id, this.voucher);
+      const voucherId = this.$route.params.id;
+      this.$store.commit('voucherRouteStore/setVoucherRoute', `/vouchers/${voucherId}`);
+      voucherApi.findById(voucherId, this.voucher);
     },
 
     onLikeClick() {
@@ -158,31 +160,16 @@ export default {
         .then((response) => {
           console.log(response);
           this.voucherForSaleList = response.data;
-          
-          this.voucherForSaleList.forEach(voucherForSale => {
-            if (this.voucherForSaleStock.has(voucherForSale.expDate)) {
-              this.setStock(voucherForSale, this.getStock(voucherForSale) + 1);
-            } else {
-              this.setStock(voucherForSale, 1);
-            }
-          })
         });
     },
 
     onFinalPurchaseClick() {
-      if (this.totalQuantity == 0) {
+      if (this.totalQuantity === 0) {
         alert('구매할 기프티콘을 선택해주세요.');
         return;
       }
-
-      const payload = {
-        purchaseList: this.toPurchaseList,
-        totalQuantity: this.totalQuantity,
-        totalPrice: this.totalPrice,
-      }
-
-      this.$store.commit('purchaseListStore/setPurchaseList', payload);
-      this.$router.push('/purchase');
+      console.log(this.toPurchaseList);
+      orderApi.placeOrder(this.$router, this.toPurchaseList);
     },
 
     onVoucherForSaleCheck(event, voucherForSale) {
@@ -193,14 +180,6 @@ export default {
         this.totalQuantity--;
         this.totalPrice -= voucherForSale.price;
       }
-    },
-
-    getStock(voucherForSale) {
-      return this.voucherForSaleStock.get(voucherForSale.expDate);
-    },
-
-    setStock(voucherForSale, stock) {
-      this.voucherForSaleStock.set(voucherForSale.expDate, stock);
     },
 
     format(price) {

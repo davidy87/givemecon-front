@@ -2,24 +2,27 @@
   <navbar-header></navbar-header>
 
   <div id="purchase" class="container">
-    <div class="pb-5">
+    <div class="container pb-5">
       <h1>결제하기</h1>
     </div>
 
-    <div class="container px-5">
-      <ul id="purchase-list-group" class="list-group" v-for="voucher in purchaseList" :key="voucher">
+    <div class="container">
+      <ul id="purchase-list-group" class="list-group" v-for="voucher in orderSummary.orderItems" :key="voucher">
         <li id="purchase-list-group-item" class="list-group-item border-dark">
-          <div class="d-flex justify-content-between align-items-start py-2">
-            <div class="ms-2 me-auto">
-              {{ voucher.expDate }} 까지
+          <div class="d-flex py-2">
+            <div class="me-4">
+              <img :src="voucher.voucherImageUrl" alt="" style="width: 8rem;">
             </div>
-            <button @click="onDeleteClick(voucher)" class="btn btn-lg bi bi-trash"></button>
-          </div>
-          <div class="d-flex align-items-center py-2">
-            <div class="ms-2 me-auto">
-
+            <div class="d-flex align-items-start justify-content-center flex-column me-auto">
+              <div class="p-2">{{ voucher.brandName }}</div>
+              <div class="p-2">{{ voucher.title }}</div>
+              <div class="p-2">
+                <span class="fw-semibold">{{ voucher.expDate }} 까지</span>
+              </div>
             </div>
-            <span>{{ format(voucher.price) }}원</span>
+            <div class="d-flex align-items-center justify-content-center">
+              <span class="fw-semibold">{{ format(voucher.price) }}원</span>
+            </div>
           </div>
         </li>
         <br>
@@ -29,21 +32,28 @@
 
       <div class="pb-5 d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
-          <div>총 수량 <span class="text-danger">{{ totalQuantity }}개</span></div>
+          <div>총 수량 <span class="text-danger">{{ orderSummary.quantity }}개</span></div>
         </div>
-        <span class="fw-semibold">총 금액 <span class="text-danger">{{ format(totalPrice) }}원</span></span>
+        <span class="fw-semibold">총 금액 <span class="text-danger">{{ format(orderSummary.totalPrice) }}원</span></span>
       </div>
     </div>
 
     <div class="container pt-5">
-      <button @click="onPayClick" class="btn btn-lg btn-primary">결제하기</button>
+      <div class="row row-cols-auto justify-content-center">
+        <div class="col">
+          <button class="btn btn-lg btn-outline-danger" @click="onCancelClick()">취소하기</button>
+        </div>
+        <div class="col">
+          <button @click="onPayClick" class="btn btn-lg btn-primary">결제하기</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import * as purchasedVoucherApi from '@/api/modules/purchased-voucher';
+import * as orderApi from '@/api/modules/order';
 
 export default {
   name: 'PurchaseView',
@@ -54,21 +64,28 @@ export default {
 
   data() {
     return {
-      prevRoute: null,
-      purchaseList: this.$store.getters['purchaseListStore/getPurchaseList'],
-      totalQuantity: this.$store.getters['purchaseListStore/getTotalQuantity'],
-      totalPrice: this.$store.getters['purchaseListStore/getTotalPrice'],
+      orderNumber: 0,
+      orderSummary: {
+        quantity: 0,
+        totalPrice: 0,
+        orderItems: []
+      }
     }
   },
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.prevRoute = from
-    });
+  beforeRouteLeave(to, from, next) {
+    const answer = confirm('이전으로 돌아가시겠습니까?\n진행 중인 주문은 취소됩니다.');
+    if (answer) {
+      orderApi.cancelOrder(this.$router, this.orderNumber);
+      next();
+    } else {
+      next(false);
+    }
   },
 
   created() {
-    console.log(this.purchaseList);
+    this.orderNumber = this.$route.query.orderNumber;
+    orderApi.findOrder(this.$router, this.orderNumber, this.orderSummary);
   },
 
   methods: {
@@ -76,33 +93,16 @@ export default {
       return Intl.NumberFormat('en-US').format(price);
     },
 
-    onDeleteClick(voucher) {
-      if (confirm('해당 제품을 제거하시겠습니까?')) {
-        this.$store.commit('purchaseListStore/removePurchase', voucher);
-        this.updateTotal();
-
-        if (this.totalQuantity === 0) {
-          this.sleep(100).then(() => {
-            alert('구매할 기프티콘이 없습니다. 선택화면으로 돌아갑니다.');
-            this.$router.replace(this.prevRoute);
-          });
-        }
-      }
-    },
-
-    updateTotal() {
-      this.totalQuantity = this.$store.getters['purchaseListStore/getTotalQuantity'];
-      this.totalPrice = this.$store.getters['purchaseListStore/getTotalPrice'];
-    },
-
-    onPayClick() {
-      this.purchaseList = this.$store.getters['purchaseListStore/getPurchaseList'],
-      console.log(Array.from(this.purchaseList.keys()));
-
+    onCheckOutClick() {
       // TODO: 결제 방법 추가 필요
       if (confirm('결제하시겠습니까?')) {
-        purchasedVoucherApi.save(this.purchaseList, this.$router);
+        orderApi.confirmOrder(this.$router, this.orderNumber);
       }
+    },
+
+    onCancelClick() {
+      const prevRoute = this.$store.getters['voucherRouteStore/getVoucherRoute'];
+      this.$router.replace(prevRoute);
     },
 
     sleep(ms) {
@@ -125,5 +125,17 @@ export default {
 
 #purchase-list-group #purchase-list-group-item {
   border-radius: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  #purchase {
+    width: 750px;
+  }
+}
+
+@media (min-width: 992px) {
+  #purchase {
+    width: 940px;
+  }
 }
 </style>@/api/purchased-voucher
