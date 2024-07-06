@@ -44,7 +44,7 @@
           <button class="btn btn-lg btn-outline-danger" @click="onCancelClick()">취소하기</button>
         </div>
         <div class="col">
-          <button @click="onPayClick" class="btn btn-lg btn-primary">결제하기</button>
+          <button @click="onCheckOutClick" class="btn btn-lg btn-primary">결제하기</button>
         </div>
       </div>
     </div>
@@ -54,6 +54,7 @@
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
 import * as orderApi from '@/api/modules/order';
+import * as paymentApi from '@/api/modules/payment';
 
 export default {
   name: 'PurchaseView',
@@ -96,7 +97,7 @@ export default {
     onCheckOutClick() {
       // TODO: 결제 방법 추가 필요
       if (confirm('결제하시겠습니까?')) {
-        orderApi.confirmOrder(this.$router, this.orderNumber);
+        paymentApi.requestTossPayment(this.getPaymentInfo());
       }
     },
 
@@ -105,9 +106,25 @@ export default {
       this.$router.replace(prevRoute);
     },
 
-    sleep(ms) {
-      return new Promise((r) => setTimeout(r, ms));
-    }
+    getPaymentInfo() {
+      const orderItems = this.orderSummary.orderItems;
+      let orderName = orderItems[0].title;
+
+      if (orderItems.length > 1) {
+        orderName += ` 외 ${orderItems.length - 1}건`;
+      }
+
+      const paymentInfo = {
+        amount: this.orderSummary.totalPrice,
+        orderId: this.orderNumber,
+        orderName: orderName,
+        customerName: localStorage.getItem('username'),
+        successUrl: `${location.origin}/payment/success`,
+        failUrl: `${location.origin}${this.$route.fullPath}`,
+      };
+
+      return paymentInfo;
+    },
   }
 }
 </script>
