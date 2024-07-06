@@ -7,6 +7,7 @@ import LoginView from '@/view/service/LoginView.vue'
 import VoucherListView from '@/view/service/VoucherListView.vue'
 import VoucherView from '@/view/service/VoucherView.vue'
 import PurchaseView from '@/view/service/PurchaseView'
+import PaymentSuccessView from '@/view/service/PaymentSuccessView'
 
 import VoucherImageUploadView from '@/view/mypage/VoucherImageUploadView.vue'
 import VoucherSubmitView from '@/view/mypage/VoucherSubmitView.vue'
@@ -36,6 +37,7 @@ const routes = [
   { path: '/sell/details', component: VoucherSubmitView, meta: { requiresAuth: true } },
   { path: '/liked-vouchers', component: LikedVoucherListView, meta: { requiresAuth: true } },
   { path: '/purchase', component: PurchaseView, meta: { requiresAuth: true } },
+  { path: '/payment/success', component: PaymentSuccessView, meta: { requiresAuth: true } },
   { path: '/my-vouchers', component: MyVouchersView, meta: { requiresAuth: true } },
   { path: '/my-vouchers/usable/:id', component: UsableVoucherView, meta: { requiresAuth: true } },
   { path: '/admin/login', component: AdminLoginView },

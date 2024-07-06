@@ -81,9 +81,10 @@ export async function updateStatus(router, id, statusCode, rejectedReason) {
 
 export const VoucherForSaleStatus = {
   NOT_YET_PERMITTED: 0,
-  FOR_SALE: 1,
-  SOLD: 2,
-  REJECTED: 3,
-  EXPIRED: 4
+  REJECTED: 1,
+  FOR_SALE: 2,
+  ORDER_PLACED: 3,
+  SOLD: 4,
+  EXPIRED: 5,
 }
 Object.freeze(VoucherForSaleStatus);
