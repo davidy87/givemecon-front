@@ -141,7 +141,7 @@ import NavbarHeader from '@/components/NavbarHeader.vue';
 import * as caetgoryApi from '@/api/modules/category';
 import * as brandApi from '@/api/modules/brand';
 import * as voucherKindApi from '@/api/modules/voucher-kind';
-import * as voucherForSaleApi from '@/api/modules/voucher-for-sale';
+import * as voucherApi from '@/api/modules/voucher';
 
 export default {
   name: 'VoucherSubmitView',
@@ -210,7 +210,7 @@ export default {
       }
 
       if (confirm('이 기프티콘을 판매하시겠습니까?')) {
-        voucherForSaleApi.save(this.voucherToPost, this.$router);
+        voucherApi.save(this.voucherToPost, this.$router);
       }
     },
 

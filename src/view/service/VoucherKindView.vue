@@ -114,7 +114,7 @@
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
 import * as voucherKindApi from '@/api/modules/voucher-kind';
-import * as voucherForSaleApi from '@/api/modules/voucher-for-sale';
+import * as voucherApi from '@/api/modules/voucher';
 import * as likedVoucherApi from '@/api/modules/liked-voucher';
 import * as orderApi from '@/api/modules/order';
 
@@ -164,7 +164,7 @@ export default {
       this.totalPrice = 0;
       
       const voucherKindId = this.$route.params.id;
-      voucherForSaleApi.findAllForSaleByVoucherKindId(this.$router, voucherKindId, this.voucherList);
+      voucherApi.findAllForSaleByVoucherKindId(this.$router, voucherKindId, this.voucherList);
       this.modalReady = true;
     },
 

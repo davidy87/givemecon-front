@@ -156,7 +156,6 @@ export default {
   data() {
     return {
       categories : [],
-      // pagedBrands : [],
       selectedCategory : {},
       brands : [],
       currentPage : ref(1),
@@ -174,18 +173,6 @@ export default {
   methods: {
     onLoad() {
       categoryApi.findAll(this.categories, this.$router);
-      // brandApi
-      //   .findPage()
-      //   .then(
-      //     response => {
-      //       console.log(response);
-      //       let data = response.data;
-      //       this.currentPage = ref(data.number + 1);
-      //       this.totalPages = data.totalPages;
-      //       this.itemsPerPage = data.size;
-      //       this.pagedBrands = data.brands;
-      //     }
-      //   );
     },
 
     onImageUpload(e, brand) {

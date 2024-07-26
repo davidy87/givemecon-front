@@ -67,8 +67,7 @@
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
 import * as purchasedVoucherApi from '@/api/modules/purchased-voucher';
-import * as voucherForSaleApi from '@/api/modules/voucher-for-sale';
-// import mediumZoom from 'medium-zoom';
+import * as voucherApi from '@/api/modules/voucher';
 
 export default {
   name: 'UsableVoucherView',
@@ -85,7 +84,6 @@ export default {
 
   methods: {
     onLoad() {
-      // mediumZoom(document.querySelector("#voucher-image"));
       purchasedVoucherApi.findById(this.$route.params.id, this.voucher);
     },
 
@@ -96,7 +94,7 @@ export default {
     },
 
     showVoucherImage(voucherId) {
-      voucherForSaleApi
+      voucherApi
         .findVoucherImage(this.$router, voucherId)
         .then(
           (result) => {

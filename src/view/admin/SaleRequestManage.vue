@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import * as voucherForSaleApi from '@/api/modules/voucher-for-sale';
+import * as voucherApi from '@/api/modules/voucher';
 
 export default {
   name: 'SaleRequestManage',
@@ -36,13 +36,13 @@ export default {
   data() {
     return {
       saleRequests: [],
-      Status: voucherForSaleApi.VoucherForSaleStatus
+      Status: voucherApi.VoucherForSaleStatus
     }
   },
 
   methods: {
     onLoad() {
-      voucherForSaleApi.findAllByStatus(this.Status.SALE_REQUESTED, this.saleRequests, this.$router);
+      voucherApi.findAllByStatus(this.Status.SALE_REQUESTED, this.saleRequests, this.$router);
     },
 
     onTitleClick(idx) {
