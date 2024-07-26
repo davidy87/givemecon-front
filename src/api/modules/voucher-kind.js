@@ -2,7 +2,7 @@ import http from '../index';
 import { HttpStatusCode } from 'axios';
 import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/util/utilities';
 
-const BASE_PATH = '/vouchers';
+const BASE_PATH = '/voucher-kinds';
 
 export async function save(formData, router) {
   http
@@ -23,40 +23,41 @@ export async function save(formData, router) {
     );
 }
 
-export async function findAllByBrandName(brandName, vouchers) {
-  const payload = {
+export async function findAllByBrandId(brandId, voucherKinds) {
+  const config = {
     params: {
-      brandName: brandName
-    }
+      brandId: brandId
+    },
+    headers: getRequestHeaders()['headers']
   };
 
   http
-    .get(BASE_PATH, payload)
+    .get(BASE_PATH, config)
     .then(
       (response) => {
         console.log(response);
-        if (vouchers.length === 0) {
-          response.data.vouchers.forEach(voucher => {
-            vouchers.push(voucher);
+        if (voucherKinds.length === 0) {
+          response.data.forEach(voucherKind => {
+            voucherKinds.push(voucherKind);
           });
         }
       }
     );
 }
 
-export async function findById(id, voucher) {
+export async function findById(id, voucherKind) {
   http
-    .get(`${BASE_PATH}/${id}`)
+    .get(`${BASE_PATH}/${id}`, getRequestHeaders())
     .then((response) => {
       console.log(response);
       Object.entries(response.data).forEach(([key, value]) => {
-        voucher[key] = value;
+        voucherKind[key] = value;
       })
     });
 }
 
-export async function findSellingList(voucherId) {
-  return http.get(`${BASE_PATH}/${voucherId}/selling-list`);
+export async function findSellingList(id) {
+  return http.get(`${BASE_PATH}/${id}/selling-list`);
 }
 
 export async function update(id, formData, router) {

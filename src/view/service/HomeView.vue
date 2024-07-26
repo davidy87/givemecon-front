@@ -31,7 +31,7 @@
             <div class="d-flex align-items-center justify-content-center">
               <div class="row row-col-auto justify-content-center">
                 <div class="col p-3" v-for="brand in brands" :key="brand">                  
-                  <button @click="onBrandClick(brand.name)" class="card align-items-center mx-auto" style="width: 8rem;">
+                  <button @click="onBrandClick(brand.id)" class="card align-items-center mx-auto" style="width: 8rem;">
                     <img class="card-img-top p-3" :src=brand.iconUrl>
                     <div class="card-body" style="width: inherit;">
                       <span class="card-text" >{{ brand.name }}</span>
@@ -73,21 +73,15 @@ export default {
 
     onCategoryClick(categoryId, categoryName) {
       this.modalHeader = categoryName;
-
-      brandApi.findPage(categoryId)
-        .then(
-          response => {
-            console.log(response);
-            this.brands = response.data.brands;
-          }
-        );
+      this.brands = [];
+      brandApi.findAllByCategoryId(categoryId, this.brands);
     },
 
-    onBrandClick(brandName) {
+    onBrandClick(brandId) {
       this.$router.push({ 
-        path: '/vouchers', 
+        path: '/voucher-kinds', 
         query: { 
-          brand: brandName
+          brandId: brandId
         } 
       });
     },

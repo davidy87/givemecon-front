@@ -47,11 +47,9 @@ export async function findAllByCategoryId(categoryId, brands) {
     .get(BASE_PATH, payload)
     .then(
       (response) => {
-        if (brands.length === 0) {
-          response.data.brands.forEach((brand) => {
-            brands.push(brand);
-          });
-        }
+        response.data.forEach((brand) => {
+          brands.push(brand);
+        });
       }
     );
 }

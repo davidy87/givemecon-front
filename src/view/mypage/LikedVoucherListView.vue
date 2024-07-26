@@ -78,7 +78,7 @@ export default {
     },
 
     onVoucherClick(id) {
-      this.$router.push('/vouchers/' + id);
+      this.$router.push('/voucher-kinds/' + id);
     },
 
     sleep(ms) {

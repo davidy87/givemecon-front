@@ -4,6 +4,44 @@
       <h1>브랜드 관리</h1>
     </div>
 
+    <div class="container d-flex justify-content-center">
+      <div class="container d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 250px;">
+        <div class="flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+          <span class="fs-5 fw-semibold">카테고리</span>
+        </div>
+        <div v-for="category in categories" :key="category" class="list-group list-group-flush border-bottom scrollarea">
+          <a @click="onCategoryClick(category)" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
+            <div>
+              <span class="mb-1">{{ category.name }}</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="container p-5 d-flex align-items-center justify-content-center">
+        <div class="d-flex align-items-center justify-content-center">
+          <div class="row row-cols-auto justify-content-center">
+            <div class="col p-3" v-for="brand in brands" :key="brand">
+              <button @click="onBrandClick(brand)"
+                      class="card align-items-center mx-auto" data-bs-toggle="modal" data-bs-target="#edit-brand" style="width: 8rem;">
+                <img class="card-img-top p-3" :src=brand.iconUrl>
+                <p>{{ brand.name }}</p>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="py-3">
+      <hr>
+    </div>
+
+    <div class="container">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-brand">브랜드 추가하기</button>
+    </div>
+
+<!-- 
     <div class="container">
       <div class="d-flex align-items-center justify-content-center">
         <div class="row row-cols-auto justify-content-center">
@@ -29,7 +67,11 @@
       <div class="container pt-3">
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-brand">브랜드 추가하기</button>
       </div>
-    </div>
+    </div> -->
+
+    <!-- <div class="container pt-3">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-brand">브랜드 추가하기</button>
+    </div> -->
 
     <div class="modal fade" id="add-brand">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -114,7 +156,9 @@ export default {
   data() {
     return {
       categories : [],
-      pagedBrands : [],
+      // pagedBrands : [],
+      selectedCategory : {},
+      brands : [],
       currentPage : ref(1),
       itemsPerPage : 1,
       totalPages : 1,
@@ -130,18 +174,18 @@ export default {
   methods: {
     onLoad() {
       categoryApi.findAll(this.categories, this.$router);
-      brandApi
-        .findPage()
-        .then(
-          response => {
-            console.log(response);
-            let data = response.data;
-            this.currentPage = ref(data.number + 1);
-            this.totalPages = data.totalPages;
-            this.itemsPerPage = data.size;
-            this.pagedBrands = data.brands;
-          }
-        );
+      // brandApi
+      //   .findPage()
+      //   .then(
+      //     response => {
+      //       console.log(response);
+      //       let data = response.data;
+      //       this.currentPage = ref(data.number + 1);
+      //       this.totalPages = data.totalPages;
+      //       this.itemsPerPage = data.size;
+      //       this.pagedBrands = data.brands;
+      //     }
+      //   );
     },
 
     onImageUpload(e, brand) {
@@ -152,8 +196,15 @@ export default {
       }
     },
 
+    onCategoryClick(category) {
+      this.selectedCategory = category;
+      this.brands = [];
+      brandApi.findAllByCategoryId(category.id, this.brands);
+    },
+
     onBrandClick(brand) {
       this.brandToEdit.id = brand.id;
+      this.brandToEdit.categoryId = this.selectedCategory.id;
       this.brandToEdit.name = brand.name;
     },
 

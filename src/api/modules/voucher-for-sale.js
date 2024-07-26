@@ -2,7 +2,7 @@ import http from '../index';
 import { HttpStatusCode } from 'axios';
 import { requestNewAccessToken, getRequestHeaders, ContentType, handleBadRequest } from '@/util/utilities';
 
-const BASE_PATH = '/vouchers-for-sale';
+const BASE_PATH = '/vouchers';
 
 export async function save(voucherToPost, router) {
   http
@@ -24,8 +24,15 @@ export async function save(voucherToPost, router) {
 }
 
 export async function findAllByStatus(statusCode, forSaleRequests, router) {
+  const config = {
+    params: {
+      statusCode: statusCode
+    },
+    headers: getRequestHeaders()['headers']
+  };
+
   http
-    .get(BASE_PATH, {params: {statusCode}}, getRequestHeaders())
+    .get(BASE_PATH, config)
     .then(
       (response) => {
         console.log(response);
@@ -40,6 +47,53 @@ export async function findAllByStatus(statusCode, forSaleRequests, router) {
         }
       }
     );
+}
+
+export async function findAllForSaleByVoucherKindId(router, voucherKindId, voucherList) {
+  const config = {
+    params: {
+      voucherKindId: voucherKindId
+    },
+    headers: getRequestHeaders()['headers']
+  };
+
+  http
+    .get(BASE_PATH, config)
+    .then(
+      (response) => {
+        console.log(response);
+        response.data.forEach((voucher) => {
+          voucherList.push(voucher);
+        });
+      },
+      async (error) => {
+        console.log(error);
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          await requestNewAccessToken(router);
+        }
+      }
+    );
+}
+
+export async function findVoucherImage(router, voucherId) {
+  let voucherImageUrl = '';
+
+  await http
+    .get(`${BASE_PATH}/${voucherId}/image`, getRequestHeaders())
+    .then(
+      (response) => {
+        console.log(response);
+        voucherImageUrl = response.data.imageUrl;
+      },
+      async (error) => {
+        console.log(error);
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          await requestNewAccessToken(router);
+        }
+      }
+    );
+
+  return voucherImageUrl;
 }
 
 export async function updateStatus(router, id, statusCode, rejectedReason) {
@@ -80,8 +134,8 @@ export async function updateStatus(router, id, statusCode, rejectedReason) {
 }
 
 export const VoucherForSaleStatus = {
-  NOT_YET_PERMITTED: 0,
-  REJECTED: 1,
+  SALE_REQUESTED: 0,
+  SALE_REJECTED: 1,
   FOR_SALE: 2,
   ORDER_PLACED: 3,
   SOLD: 4,

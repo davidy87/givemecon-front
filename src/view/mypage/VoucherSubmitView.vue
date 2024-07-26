@@ -109,17 +109,17 @@
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5">{{ selectedBrand.name }} 판매 리스트: {{ vouchers.length }}</h1>
+            <h1 class="modal-title fs-5">{{ selectedBrand.name }} 판매 리스트: {{ voucherKinds.length }}</h1>
             <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="d-flex align-items-center justify-content-center">
               <div class="row row-col-auto justify-content-center">
-                <div class="col p-3" v-for="voucher in vouchers" :key="voucher">                  
-                  <button @click="onVoucherClick(voucher)" class="card align-items-center mx-auto" data-bs-dismiss="modal" style="width: 8rem;">
-                    <img class="card-img-top p-3" :src=voucher.imageUrl>
+                <div class="col p-3" v-for="voucherKind in voucherKinds" :key="voucherKind">                  
+                  <button @click="onVoucherClick(voucherKind)" class="card align-items-center mx-auto" data-bs-dismiss="modal" style="width: 8rem;">
+                    <img class="card-img-top p-3" :src=voucherKind.imageUrl>
                     <div class="card-body" style="width: inherit;">
-                      <span class="card-text" >{{ voucher.title }}</span>
+                      <span class="card-text" >{{ voucherKind.title }}</span>
                     </div>
                   </button>
                 </div>
@@ -140,7 +140,7 @@
 import NavbarHeader from '@/components/NavbarHeader.vue';
 import * as caetgoryApi from '@/api/modules/category';
 import * as brandApi from '@/api/modules/brand';
-import * as voucherApi from '@/api/modules/voucher';
+import * as voucherKindApi from '@/api/modules/voucher-kind';
 import * as voucherForSaleApi from '@/api/modules/voucher-for-sale';
 
 export default {
@@ -155,12 +155,12 @@ export default {
     return {
       categories : [],
       brands : [],
-      vouchers : [],
+      voucherKinds : [],
       selectedCategory : {},
       selectedBrand : {},
       imagePreviewUrl: imageInfo.imagePreviewUrl,
       voucherToPost : {
-        voucherId : null,
+        voucherKindId : null,
         title : null,
         price : null,
         expDate : imageInfo.expDate,
@@ -189,7 +189,7 @@ export default {
         return;
       }
 
-      if (!this.voucherToPost.voucherId || !this.voucherToPost.title) {
+      if (!this.voucherToPost.voucherKindId || !this.voucherToPost.title) {
         alert('상품명을 다시 선택해주세요.');
         return;
       }
@@ -222,13 +222,13 @@ export default {
 
     onBrandClick(brand) {
       this.selectedBrand = brand;
-      this.vouchers = [];
-      voucherApi.findAllByBrandName(brand.name, this.vouchers);
+      this.voucherKinds = [];
+      voucherKindApi.findAllByBrandId(brand.id, this.voucherKinds);
     },
 
-    onVoucherClick(voucher) {
-      this.voucherToPost.voucherId = voucher.id;
-      this.voucherToPost.title = voucher.title;
+    onVoucherClick(voucherKind) {
+      this.voucherToPost.voucherKindId = voucherKind.id;
+      this.voucherToPost.title = voucherKind.title;
     }
   },
 

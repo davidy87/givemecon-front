@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-center">
       <div class="card" style="width: auto; height: auto;">
         <div class="container py-3">
-          <img v-bind:src="requestedSale.imageUrl" class="card-img-top p-3" style="width: 500px; height: 500px;" />
+          <img :src="voucherImageUrl" class="card-img-top p-3" style="width: 500px; height: 500px;" />
         </div>
         <div class="card-body">
           <ul id="details-list-group" class="list-group">
@@ -44,15 +44,23 @@ export default {
 
   data() {
     return {
+      voucherImageUrl: '',
       requestedSale: this.$store.getters['requestedSaleStore/getRequestedSale'],
       Status: voucherForSaleApi.VoucherForSaleStatus
     }
   },
 
-  methods: {
-    onLoad() {
-    },
+  created() {
+    voucherForSaleApi
+      .findVoucherImage(this.$router, this.requestedSale.id)
+      .then(
+        (result) => {
+          this.voucherImageUrl = result;
+        }
+      );
+  },
 
+  methods: {
     reject() {
       if (confirm('이 기프티콘 판매를 거절하시겠습니까?')) {
         const rejectedReason = prompt('거절 사유');
@@ -72,10 +80,6 @@ export default {
         voucherForSaleApi.updateStatus(this.$router, this.requestedSale.id, this.Status.FOR_SALE);
       }
     }
-  },
-
-  mounted(){
-    this.onLoad();
   }
 }
 </script>

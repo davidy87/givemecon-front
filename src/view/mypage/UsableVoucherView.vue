@@ -3,7 +3,7 @@
 
   <div id="valid-voucher" class="container">
     <div class="container">
-      <img id='voucher-image' :src="voucher.imageUrl" alt="" height="400" width="400">
+      <img id='voucher-kind-image' :src="voucher.voucherKindImageUrl" alt="" height="400" width="400">
     </div>
     <div class="container">
       <div class="container py-5">
@@ -37,16 +37,38 @@
         </div>
       </div>
       <div class="container">
-        <button @click="onUsedClick" class="btn btn-lg btn-primary">사용 완료</button>
+        <div class="row row-cols-auto justify-content-center">
+          <div class="col">
+            <button @click="onUsedClick()" class="btn btn-lg btn-secondary">사용 완료</button>
+          </div>
+          <div class="col">
+            <button @click="showVoucherImage(voucher.voucherId)" class="btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#voucher-image-modal">기프티콘 확인하기</button>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="modal fade" id="voucher-image-modal">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="container">
+              <img id='voucher-image' :src="voucherImageUrl" alt="" width="400" height="600">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
+
 </template>
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
 import * as purchasedVoucherApi from '@/api/modules/purchased-voucher';
-import mediumZoom from 'medium-zoom';
+import * as voucherForSaleApi from '@/api/modules/voucher-for-sale';
+// import mediumZoom from 'medium-zoom';
 
 export default {
   name: 'UsableVoucherView',
@@ -56,13 +78,14 @@ export default {
 
   data() {
     return {
-      voucher : {}
+      voucher : {},
+      voucherImageUrl : ''
     }
   },
 
   methods: {
     onLoad() {
-      mediumZoom(document.querySelector("#voucher-image"));
+      // mediumZoom(document.querySelector("#voucher-image"));
       purchasedVoucherApi.findById(this.$route.params.id, this.voucher);
     },
 
@@ -70,6 +93,16 @@ export default {
       if (confirm('사용완료 하시겠습니까?')) {
         purchasedVoucherApi.updateValidity(this.$router, this.$route.params.id);
       }
+    },
+
+    showVoucherImage(voucherId) {
+      voucherForSaleApi
+        .findVoucherImage(this.$router, voucherId)
+        .then(
+          (result) => {
+            this.voucherImageUrl = result;
+          }
+        );
     },
 
     format(price) {

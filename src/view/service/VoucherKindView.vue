@@ -3,16 +3,16 @@
 
   <div id="voucher" class="container">
     <div class="container">
-      <img :src="voucher.imageUrl" alt="">
+      <img :src="voucherKind.imageUrl" alt="">
     </div>
 
     <div class="container">
       <div class="container py-5">
-        <h2 class="text-start">{{ voucher.title }}</h2>
+        <h2 class="text-start">{{ voucherKind.title }}</h2>
       </div>
 
       <div class="container">
-        <h4 class="text-start">{{ format(voucher.minPrice) }} 원</h4>
+        <h4 class="text-start">{{ format(voucherKind.minPrice) }} 원</h4>
       </div>
 
       <div class="container py-4">
@@ -33,13 +33,13 @@
             <h4>상품설명</h4>
             <br>
             <div>
-              {{ voucher.description }}
+              {{ voucherKind.description }}
             </div>
           </div>
           <div class="tab-pane fade" id="caution-tab-pane" role="tabpanel" aria-labelledby="caution-tab" tabindex="0">
             <h4>유의사항</h4>
             <div>
-              {{ voucher.caution }}
+              {{ voucherKind.caution }}
             </div>
           </div>
         </div>
@@ -48,11 +48,11 @@
       <div class="container-fluid" id="purchase-btn">
         <div class="row row-cols-auto justify-content-center">
           <div class="col">
-            <button class="btn btn-lg btn-outline-danger" @click="onLikeClick">찜하기</button>
+            <button class="btn btn-lg btn-outline-danger" @click="onLikeClick()">찜하기</button>
           </div>
           <div class="col">
-            <button class="btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#vouchers-for-sale"
-                    @click="onPurchaseClick">
+            <button class="btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#vouchers"
+                    @click="onPurchaseClick()">
               구매하기
             </button>
           </div>
@@ -61,7 +61,7 @@
     </div>
 
     <!-- voucher for sale modal -->
-    <div class="modal fade" id="vouchers-for-sale">
+    <div class="modal fade" id="vouchers">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
@@ -75,18 +75,18 @@
               </div>
               
               <div class="list-group-item d-flex justify-content-between align-items-start"
-                    v-for="voucherForSale in voucherForSaleList" :key="voucherForSale">
+                    v-for="voucher in voucherList" :key="voucher">
                 <div class="form-check">
                   <input class="form-check-input" 
                          type="checkbox"
-                         :value="voucherForSale.id"
+                         :value="voucher.id"
                          v-model="toPurchaseList"
-                         @change="onVoucherForSaleCheck($event, voucherForSale)">
+                         @change="onVoucherCheck($event, voucher)">
                   <div class="ms-2 me-auto">
-                    <span class="fw-semibold">{{ voucherForSale.expDate }} 까지</span>
+                    <span class="fw-semibold">{{ voucher.expDate }} 까지</span>
                   </div>
                 </div>
-                <span class="fw-semibold">{{ format(voucherForSale.price) }} 원</span>
+                <span class="fw-semibold">{{ format(voucher.price) }} 원</span>
               </div>
             </div>
       
@@ -100,7 +100,7 @@
             </div>
 
             <div class="container-fluid">
-              <button @click="onFinalPurchaseClick" class="btn btn-primary">
+              <button @click="onFinalPurchaseClick()" class="btn btn-primary">
                 <span class="fw-semibold">구매하기</span>
               </button>
             </div>
@@ -113,32 +113,34 @@
 
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import * as voucherApi from '@/api/modules/voucher';
+import * as voucherKindApi from '@/api/modules/voucher-kind';
+import * as voucherForSaleApi from '@/api/modules/voucher-for-sale';
 import * as likedVoucherApi from '@/api/modules/liked-voucher';
 import * as orderApi from '@/api/modules/order';
 
 export default {
-  name: 'VoucherView',
+  name: 'VoucherKindView',
   components: {
     NavbarHeader
   },
 
   data() {
     return {
-      voucher: {},
-      voucherForSaleStock: new Map(),
-      voucherForSaleList: [],
+      voucherKind: {},
+      voucherStock: new Map(),
+      voucherList: [],
       toPurchaseList: [],
       totalQuantity: 0,
       totalPrice: 0,
+      modalReady: false
     }
   },
 
   methods: {
     onLoad() {
-      const voucherId = this.$route.params.id;
-      this.$store.commit('voucherRouteStore/setVoucherRoute', `/vouchers/${voucherId}`);
-      voucherApi.findById(voucherId, this.voucher);
+      const voucherKindId = this.$route.params.id;
+      this.$store.commit('voucherRouteStore/setVoucherRoute', `/voucher-kinds/${voucherKindId}`);
+      voucherKindApi.findById(voucherKindId, this.voucherKind);
     },
 
     onLikeClick() {
@@ -146,21 +148,24 @@ export default {
         alert('로그인 후 이용해주세요.');
         return;
       }
-      likedVoucherApi.addToLikedList(this.voucher.id, this.$router);
+      likedVoucherApi.addToLikedList(this.voucherKind.id, this.$router);
     },
 
     onPurchaseClick() {
+       if (!localStorage.getItem('accessToken')) {
+        alert('로그인 후 이용해주세요.');
+        return;
+      }
+
+      this.voucherList = [];
       this.toPurchaseList = [];
-      this.voucherForSaleStock = new Map();
+      this.voucherStock = new Map();
       this.totalQuantity = 0;
       this.totalPrice = 0;
-
-      voucherApi
-        .findSellingList(this.voucher.id)
-        .then((response) => {
-          console.log(response);
-          this.voucherForSaleList = response.data;
-        });
+      
+      const voucherKindId = this.$route.params.id;
+      voucherForSaleApi.findAllForSaleByVoucherKindId(this.$router, voucherKindId, this.voucherList);
+      this.modalReady = true;
     },
 
     onFinalPurchaseClick() {
@@ -172,13 +177,13 @@ export default {
       orderApi.placeOrder(this.$router, this.toPurchaseList);
     },
 
-    onVoucherForSaleCheck(event, voucherForSale) {
+    onVoucherCheck(event, voucher) {
       if (event.target.checked) {
         this.totalQuantity++;
-        this.totalPrice += voucherForSale.price;
+        this.totalPrice += voucher.price;
       } else {
         this.totalQuantity--;
-        this.totalPrice -= voucherForSale.price;
+        this.totalPrice -= voucher.price;
       }
     },
 

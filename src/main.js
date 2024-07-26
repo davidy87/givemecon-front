@@ -4,9 +4,10 @@ import App from './App.vue'
 
 import HomeView from '@/view/service/HomeView.vue'
 import LoginView from '@/view/service/LoginView.vue'
-import VoucherListView from '@/view/service/VoucherListView.vue'
-import VoucherView from '@/view/service/VoucherView.vue'
+import VoucherKindListView from '@/view/service/VoucherKindListView.vue'
+import VoucherKindView from '@/view/service/VoucherKindView.vue'
 import PurchaseView from '@/view/service/PurchaseView'
+import PaymentProcessingView from '@/view/service/PaymentProcessingView'
 import PaymentSuccessView from '@/view/service/PaymentSuccessView'
 
 import VoucherImageUploadView from '@/view/mypage/VoucherImageUploadView.vue'
@@ -31,12 +32,13 @@ import "vue-awesome-paginate/dist/style.css";
 const routes = [
   { path: '/', component: HomeView },
   { path: '/login', component: LoginView },
-  { path: '/vouchers', component: VoucherListView },
-  { path: '/vouchers/:id', component: VoucherView },
+  { path: '/voucher-kinds', component: VoucherKindListView },
+  { path: '/voucher-kinds/:id', component: VoucherKindView },
   { path: '/sell', component: VoucherImageUploadView, meta: { requiresAuth: true } },
   { path: '/sell/details', component: VoucherSubmitView, meta: { requiresAuth: true } },
   { path: '/liked-vouchers', component: LikedVoucherListView, meta: { requiresAuth: true } },
   { path: '/purchase', component: PurchaseView, meta: { requiresAuth: true } },
+  { path: '/payment/processing', component: PaymentProcessingView, meta: { requiresAuth: true } },
   { path: '/payment/success', component: PaymentSuccessView, meta: { requiresAuth: true } },
   { path: '/my-vouchers', component: MyVouchersView, meta: { requiresAuth: true } },
   { path: '/my-vouchers/usable/:id', component: UsableVoucherView, meta: { requiresAuth: true } },
@@ -91,7 +93,7 @@ router.beforeEach((to, from, next) => {
     '/admin/sale-requests/:id',
     '/admin/categories', 
     '/admin/brands',
-    "/admin/vouchers"
+    '/admin/vouchers'
   ];
 
   // 인증되지 않은 상태라면 인증이 필요한 페이지 접속 거부
@@ -108,7 +110,7 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  if (localStorage.getItem('authority') !== 'ADMIN' && adminPathList.includes(to.path)) {
+  if (localStorage.getItem('role') !== 'ADMIN' && adminPathList.includes(to.path)) {
     next('/');
     return;
   }

@@ -42,7 +42,7 @@ export default {
 
   methods: {
     onLoad() {
-      voucherForSaleApi.findAllByStatus(this.Status.NOT_YET_PERMITTED, this.saleRequests, this.$router);
+      voucherForSaleApi.findAllByStatus(this.Status.SALE_REQUESTED, this.saleRequests, this.$router);
     },
 
     onTitleClick(idx) {

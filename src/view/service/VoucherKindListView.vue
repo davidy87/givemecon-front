@@ -9,12 +9,12 @@
     <div class="container-fluid">
       <div class="d-flex align-items-center justify-content-center">
         <div class="row row-cols-auto justify-content-center">
-          <div class="col p-4" v-for="voucher in vouchers" :key="voucher">
-            <button @click="onVoucherClick(voucher.id)" class="card align-items-center mx-auto" style="width: 11rem;">
-              <img class="card-img-top p-3" :src="voucher.imageUrl">
+          <div class="col p-4" v-for="voucherKind in voucherKinds" :key="voucherKind">
+            <button @click="onVoucherKindClick(voucherKind.id)" class="card align-items-center mx-auto" style="width: 11rem;">
+              <img class="card-img-top p-3" :src="voucherKind.imageUrl">
               <div class="card-body">
-                <p class="card-text">{{ voucher.title }}</p>
-                <p class="card-text">{{ Intl.NumberFormat('en-US').format(voucher.minPrice) }} 원</p>
+                <p class="card-text">{{ voucherKind.title }}</p>
+                <p class="card-text">{{ Intl.NumberFormat('en-US').format(voucherKind.minPrice) }} 원</p>
               </div>
             </button>
           </div>
@@ -26,27 +26,27 @@
   
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
-import * as voucherApi from '@/api/modules/voucher';
+import * as voucherKindApi from '@/api/modules/voucher-kind';
 
 export default {
-  name: 'VoucherListView',
+  name: 'VoucherKindListView',
   components: {
     NavbarHeader
   },
 
   data() {
     return {
-      vouchers : [],
+      voucherKinds : [],
     };
   },
 
   methods: {
     onLoad() {
-      voucherApi.findAllByBrandName(this.$route.query.brand, this.vouchers);
+      voucherKindApi.findAllByBrandId(this.$route.query.brandId, this.voucherKinds);
     },
 
-    onVoucherClick(id) {
-      this.$router.push('/vouchers/' + id);
+    onVoucherKindClick(id) {
+      this.$router.push('/voucher-kinds/' + id);
     }
   },
 
