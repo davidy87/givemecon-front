@@ -1,9 +1,8 @@
 <template>
-  <navbar-header></navbar-header>
 
   <div id="valid-voucher" class="container">
     <div class="container">
-      <img id='voucher-kind-image' :src="voucher.voucherKindImageUrl" alt="" height="400" width="400">
+      <img id='voucher-kind-image' :src="voucher.voucherKindImageUrl" alt="">
     </div>
     <div class="container">
       <div class="container py-5">
@@ -65,15 +64,11 @@
 </template>
 
 <script>
-import NavbarHeader from '@/components/NavbarHeader.vue';
 import * as purchasedVoucherApi from '@/api/modules/purchased-voucher';
 import * as voucherApi from '@/api/modules/voucher';
 
 export default {
   name: 'UsableVoucherView',
-  components: {
-    NavbarHeader
-  },
 
   data() {
     return {

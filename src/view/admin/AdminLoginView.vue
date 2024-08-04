@@ -33,7 +33,7 @@ export default {
   methods: {
     onLoginClick() {
       axios
-        .post('/api/members/admin/login', this.loginRequest)
+        .post('/api/admin/members/login', this.loginRequest)
         .then((response) => {
           console.log(response.data);
 

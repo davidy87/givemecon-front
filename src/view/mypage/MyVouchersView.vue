@@ -1,6 +1,4 @@
 <template>
-  <navbar-header></navbar-header>
-
   <div id="my-vouchers" class="container">
     <div class="pb-5">
       <h1>내 기프티콘</h1>
@@ -72,14 +70,10 @@
 </template>
 
 <script>
-import NavbarHeader from '@/components/NavbarHeader.vue';
 import * as purchasedVoucherApi from '@/api/modules/purchased-voucher';
 
 export default {
   name: 'MyVouchersView',
-  components: {
-    NavbarHeader
-  },
 
   data() {
     const StatusInfo = {

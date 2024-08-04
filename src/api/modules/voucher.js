@@ -1,6 +1,6 @@
 import http from '../index';
 import { HttpStatusCode } from 'axios';
-import { requestNewAccessToken, getRequestHeaders, ContentType, handleBadRequest } from '@/util/utilities';
+import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/util/utilities';
 
 const BASE_PATH = '/vouchers';
 
@@ -23,21 +23,16 @@ export async function save(voucherToPost, router) {
     );
 }
 
-export async function findAllByStatus(statusCode, forSaleRequests, router) {
-  const config = {
-    params: {
-      statusCode: statusCode
-    },
-    headers: getRequestHeaders()['headers']
-  };
+export function findAll(router) {
+  let result = [];
 
   http
-    .get(BASE_PATH, config)
+    .get(BASE_PATH, getRequestHeaders())
     .then(
       (response) => {
         console.log(response);
-        response.data.forEach((voucherForSale) => {
-          forSaleRequests.push(voucherForSale);
+        response.data.forEach((voucher) => {
+          result.push(voucher);
         });
       },
       async (error) => {
@@ -47,6 +42,38 @@ export async function findAllByStatus(statusCode, forSaleRequests, router) {
         }
       }
     );
+  
+  return result;
+}
+
+export async function findAllByStatus(router, statusCode) {
+  let result = [];
+
+  const config = {
+    params: {
+      statusCode: statusCode
+    },
+    headers: getRequestHeaders()['headers']
+  };
+
+  await http
+    .get(BASE_PATH, config)
+    .then(
+      (response) => {
+        console.log(response);
+        response.data.forEach((voucher) => {
+          result.push(voucher);
+        });
+      },
+      async (error) => {
+        console.log(error);
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          await requestNewAccessToken(router);
+        }
+      }
+    );
+  
+  return result;
 }
 
 export async function findAllForSaleByVoucherKindId(router, voucherKindId, voucherList) {
@@ -96,44 +123,7 @@ export async function findVoucherImage(router, voucherId) {
   return voucherImageUrl;
 }
 
-export async function updateStatus(router, id, statusCode, rejectedReason) {
-  const requestBody = {
-    statusCode,
-    rejectedReason
-  }
-
-  http
-    .put(`${BASE_PATH}/${id}`, requestBody, getRequestHeaders())
-    .then(
-      (response) => {
-        console.log(response);
-
-        switch (statusCode) {
-          case VoucherForSaleStatus.FOR_SALE: 
-            alert('기프티콘 판매가 허가되었습니다.');
-            break;
-          case VoucherForSaleStatus.REJECTED:
-            alert('기프티콘 판매가 거절되었습니다.');
-            break;
-        }
-
-        router.replace('/admin/sale-requests');
-      },
-      async (error) => {
-        console.log(error.response);
-        const status = error.response.status;
-
-        if (status === HttpStatusCode.BadRequest) {
-          handleBadRequest(error);
-        } else if (error.response.status === HttpStatusCode.Unauthorized) {
-          await requestNewAccessToken(router);
-          updateStatus(router, id, statusCode, rejectedReason);
-        }
-      }
-    );
-}
-
-export const VoucherForSaleStatus = {
+export const VoucherStatus = {
   SALE_REQUESTED: 0,
   SALE_REJECTED: 1,
   FOR_SALE: 2,
@@ -141,4 +131,4 @@ export const VoucherForSaleStatus = {
   SOLD: 4,
   EXPIRED: 5,
 }
-Object.freeze(VoucherForSaleStatus);
+Object.freeze(VoucherStatus);

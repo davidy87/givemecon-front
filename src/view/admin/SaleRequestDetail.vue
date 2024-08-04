@@ -38,6 +38,7 @@
 
 <script>
 import * as voucherApi from '@/api/modules/voucher';
+import * as adminVoucherApi from '@/api/modules/admin/voucher';
 
 export default {
   name: 'SaleRequestDetail',
@@ -46,7 +47,7 @@ export default {
     return {
       voucherImageUrl: '',
       requestedSale: this.$store.getters['requestedSaleStore/getRequestedSale'],
-      Status: voucherApi.VoucherForSaleStatus
+      Status: voucherApi.VoucherStatus
     }
   },
 
@@ -70,14 +71,14 @@ export default {
         }
 
         if (confirm('거절 사유: ' + rejectedReason + '\n' + '위와 같은 사유로 판매 요청을 거절하시겠습니까?')) {
-          voucherApi.updateStatus(this.$router, this.requestedSale.id, this.Status.REJECTED);
+          adminVoucherApi.updateStatus(this.$router, this.requestedSale.id, this.Status.REJECTED);
         }
       }
     },
 
     permit() {
       if (confirm('이 기프티콘 판매를 허가하시겠습니까?')) {
-        voucherApi.updateStatus(this.$router, this.requestedSale.id, this.Status.FOR_SALE);
+        adminVoucherApi.updateStatus(this.$router, this.requestedSale.id, this.Status.FOR_SALE);
       }
     }
   }

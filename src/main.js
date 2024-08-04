@@ -12,9 +12,11 @@ import PaymentSuccessView from '@/view/service/PaymentSuccessView'
 
 import VoucherImageUploadView from '@/view/mypage/VoucherImageUploadView.vue'
 import VoucherSubmitView from '@/view/mypage/VoucherSubmitView.vue'
+import MyInfoView from '@/view/mypage/MyInfoView.vue'
 import LikedVoucherListView from '@/view/mypage/LikedVoucherListView.vue'
 import MyVouchersView from '@/view/mypage/MyVouchersView.vue'
 import UsableVoucherView from '@/view/mypage/UsableVoucherView.vue'
+import MySalesView from '@/view/mypage/MySalesView.vue'
 
 import AdminView from '@/view/admin/AdminView.vue'
 import AdminLoginView from '@/view/admin/AdminLoginView.vue'
@@ -36,12 +38,35 @@ const routes = [
   { path: '/voucher-kinds/:id', component: VoucherKindView },
   { path: '/sell', component: VoucherImageUploadView, meta: { requiresAuth: true } },
   { path: '/sell/details', component: VoucherSubmitView, meta: { requiresAuth: true } },
-  { path: '/liked-vouchers', component: LikedVoucherListView, meta: { requiresAuth: true } },
   { path: '/purchase', component: PurchaseView, meta: { requiresAuth: true } },
   { path: '/payment/processing', component: PaymentProcessingView, meta: { requiresAuth: true } },
   { path: '/payment/success', component: PaymentSuccessView, meta: { requiresAuth: true } },
-  { path: '/my-vouchers', component: MyVouchersView, meta: { requiresAuth: true } },
-  { path: '/my-vouchers/usable/:id', component: UsableVoucherView, meta: { requiresAuth: true } },
+  { path: '/my-info', 
+    component: MyInfoView,
+    meta: { requiresAuth: true },
+    children: [
+      { 
+        path: '/liked-vouchers', 
+        component: LikedVoucherListView, 
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/my-vouchers', 
+        component: MyVouchersView, 
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/my-vouchers/usable/:id', 
+        component: UsableVoucherView, 
+        meta: { requiresAuth: true } 
+      },
+      { 
+        path: '/my-sales', 
+        component: MySalesView, 
+        meta: { requiresAuth: true } 
+      },
+    ]
+  },
   { path: '/admin/login', component: AdminLoginView },
   { path: '/admin',
     component: AdminView, 
