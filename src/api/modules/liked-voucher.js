@@ -27,7 +27,7 @@ export function findAll(likedVouchers, router) {
     .get(BASE_PATH, getRequestHeaders())
     .then(
       (response) => {
-        response.data.vouchers.forEach((likedVoucher) => {
+        response.data.forEach((likedVoucher) => {
           likedVouchers.set(likedVoucher.id, likedVoucher);
         });
       },

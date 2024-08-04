@@ -1,5 +1,5 @@
 <template>
-  <navbar-header></navbar-header>
+  <!-- <navbar-header></navbar-header> -->
 
   <div id="liked-vouchers" class="container">
     <div class="pb-5">
@@ -46,14 +46,10 @@
 </template>
 
 <script>
-import NavbarHeader from '@/components/NavbarHeader.vue';
 import * as likedVoucherApi from '@/api/modules/liked-voucher';
 
 export default {
   name: 'LikedVoucherListView',
-  components: {
-    NavbarHeader
-  },
 
   data() {
     return {
@@ -78,7 +74,7 @@ export default {
     },
 
     onVoucherClick(id) {
-      this.$router.push('/vouchers/' + id);
+      this.$router.push('/voucher-kinds/' + id);
     },
 
     sleep(ms) {

@@ -28,7 +28,8 @@
 </template>
 
 <script>
-import * as voucherForSaleApi from '@/api/modules/voucher-for-sale';
+import * as voucherApi from '@/api/modules/voucher';
+import * as adminVoucherApi from '@/api/modules/admin/voucher';
 
 export default {
   name: 'SaleRequestManage',
@@ -36,13 +37,18 @@ export default {
   data() {
     return {
       saleRequests: [],
-      Status: voucherForSaleApi.VoucherForSaleStatus
+      Status: voucherApi.VoucherStatus
     }
   },
 
   methods: {
     onLoad() {
-      voucherForSaleApi.findAllByStatus(this.Status.NOT_YET_PERMITTED, this.saleRequests, this.$router);
+      adminVoucherApi.findAllByStatus(this.$router, this.Status.SALE_REQUESTED)
+        .then(
+          (result) => {
+            this.saleRequests = result;
+          }
+        );
     },
 
     onTitleClick(idx) {

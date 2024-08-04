@@ -1,6 +1,4 @@
 <template>
-  <navbar-header></navbar-header>
-
   <div id="my-vouchers" class="container">
     <div class="pb-5">
       <h1>내 기프티콘</h1>
@@ -32,7 +30,7 @@
               <div class="row row-cols-auto justify-content-center">
                 <div class="col p-4" v-for="voucher in unusedVouchers" :key="voucher">
                   <button @click="onUnusedVoucherClick(voucher.id)" class="card align-items-center mx-auto" style="width: 8rem;">
-                    <img class="card-img-top" :src="voucher.imageUrl">
+                    <img class="card-img-top" :src="voucher.voucherKindImageUrl">
                     <div class="card-body">
                       <p class="card-text">{{ voucher.title }}</p>
                       <p class="card-text">{{ Intl.NumberFormat('en-US').format(voucher.price) }} 원</p>
@@ -54,7 +52,7 @@
               <div class="row row-cols-auto justify-content-center">
                 <div class="col p-3" v-for="voucher in usedVouchers" :key="voucher">
                   <button class="card align-items-center mx-auto" style="width: 8rem;">
-                    <img class="card-img-top p-3" :src=voucher.imageUrl>
+                    <img class="card-img-top p-3" :src="voucher.voucherKindImageUrl">
                     <div class="card-body" style="width: inherit;">
                       <p class="card-text">{{ voucher.title }}</p>
                       <p class="card-text">{{ Intl.NumberFormat('en-US').format(voucher.price) }} 원</p>
@@ -72,14 +70,10 @@
 </template>
 
 <script>
-import NavbarHeader from '@/components/NavbarHeader.vue';
 import * as purchasedVoucherApi from '@/api/modules/purchased-voucher';
 
 export default {
   name: 'MyVouchersView',
-  components: {
-    NavbarHeader
-  },
 
   data() {
     const StatusInfo = {

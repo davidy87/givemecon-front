@@ -6,7 +6,7 @@ import { loadTossPayments } from '@tosspayments/payment-sdk';
 const BASE_PATH = '/payments';
 const clientKey = 'test_ck_ma60RZblrqzqZEL6nevx8wzYWBn1'
 
-export async function confirmPayment(router, requestBody, paymentResult) {
+export async function confirmPayment(router, requestBody) {
   console.log(requestBody);
 
   http
@@ -14,10 +14,7 @@ export async function confirmPayment(router, requestBody, paymentResult) {
     .then(
       (response) => {
         console.log(response.data);
-
-        Object.entries(response.data).forEach(([key, value]) => {
-          paymentResult[key] = value;
-        });
+        router.replace({ path: '/payment/success', query: { paymentKey: requestBody.paymentKey }});
       },
       async (error) => {
         console.log(error);
@@ -25,6 +22,28 @@ export async function confirmPayment(router, requestBody, paymentResult) {
         if (error.response.status === HttpStatusCode.Unauthorized) {
           await requestNewAccessToken(router);
           confirmPayment(requestBody);
+        }
+      }
+    );
+}
+
+export async function findPaymentHistory(router, paymentKey, paymentResult) {
+  http
+    .get(`${BASE_PATH}/${paymentKey}`, getRequestHeaders())
+    .then(
+      (response) => {
+        console.log(response.data);
+
+        Object.entries(response.data).forEach(([key, value]) => {
+          paymentResult[key] = value;
+        })
+      },
+      async (error) => {
+        console.log(error);
+
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          await requestNewAccessToken(router);
+          findPaymentHistory(router, paymentKey, paymentResult);
         }
       }
     );

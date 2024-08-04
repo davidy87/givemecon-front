@@ -2,7 +2,7 @@ import http from '../index';
 import { HttpStatusCode } from 'axios';
 import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/util/utilities';
 
-const BASE_PATH = '/brands'
+const BASE_PATH = '/voucher-kinds';
 
 export async function save(formData, router) {
   http
@@ -10,48 +10,54 @@ export async function save(formData, router) {
     .then(
       (response) => {
         console.log(response);
-        alert('브랜드가 추가되었습니다.');
+        alert(response.data.title + ' 기프티콘 판매 목록이 추가되었습니다.');
         router.go(0);
       },
       async (error) => {
         console.log(error);
         if (error.response.status === HttpStatusCode.Unauthorized) {
           await requestNewAccessToken(router);
-          save(formData);
+          save(formData, router);
         }
       }
     );
 }
 
-export async function findPage(categoryId, page, size, sort) {
-  const payload = {
-    params : {
-      categoryId: categoryId,
-      page: page - 1,
-      size: size,
-      sort: sort,
-    }
-  };
-
-  return http.get(BASE_PATH, payload);
-}
-
-export async function findAllByCategoryId(categoryId, brands) {
-  const payload = {
-    params : {
-      categoryId: categoryId
-    }
+export async function findAllByBrandId(brandId, voucherKinds) {
+  const config = {
+    params: {
+      brandId: brandId
+    },
+    headers: getRequestHeaders()['headers']
   };
 
   http
-    .get(BASE_PATH, payload)
+    .get(BASE_PATH, config)
     .then(
       (response) => {
-        response.data.forEach((brand) => {
-          brands.push(brand);
-        });
+        console.log(response);
+        if (voucherKinds.length === 0) {
+          response.data.forEach(voucherKind => {
+            voucherKinds.push(voucherKind);
+          });
+        }
       }
     );
+}
+
+export async function findById(id, voucherKind) {
+  http
+    .get(`${BASE_PATH}/${id}`, getRequestHeaders())
+    .then((response) => {
+      console.log(response);
+      Object.entries(response.data).forEach(([key, value]) => {
+        voucherKind[key] = value;
+      })
+    });
+}
+
+export async function findSellingList(id) {
+  return http.get(`${BASE_PATH}/${id}/selling-list`);
 }
 
 export async function update(id, formData, router) {
@@ -60,7 +66,7 @@ export async function update(id, formData, router) {
     .then(
       (response) => {
         console.log(response);
-        alert('브랜드가 수정되었습니다.');
+        alert('기프티콘 판매 목록 수정이 완료되었습니다.');
         router.go(0);
       },
       async (error) => {

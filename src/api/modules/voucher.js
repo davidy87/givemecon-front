@@ -4,76 +4,131 @@ import { requestNewAccessToken, getRequestHeaders, ContentType } from '@/util/ut
 
 const BASE_PATH = '/vouchers';
 
-export async function save(formData, router) {
+export async function save(voucherToPost, router) {
   http
-    .post(BASE_PATH, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
+    .post(BASE_PATH, voucherToPost, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
     .then(
       (response) => {
         console.log(response);
-        alert(response.data.title + ' 기프티콘 판매 목록이 추가되었습니다.');
-        router.go(0);
+        alert('판매 등록이 완료되었습니다.');
+        router.replace('/');
       },
       async (error) => {
         console.log(error);
         if (error.response.status === HttpStatusCode.Unauthorized) {
           await requestNewAccessToken(router);
-          save(formData, router);
         }
+        alert('판매 등록에 실패했습니다. 다시 시도해주세요.');
       }
     );
 }
 
-export async function findAllByBrandName(brandName, vouchers) {
-  const payload = {
+export function findAll(router) {
+  let result = [];
+
+  http
+    .get(BASE_PATH, getRequestHeaders())
+    .then(
+      (response) => {
+        console.log(response);
+        response.data.forEach((voucher) => {
+          result.push(voucher);
+        });
+      },
+      async (error) => {
+        console.log(error);
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          await requestNewAccessToken(router);
+        }
+      }
+    );
+  
+  return result;
+}
+
+export async function findAllByStatus(router, statusCode) {
+  let result = [];
+
+  const config = {
     params: {
-      brandName: brandName
-    }
+      statusCode: statusCode
+    },
+    headers: getRequestHeaders()['headers']
+  };
+
+  await http
+    .get(BASE_PATH, config)
+    .then(
+      (response) => {
+        console.log(response);
+        response.data.forEach((voucher) => {
+          result.push(voucher);
+        });
+      },
+      async (error) => {
+        console.log(error);
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          await requestNewAccessToken(router);
+        }
+      }
+    );
+  
+  return result;
+}
+
+export async function findAllForSaleByVoucherKindId(router, voucherKindId, voucherList) {
+  const config = {
+    params: {
+      voucherKindId: voucherKindId
+    },
+    headers: getRequestHeaders()['headers']
   };
 
   http
-    .get(BASE_PATH, payload)
+    .get(BASE_PATH, config)
     .then(
       (response) => {
         console.log(response);
-        if (vouchers.length === 0) {
-          response.data.vouchers.forEach(voucher => {
-            vouchers.push(voucher);
-          });
-        }
-      }
-    );
-}
-
-export async function findById(id, voucher) {
-  http
-    .get(`${BASE_PATH}/${id}`)
-    .then((response) => {
-      console.log(response);
-      Object.entries(response.data).forEach(([key, value]) => {
-        voucher[key] = value;
-      })
-    });
-}
-
-export async function findSellingList(voucherId) {
-  return http.get(`${BASE_PATH}/${voucherId}/selling-list`);
-}
-
-export async function update(id, formData, router) {
-  http
-    .post(`${BASE_PATH}/${id}`, formData, getRequestHeaders(ContentType.MULITPART_FORM_DATA))
-    .then(
-      (response) => {
-        console.log(response);
-        alert('기프티콘 판매 목록 수정이 완료되었습니다.');
-        router.go(0);
+        response.data.forEach((voucher) => {
+          voucherList.push(voucher);
+        });
       },
       async (error) => {
         console.log(error);
         if (error.response.status === HttpStatusCode.Unauthorized) {
           await requestNewAccessToken(router);
-          update(id, formData, router);
         }
       }
     );
 }
+
+export async function findVoucherImage(router, voucherId) {
+  let voucherImageUrl = '';
+
+  await http
+    .get(`${BASE_PATH}/${voucherId}/image`, getRequestHeaders())
+    .then(
+      (response) => {
+        console.log(response);
+        voucherImageUrl = response.data.imageUrl;
+      },
+      async (error) => {
+        console.log(error);
+        if (error.response.status === HttpStatusCode.Unauthorized) {
+          await requestNewAccessToken(router);
+        }
+      }
+    );
+
+  return voucherImageUrl;
+}
+
+export const VoucherStatus = {
+  SALE_REQUESTED: 0,
+  SALE_REJECTED: 1,
+  FOR_SALE: 2,
+  ORDER_PLACED: 3,
+  SOLD: 4,
+  EXPIRED: 5,
+}
+Object.freeze(VoucherStatus);

@@ -74,10 +74,10 @@ export default {
     }
   },
 
-  beforeRouteLeave(to, from, next) {
+  async beforeRouteLeave(to, from, next) {
     const answer = confirm('이전으로 돌아가시겠습니까?\n진행 중인 주문은 취소됩니다.');
     if (answer) {
-      orderApi.cancelOrder(this.$router, this.orderNumber);
+      await orderApi.cancelOrder(this.$router, this.orderNumber);
       next();
     } else {
       next(false);
@@ -119,7 +119,7 @@ export default {
         orderId: this.orderNumber,
         orderName: orderName,
         customerName: localStorage.getItem('username'),
-        successUrl: `${location.origin}/payment/success`,
+        successUrl: `${location.origin}/payment/processing`,
         failUrl: `${location.origin}${this.$route.fullPath}`,
       };
 

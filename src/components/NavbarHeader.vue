@@ -26,15 +26,10 @@
               <router-link to="/sell" class="dropdown-item">판매하기</router-link>
             </li>
             <li>
-              <router-link to="/liked-vouchers" class="dropdown-item">찜 리스트</router-link>
+              <router-link to="/my-info" class="dropdown-item">내 정보</router-link>
             </li>
             <li>
-              <router-link to="/my-vouchers" class="dropdown-item">내콘함</router-link>
-            </li>
-            <li>
-              <!-- <form action="http://localhost:8080/logout" method="post"> -->
               <button @click="onLogoutClick" class="dropdown-item">로그아웃</button>
-              <!-- </form> -->
             </li>
           </ul>
         </div>

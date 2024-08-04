@@ -56,13 +56,7 @@ export default {
   },
 
   created() {
-    const paymentSuccessInfo = {
-      paymentKey: this.$route.query.paymentKey,
-      orderId: this.$route.query.orderId,
-      amount: this.$route.query.amount,
-    }
-
-    paymentApi.confirmPayment(this.$router, paymentSuccessInfo, this.paymentResult);
+    paymentApi.findPaymentHistory(this.$router, this.$route.query.paymentKey, this.paymentResult);
   },
 
   methods: {

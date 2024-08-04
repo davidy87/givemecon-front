@@ -34,8 +34,8 @@
 import NavbarHeader from '@/components/NavbarHeader.vue';
 import FadeLoader from 'vue-spinner/src/FadeLoader.vue';
 import { HttpStatusCode } from 'axios';
-import * as imageApi from '@/api/modules/image-text';
 import { requestNewAccessToken } from '@/util/utilities';
+import * as imageApi from '@/api/modules/image-text';
 
 export default {
   name: 'VoucherImageUploadView',

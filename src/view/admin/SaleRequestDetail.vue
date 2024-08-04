@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-center">
       <div class="card" style="width: auto; height: auto;">
         <div class="container py-3">
-          <img v-bind:src="requestedSale.imageUrl" class="card-img-top p-3" style="width: 500px; height: 500px;" />
+          <img :src="voucherImageUrl" class="card-img-top p-3" style="width: 500px; height: 500px;" />
         </div>
         <div class="card-body">
           <ul id="details-list-group" class="list-group">
@@ -37,22 +37,31 @@
 </template>
 
 <script>
-import * as voucherForSaleApi from '@/api/modules/voucher-for-sale';
+import * as voucherApi from '@/api/modules/voucher';
+import * as adminVoucherApi from '@/api/modules/admin/voucher';
 
 export default {
   name: 'SaleRequestDetail',
 
   data() {
     return {
+      voucherImageUrl: '',
       requestedSale: this.$store.getters['requestedSaleStore/getRequestedSale'],
-      Status: voucherForSaleApi.VoucherForSaleStatus
+      Status: voucherApi.VoucherStatus
     }
   },
 
-  methods: {
-    onLoad() {
-    },
+  created() {
+    voucherApi
+      .findVoucherImage(this.$router, this.requestedSale.id)
+      .then(
+        (result) => {
+          this.voucherImageUrl = result;
+        }
+      );
+  },
 
+  methods: {
     reject() {
       if (confirm('이 기프티콘 판매를 거절하시겠습니까?')) {
         const rejectedReason = prompt('거절 사유');
@@ -62,20 +71,16 @@ export default {
         }
 
         if (confirm('거절 사유: ' + rejectedReason + '\n' + '위와 같은 사유로 판매 요청을 거절하시겠습니까?')) {
-          voucherForSaleApi.updateStatus(this.$router, this.requestedSale.id, this.Status.REJECTED);
+          adminVoucherApi.updateStatus(this.$router, this.requestedSale.id, this.Status.REJECTED);
         }
       }
     },
 
     permit() {
       if (confirm('이 기프티콘 판매를 허가하시겠습니까?')) {
-        voucherForSaleApi.updateStatus(this.$router, this.requestedSale.id, this.Status.FOR_SALE);
+        adminVoucherApi.updateStatus(this.$router, this.requestedSale.id, this.Status.FOR_SALE);
       }
     }
-  },
-
-  mounted(){
-    this.onLoad();
   }
 }
 </script>

@@ -40,7 +40,15 @@ export async function findAll(router, unusedVouchers, usedVouchers) {
       (response) => {
         console.log(response.data);
 
-        response.data.purchasedVouchers.forEach(voucher => {
+        // response.data.purchasedVouchers.forEach(voucher => {
+        //   if (voucher.status === 'USABLE') {
+        //     unusedVouchers.push(voucher);
+        //   } else {
+        //     usedVouchers.push(voucher);
+        //   }
+        // })
+
+        response.data.forEach(voucher => {
           if (voucher.status === 'USABLE') {
             unusedVouchers.push(voucher);
           } else {

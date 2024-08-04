@@ -139,7 +139,7 @@
 <script>
 import * as categoryApi from '@/api/modules/category';
 import * as brandApi from '@/api/modules/brand';
-import * as voucherApi from '@/api/modules/voucher';
+import * as voucherKindApi from '@/api/modules/voucher-kind';
 
 
 export default {
@@ -173,7 +173,7 @@ export default {
     onBrandClick(brand) {
       this.selectedBrand = brand;
       this.vouchers = [];
-      voucherApi.findAllByBrandName(brand.name, this.vouchers);
+      voucherKindApi.findAllByBrandId(brand.id, this.vouchers);
     },
 
     onImageUpload(e, voucher) {
@@ -216,7 +216,7 @@ export default {
         imageFile: this.newVoucher.imageFile
       }
 
-      voucherApi.save(formData, this.$router);
+      voucherKindApi.save(formData, this.$router);
     },
 
     onEditVoucherClick() {
@@ -226,7 +226,7 @@ export default {
         formData.append(key, value);
       });
       
-      voucherApi.update(this.voucherToEdit.id, formData, this.$router);
+      voucherKindApi.update(this.voucherToEdit.id, formData, this.$router);
     }
   },
 
