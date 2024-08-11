@@ -61,7 +61,7 @@
     </div>
 
     <!-- voucher for sale modal -->
-    <div class="modal fade" id="vouchers">
+    <div class="modal fade" id="vouchers" v-if="modalReady">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
@@ -132,7 +132,7 @@ export default {
       toPurchaseList: [],
       totalQuantity: 0,
       totalPrice: 0,
-      modalReady: false
+      modalReady: false,
     }
   },
 
@@ -141,6 +141,12 @@ export default {
       const voucherKindId = this.$route.params.id;
       this.$store.commit('voucherRouteStore/setVoucherRoute', `/voucher-kinds/${voucherKindId}`);
       voucherKindApi.findById(voucherKindId, this.voucherKind);
+
+      if (!localStorage.getItem('accessToken')) {
+        this.modalReady = false;
+      } else {
+        this.modalReady = true;
+      }
     },
 
     onLikeClick() {
@@ -156,7 +162,7 @@ export default {
         alert('로그인 후 이용해주세요.');
         return;
       }
-
+      
       this.voucherList = [];
       this.toPurchaseList = [];
       this.voucherStock = new Map();
@@ -165,7 +171,6 @@ export default {
       
       const voucherKindId = this.$route.params.id;
       voucherApi.findAllForSaleByVoucherKindId(this.$router, voucherKindId, this.voucherList);
-      this.modalReady = true;
     },
 
     onFinalPurchaseClick() {

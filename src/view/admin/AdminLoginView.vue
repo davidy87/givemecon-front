@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import * as adminMemberApi from '@/api/modules/admin/member';
 
 export default {
   name: 'AdminLoginView',
@@ -32,25 +32,7 @@ export default {
 
   methods: {
     onLoginClick() {
-      axios
-        .post('/api/admin/members/login', this.loginRequest)
-        .then((response) => {
-          console.log(response.data);
-
-          Object.entries(response.data).forEach(entry => {
-            const [key, value] = entry;
-            localStorage.setItem(key, value);
-          });
-
-          this.$router.replace('/admin');
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-          
-          if (error.response.data.error.code === '001') {
-            alert('아이디 혹은 비밀번호가 올바르지 않습니다.');
-          }
-        })
+      adminMemberApi.adminLogin(this.$router, this.loginRequest);
     }
   }
 }

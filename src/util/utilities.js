@@ -66,3 +66,6 @@ export const ContentType = {
   MULITPART_FORM_DATA: 'multipart/form-data',
 }
 Object.freeze(ContentType);
+
+export const BASE_SERVER_PATH = 'http://ec2-52-78-113-173.ap-northeast-2.compute.amazonaws.com:8080';
+// export const BASE_SERVER_PATH = 'http://localhost:8080';

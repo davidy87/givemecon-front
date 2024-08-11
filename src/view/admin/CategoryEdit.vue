@@ -81,6 +81,7 @@
 
 <script>
 import * as categoryApi from '@/api/modules/category';
+import * as adminCategoryApi from '@/api/modules/admin/category';
 
 export default {
   name: 'CategoryEdit',
@@ -121,7 +122,7 @@ export default {
         formData.append(key, value);
       });
 
-      categoryApi.save(formData, this.$router);
+      adminCategoryApi.save(formData, this.$router);
     },
 
     onCategoryClick(category) {
@@ -141,7 +142,7 @@ export default {
         formData.append(key, value);
       });
 
-      categoryApi.update(this.categoryToEdit.id, formData, this.$router);
+      adminCategoryApi.update(this.categoryToEdit.id, formData, this.$router);
     }
   },
 

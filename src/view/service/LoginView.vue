@@ -36,6 +36,7 @@
 <script>
 import NavbarHeader from '@/components/NavbarHeader.vue';
 import axios, { HttpStatusCode } from 'axios';
+import { BASE_SERVER_PATH } from '@/util/utilities';
 
 export default {
   name: 'LoginVue',
@@ -61,6 +62,7 @@ export default {
     },
 
     onLoginSuccess(authorizationCode) {
+      console.log(authorizationCode);
       axios
         .get("/api/auth/success", {params: {authorizationCode}})
         .then(
@@ -72,10 +74,10 @@ export default {
             this.componentKey += 1;
             this.$router.push('/');
           },
-          (error) => {
+          async (error) => {
             console.log(error);
             if (error.response.status === HttpStatusCode.Unauthorized) {
-              this.$router.replace('/login?error');
+              await this.$router.replace('/login?error');
               this.onLoad();
             }
           }
@@ -95,7 +97,7 @@ export default {
     },
 
     onLoginClick(provider) {
-      location.href = 'http://localhost:8080/oauth2/authorization/' + provider;
+      location.href = `${BASE_SERVER_PATH}/oauth2/authorization/${provider}`;
     }
   },
   

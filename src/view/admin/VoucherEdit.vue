@@ -140,7 +140,7 @@
 import * as categoryApi from '@/api/modules/category';
 import * as brandApi from '@/api/modules/brand';
 import * as voucherKindApi from '@/api/modules/voucher-kind';
-
+import * as adminVoucherKindApi from '@/api/modules/admin/voucher-kind';
 
 export default {
   name: 'VoucherEdit',
@@ -216,7 +216,7 @@ export default {
         imageFile: this.newVoucher.imageFile
       }
 
-      voucherKindApi.save(formData, this.$router);
+      adminVoucherKindApi.save(formData, this.$router);
     },
 
     onEditVoucherClick() {
@@ -226,7 +226,7 @@ export default {
         formData.append(key, value);
       });
       
-      voucherKindApi.update(this.voucherToEdit.id, formData, this.$router);
+      adminVoucherKindApi.update(this.voucherToEdit.id, formData, this.$router);
     }
   },
 

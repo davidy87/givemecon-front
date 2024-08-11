@@ -150,6 +150,7 @@
 import { ref } from 'vue';
 import * as categoryApi from '@/api/modules/category';
 import * as brandApi from '@/api/modules/brand';
+import * as adminBrandApi from '@/api/modules/admin/brand';
 
 export default {
   name: 'BrandEdit',
@@ -216,7 +217,7 @@ export default {
       formData.append('name', this.newBrand.name);
       formData.append('iconFile', this.newBrand.iconFile);
 
-      brandApi.save(formData, this.$router);
+      adminBrandApi.save(formData, this.$router);
     },
 
     onEditBrandClick() {
@@ -236,7 +237,7 @@ export default {
         formData.append(key, value);
       });
 
-      brandApi.update(this.brandToEdit.id, formData, this.$router);
+      adminBrandApi.update(this.brandToEdit.id, formData, this.$router);
     },
 
     onClickHandler(page) {

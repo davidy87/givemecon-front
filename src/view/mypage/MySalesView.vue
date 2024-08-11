@@ -53,7 +53,7 @@
             </div>
           </div>
         </div>
-        <div class="tab-pane fade" id="for-sale-tab-pane" role="tabpanel" aria-labelledby="used-tab" tabindex="1">
+        <div class="tab-pane fade" id="rejected-sales-tab-pane" role="tabpanel" aria-labelledby="used-tab" tabindex="1">
           <div v-if="rejectedSales.length === 0" class="container py-5">
             <div class="d-flex align-items-center justify-content-center">
               <h4>판매 거절된 기프티콘이 없습니다.</h4>
@@ -76,7 +76,7 @@
             </div>
           </div>
         </div>
-        <div class="tab-pane fade" id="rejected-sales-tab-pane" role="tabpanel" aria-labelledby="used-tab" tabindex="2">
+        <div class="tab-pane fade" id="for-sale-tab-pane" role="tabpanel" aria-labelledby="used-tab" tabindex="2">
           <div v-if="forSaleList.length === 0" class="container py-5">
             <div class="d-flex align-items-center justify-content-center">
               <h4>판매 중인 기프티콘이 없습니다.</h4>
